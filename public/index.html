@@ -80,6 +80,11 @@
         .qty-select:hover { border-color: var(--gray-light); }
         .qty-select:focus { outline: none; border-color: var(--ocean); box-shadow: 0 0 0 3px var(--ocean-light); }
 
+        .size-select { appearance: none; -webkit-appearance: none; width: 90px; padding: 5px 20px 5px 8px; background: var(--white); border: 1px solid var(--border); border-radius: 4px; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10px; font-weight: 300; letter-spacing: 0.5px; color: var(--black); cursor: pointer; margin-bottom: 12px; transition: border-color var(--transition-fast); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; }
+        .size-select:hover { border-color: var(--gray-light); }
+        .size-select:focus { outline: none; border-color: var(--ocean); box-shadow: 0 0 0 3px var(--ocean-light); }
+        .size-label { display: block; font-size: 9px; font-weight: 500; color: var(--charcoal); margin-bottom: 6px; letter-spacing: 0.5px; text-transform: uppercase; }
+
         .add-btn { padding: 10px 18px; background: none; border: none; color: var(--ocean); font-family: var(--font-main); font-size: 11px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: all var(--transition-fast); border-radius: 6px; min-height: 44px; }
         .add-btn:hover { background: var(--ocean-light); }
         .add-btn.added { color: var(--tropique); }
@@ -252,14 +257,10 @@
             ]},
             { key: "textiles", label: "Textiles", sub: [
                 { key: "tshirt", label: "T-shirt", items: [
-                    { name: "Tshirt kaki logo", ref: "BEA-16", size: "XS" },
-                    { name: "Tshirt kaki logo", ref: "BEA-16", size: "S" },
-                    { name: "Tshirt kaki logo", ref: "BEA-16", size: "M" },
-                    { name: "Tshirt kaki logo", ref: "BEA-16", size: "L" },
-                    { name: "Tshirt kaki logo", ref: "BEA-16", size: "XL" }
+                    { name: "Tshirt kaki logo", ref: "BEA-16", sizes: ["XS", "S", "M", "L", "XL"], requiresSize: true }
                 ]},
                 { key: "sac-plage", label: "Sac de plage", items: [
-                    { name: "Sac de plage", ref: "SDP 01", img: "images/mugs/sacdeplage.PNG" }
+                    { name: "Sac de plage", ref: "SDP 01", img: "images/mugs/sacdeplage.jpg" }
                 ]},
                 { key: "tote-bag", label: "Tote Bag", items: [] },
                 { key: "pochette", label: "Pochette", items: [] }
@@ -293,7 +294,7 @@
                     { name: "Affiche A3 + Tube", ref: "AFFA3", detail: "A3 (297 x 420)" }
                 ]},
                 { key: "jeux-loisirs", label: "Jeux & Loisirs", items: [
-                    { name: "Morpion", ref: "MOR 01" },
+                    { name: "Morpion", ref: "MOR 01", img: "images/mugs/morpion.jpg" },
                     { name: "Dominos", ref: "DOM 01" },
                     { name: "Mikado", ref: "MIK 01" },
                     { name: "Yoyo", ref: "YOY 01" },
@@ -370,16 +371,46 @@
             productGrid.innerHTML = currentSubCat.items.map(item => {
                 let info = item.ref;
                 if (item.color) info += ' | ' + item.color;
-                if (item.size) info += ' | ' + item.size;
+                if (item.size && !item.requiresSize) info += ' | ' + item.size;
                 if (item.detail) info += ' | ' + item.detail;
-                return '<article class="product-card" data-ref="' + item.ref + '"><div class="product-img"' + (item.img ? ' style="background-image: url(\'' + item.img + '\')"' : '') + '></div><h3 class="product-title">' + item.name + '</h3><p class="product-info">' + info + '</p><select class="qty-select">' + QTY_OPTIONS.map(o => '<option value="' + o.val + '">' + o.label + '</option>').join('') + '</select><button class="add-btn" data-ref="' + item.ref + '">Ajouter</button></article>';
+
+                // Générer le sélecteur de taille si nécessaire
+                let sizeSelector = '';
+                if (item.requiresSize && item.sizes) {
+                    sizeSelector = '<label class="size-label">Taille</label><select class="size-select">' +
+                        item.sizes.map(s => '<option value="' + s + '">' + s + '</option>').join('') +
+                        '</select>';
+                }
+
+                return '<article class="product-card" data-ref="' + item.ref + '">' +
+                    '<div class="product-img"' + (item.img ? ' style="background-image: url(\'' + item.img + '\')"' : '') + '></div>' +
+                    '<h3 class="product-title">' + item.name + '</h3>' +
+                    '<p class="product-info">' + info + '</p>' +
+                    sizeSelector +
+                    '<select class="qty-select">' + QTY_OPTIONS.map(o => '<option value="' + o.val + '">' + o.label + '</option>').join('') + '</select>' +
+                    '<button class="add-btn" data-ref="' + item.ref + '">Ajouter</button>' +
+                    '</article>';
             }).join('');
+
             productGrid.querySelectorAll('.add-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     const card = btn.closest('.product-card');
                     const item = currentSubCat.items.find(i => i.ref === btn.dataset.ref);
                     const qty = parseInt(card.querySelector('.qty-select').value);
-                    if (item) { addToCart(item, qty); btn.textContent = '✓ Ajouté'; btn.classList.add('added'); setTimeout(() => { btn.textContent = 'Ajouter'; btn.classList.remove('added'); }, 1500); }
+
+                    // Récupérer la taille si le produit en nécessite une
+                    let selectedSize = null;
+                    if (item.requiresSize) {
+                        const sizeSelect = card.querySelector('.size-select');
+                        if (sizeSelect) selectedSize = sizeSelect.value;
+                    }
+
+                    if (item) {
+                        addToCart(item, qty, selectedSize);
+                        btn.textContent = '✓ Ajouté';
+                        btn.classList.add('added');
+                        setTimeout(() => { btn.textContent = 'Ajouter'; btn.classList.remove('added'); }, 1500);
+                    }
                 });
             });
             observeProducts();
@@ -390,13 +421,34 @@
             productGrid.querySelectorAll('.product-card').forEach(card => observer.observe(card));
         }
 
-        function addToCart(item, qty) {
-            const existing = cart.find(i => i.ref === item.ref);
-            if (existing) existing.qty += qty; else cart.push({ ...item, qty });
+        function addToCart(item, qty, selectedSize) {
+            // Créer une clé unique basée sur ref + taille (pour les produits avec taille)
+            const cartKey = selectedSize ? item.ref + '-' + selectedSize : item.ref;
+
+            // Chercher si l'article existe déjà avec la même taille
+            const existing = cart.find(i => {
+                const existingKey = i.selectedSize ? i.ref + '-' + i.selectedSize : i.ref;
+                return existingKey === cartKey;
+            });
+
+            if (existing) {
+                existing.qty += qty;
+            } else {
+                const cartItem = { ...item, qty };
+                if (selectedSize) cartItem.selectedSize = selectedSize;
+                cart.push(cartItem);
+            }
             updateCartUI();
         }
 
-        function removeFromCart(ref) { cart = cart.filter(i => i.ref !== ref); updateCartUI(); }
+        function removeFromCart(ref, selectedSize) {
+            cart = cart.filter(i => {
+                const cartKey = i.selectedSize ? i.ref + '-' + i.selectedSize : i.ref;
+                const removeKey = selectedSize ? ref + '-' + selectedSize : ref;
+                return cartKey !== removeKey;
+            });
+            updateCartUI();
+        }
 
         function updateCartUI() {
             const total = cart.reduce((sum, i) => sum + i.qty, 0);
@@ -407,10 +459,17 @@
                 cartBody.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">☀️</div><p>Votre sélection est vide</p></div>';
             } else {
                 cartBody.innerHTML = cart.map(i => {
-                    let details = i.ref; if (i.color) details += ' | ' + i.color; if (i.size) details += ' | ' + i.size;
-                    return '<div class="cart-item"><div class="cart-item-info"><div class="cart-item-name">' + i.name + '</div><div class="cart-item-ref">' + details + '</div><div class="cart-item-qty">Quantité : ' + i.qty + '</div></div><button class="cart-item-remove" data-ref="' + i.ref + '">×</button></div>';
+                    let details = i.ref;
+                    if (i.color) details += ' | ' + i.color;
+                    if (i.selectedSize) details += ' | Taille ' + i.selectedSize;
+                    else if (i.size) details += ' | ' + i.size;
+
+                    const removeKey = i.selectedSize || '';
+                    return '<div class="cart-item"><div class="cart-item-info"><div class="cart-item-name">' + i.name + '</div><div class="cart-item-ref">' + details + '</div><div class="cart-item-qty">Quantité : ' + i.qty + '</div></div><button class="cart-item-remove" data-ref="' + i.ref + '" data-size="' + removeKey + '">×</button></div>';
                 }).join('');
-                cartBody.querySelectorAll('.cart-item-remove').forEach(btn => { btn.addEventListener('click', () => removeFromCart(btn.dataset.ref)); });
+                cartBody.querySelectorAll('.cart-item-remove').forEach(btn => {
+                    btn.addEventListener('click', () => removeFromCart(btn.dataset.ref, btn.dataset.size || null));
+                });
             }
         }
 
@@ -428,21 +487,35 @@
                 return;
             }
 
-            // Préparer le contenu de la commande
-            let orderDetails = cart.map(i => {
-                let details = i.name + ' (' + i.ref + ')';
-                if (i.color) details += ' - ' + i.color;
-                if (i.size) details += ' - ' + i.size;
-                details += ' - Quantité: ' + i.qty;
-                return details;
-            }).join('\n');
+            // Générer un numéro de commande unique (Format: 2026-XXXX)
+            const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
+
+            // Créer le tableau HTML des produits pour l'email
+            let orderTableRows = cart.map(i => {
+                let spec = '';
+                if (i.color && i.selectedSize) spec = i.color + ' / Taille ' + i.selectedSize;
+                else if (i.color && i.size) spec = i.color + ' / ' + i.size;
+                else if (i.selectedSize) spec = 'Taille ' + i.selectedSize;
+                else if (i.color) spec = i.color;
+                else if (i.size) spec = 'Taille ' + i.size;
+                else if (i.detail) spec = i.detail;
+                else spec = '—';
+
+                return '<tr>' +
+                    '<td class="product-name">' + i.name + '</td>' +
+                    '<td class="product-ref">' + i.ref + '</td>' +
+                    '<td class="product-spec">' + spec + '</td>' +
+                    '<td class="product-qty">' + i.qty + '</td>' +
+                    '</tr>';
+            }).join('');
 
             // Paramètres EmailJS
             const templateParams = {
+                order_number: orderNumber,
                 customer_name: customerName.value,
                 customer_email: customerEmail.value,
-                customer_comment: customerComment.value || 'Aucun commentaire',
-                order_details: orderDetails,
+                customer_comment: customerComment.value || '',
+                order_table_rows: orderTableRows,
                 total_items: cart.reduce((sum, i) => sum + i.qty, 0)
             };
 
@@ -456,7 +529,7 @@
             // Envoyer l'email via EmailJS
             emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams)
                 .then(() => {
-                    alert('Votre commande a été envoyée avec succès !');
+                    alert('Votre commande #' + orderNumber + ' a été envoyée avec succès !');
                     cart = [];
                     updateCartUI();
                     customerName.value = '';
