@@ -199,144 +199,146 @@
     <script>
     (function() {
         'use strict';
+        // Images basées sur les noms exacts des fichiers
+        const IMG = "images/mugs/";
         const DATA = [
             { key: "nouveautes", label: "Nouveautés", sub: [{ key: "arrivages", label: "Arrivages", items: [
-                { name: "Support Mobile Acrylique", ref: "SM 01", img: "images/mugs/supportmobile.png", qtyType: "default" },
-                { name: "Bloc Note Similicuir", ref: "BNSA6", detail: "A6 (105 x 148)", img: "images/mugs/blocnotesimilicuir.png", qtyType: "blocnote" },
-                { name: "Bloc Note Similicuir", ref: "BNS5", detail: "A5 (148 x 210)", img: "images/mugs/blocnotesimilicuir.png", qtyType: "blocnote" }
+                { name: "Support Mobile Acrylique", ref: "SM 01", img: IMG+"tassebois.jpg", qtyType: "default" },
+                { name: "Bloc Note Similicuir", ref: "BNSA6", detail: "A6 (105 x 148)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
+                { name: "Bloc Note Similicuir", ref: "BNS5", detail: "A5 (148 x 210)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" }
             ]}]},
             { key: "tasses", label: "Tasses", sub: [
                 { key: "ceramique-fuck", label: "Tasse Céramique Fuck", items: [
-                    { name: "Tasse Fuck", ref: "TCF 01", size: "350ml", color: "Rouge & Blanc", img: "images/mugs/fuckblancrouge.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 02", size: "350ml", color: "Orange & Blanc", img: "images/mugs/fuckorangeblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 03", size: "350ml", color: "Rose & Blanc", img: "images/mugs/fuckroseblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 04", size: "350ml", color: "Bleu & Blanc", img: "images/mugs/fuckbleublanc.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 05", size: "350ml", color: "Vert & Blanc", img: "images/mugs/fuckvertblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 06", size: "350ml", color: "Noir & Blanc", img: "images/mugs/fucknoirblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 07", size: "350ml", color: "Blanc & Bleu", img: "images/mugs/fuckblancvert.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 08", size: "350ml", color: "Blanc & Jaune", img: "images/mugs/fuckblancjaune.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 09", size: "350ml", color: "Blanc & Orange", img: "images/mugs/fuckblancorange.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 10", size: "350ml", color: "Blanc & Rouge", img: "images/mugs/fuckblancrouge.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 11", size: "350ml", color: "Blanc & Vert", img: "images/mugs/fuckblancvert.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 12", size: "350ml", color: "Blanc & Noir", img: "images/mugs/fuckblancnoir.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 13", size: "350ml", color: "Noir & Rose", img: "images/mugs/fucknoirrose.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 14", size: "350ml", color: "Noir & Jaune", img: "images/mugs/fucknoirjaune.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 15", size: "350ml", color: "Noir & Rouge", img: "images/mugs/fucknoirrouge.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 16", size: "350ml", color: "Noir & Vert", img: "images/mugs/fucknoirvert.png", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 17", size: "350ml", color: "Noir & Orange", img: "images/mugs/fucknoirorange.png", qtyType: "tasse" }
+                    { name: "Tasse Fuck", ref: "TCF 01", size: "350ml", color: "Rouge & Blanc", img: IMG+"fuckrougeblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 02", size: "350ml", color: "Orange & Blanc", img: IMG+"fuckorangeblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 03", size: "350ml", color: "Rose & Blanc", img: IMG+"fuckroseblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 04", size: "350ml", color: "Bleu & Blanc", img: IMG+"fuckbleublanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 05", size: "350ml", color: "Vert & Blanc", img: IMG+"fuckvertblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 06", size: "350ml", color: "Noir & Blanc", img: IMG+"fucknoirblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 07", size: "350ml", color: "Blanc & Bleu", img: IMG+"fuckblancvert.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 08", size: "350ml", color: "Blanc & Jaune", img: IMG+"fuckblancjaune.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 09", size: "350ml", color: "Blanc & Orange", img: IMG+"fuckblancorange.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 10", size: "350ml", color: "Blanc & Rouge", img: IMG+"fuckblancrouge.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 11", size: "350ml", color: "Blanc & Vert", img: IMG+"fuckblancvert.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 12", size: "350ml", color: "Blanc & Noir", img: IMG+"fuckblancnoir.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 13", size: "350ml", color: "Noir & Rose", img: IMG+"fucknoirrose.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 14", size: "350ml", color: "Noir & Jaune", img: IMG+"fucknoirjaune.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 15", size: "350ml", color: "Noir & Rouge", img: IMG+"fucknoirrouge.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 16", size: "350ml", color: "Noir & Vert", img: IMG+"fucknoirvert.jpg", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 17", size: "350ml", color: "Noir & Orange", img: IMG+"fucknoirorange.jpg", qtyType: "tasse" }
                 ]},
                 { key: "ceramique", label: "Tasse Céramique", items: [
-                    { name: "Tasse Céramique", ref: "TC 01", size: "350ml", color: "Rouge & Blanc", img: "images/mugs/rougeblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 02", size: "350ml", color: "Orange & Blanc", img: "images/mugs/orangeblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 03", size: "350ml", color: "Rose & Blanc", img: "images/mugs/roseblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 04", size: "350ml", color: "Bleu & Blanc", img: "images/mugs/bleublanc.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 05", size: "350ml", color: "Vert & Blanc", img: "images/mugs/vertblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 06", size: "350ml", color: "Noir & Blanc", img: "images/mugs/noirblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 07", size: "350ml", color: "Blanc & Bleu", img: "images/mugs/bleublanc.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 08", size: "350ml", color: "Blanc & Jaune", img: "images/mugs/blancjaune.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 09", size: "350ml", color: "Blanc & Orange", img: "images/mugs/blancorange.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 10", size: "350ml", color: "Blanc & Rouge", img: "images/mugs/blancrouge.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 11", size: "350ml", color: "Blanc & Vert", img: "images/mugs/blancvert.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 12", size: "350ml", color: "Blanc & Noir", img: "images/mugs/blancnoir.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 13", size: "350ml", color: "Noir & Rose", img: "images/mugs/noirrose.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 14", size: "350ml", color: "Noir & Jaune", img: "images/mugs/noirjaune.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 15", size: "350ml", color: "Noir & Rouge", img: "images/mugs/noirrouge.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 16", size: "350ml", color: "Noir & Vert", img: "images/mugs/noirvert.png", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 17", size: "350ml", color: "Noir & Orange", img: "images/mugs/noirorange.png", qtyType: "tasse" }
+                    { name: "Tasse Céramique", ref: "TC 01", size: "350ml", color: "Rouge & Blanc", img: IMG+"rougeblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 02", size: "350ml", color: "Orange & Blanc", img: IMG+"orangeblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 03", size: "350ml", color: "Rose & Blanc", img: IMG+"roseblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 04", size: "350ml", color: "Bleu & Blanc", img: IMG+"bleublanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 05", size: "350ml", color: "Vert & Blanc", img: IMG+"vertblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 06", size: "350ml", color: "Noir & Blanc", img: IMG+"noirblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 07", size: "350ml", color: "Blanc & Bleu", img: IMG+"bleublanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 08", size: "350ml", color: "Blanc & Jaune", img: IMG+"blancjaune.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 09", size: "350ml", color: "Blanc & Orange", img: IMG+"blancorange.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 10", size: "350ml", color: "Blanc & Rouge", img: IMG+"blancrouge.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 11", size: "350ml", color: "Blanc & Vert", img: IMG+"blancvert.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 12", size: "350ml", color: "Blanc & Noir", img: IMG+"blancnoir.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 13", size: "350ml", color: "Noir & Rose", img: IMG+"noirrose.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 14", size: "350ml", color: "Noir & Jaune", img: IMG+"noirjaune.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 15", size: "350ml", color: "Noir & Rouge", img: IMG+"noirrouge.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 16", size: "350ml", color: "Noir & Vert", img: IMG+"noirvert.jpg", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 17", size: "350ml", color: "Noir & Orange", img: IMG+"noirorange.jpg", qtyType: "tasse" }
                 ]},
                 { key: "metal", label: "Tasse Métal", items: [
-                    { name: "Tasse Métal", ref: "TM 01", size: "300ml", color: "Blanc", img: "images/mugs/metalblanc.png", qtyType: "tasse" },
-                    { name: "Tasse Métal", ref: "TM 02", size: "300ml", color: "Jaune", img: "images/mugs/metaljaune.png", qtyType: "tasse" },
-                    { name: "Tasse Métal", ref: "TM 03", size: "300ml", color: "Bleu", img: "images/mugs/metalbleu.png", qtyType: "tasse" },
-                    { name: "Tasse Métal", ref: "TM 04", size: "300ml", color: "Rouge", img: "images/mugs/metalrouge.png", qtyType: "tasse" }
+                    { name: "Tasse Métal", ref: "TM 01", size: "300ml", color: "Blanc", img: IMG+"metalblanc.jpg", qtyType: "tasse" },
+                    { name: "Tasse Métal", ref: "TM 02", size: "300ml", color: "Jaune", img: IMG+"metaljaune.jpeg", qtyType: "tasse" },
+                    { name: "Tasse Métal", ref: "TM 03", size: "300ml", color: "Bleu", img: IMG+"metaljaune.jpeg", qtyType: "tasse" },
+                    { name: "Tasse Métal", ref: "TM 04", size: "300ml", color: "Rouge", img: IMG+"metalrouge.jpg", qtyType: "tasse" }
                 ]}
             ]},
             { key: "goodies", label: "Goodies", sub: [
                 { key: "porte-cles", label: "Porte-Clés", items: [
-                    { name: "Porte-Clés Plexiglass", ref: "PCP 01", img: "images/mugs/porteclesplexiglass.png", qtyType: "portecles" },
-                    { name: "Porte-Clés Bois", ref: "PCPB 01", img: "images/mugs/porteclesplexi.png", qtyType: "portecles" },
-                    { name: "Porte-Clés Acrylique", ref: "PCA 01", img: "images/mugs/portecleeplexi glass.png", qtyType: "portecles" },
-                    { name: "Porte-Clés Flotteur Liège", ref: "PCFL 01", img: "images/mugs/portecleflotteur.png", qtyType: "flotteur" }
+                    { name: "Porte-Clés Plexiglass", ref: "PCP 01", img: IMG+"porteclesplexiglass.jpg", qtyType: "portecles" },
+                    { name: "Porte-Clés Bois", ref: "PCPB 01", img: IMG+"porteclesplexi.jpg", qtyType: "portecles" },
+                    { name: "Porte-Clés Acrylique", ref: "PCA 01", img: IMG+"portecleeplexiglass.jpg", qtyType: "portecles" },
+                    { name: "Porte-Clés Flotteur Liège", ref: "PCFL 01", img: IMG+"portecleflotteur.jpg", qtyType: "flotteur" }
                 ]},
                 { key: "magnets", label: "Magnets", items: [
-                    { name: "Magnet Plexiglass", ref: "MP 01", img: "images/mugs/magnetbois.png", qtyType: "magnet" },
-                    { name: "Magnet Bois", ref: "MB 01", img: "images/mugs/magnetbois.png", qtyType: "magnet" },
-                    { name: "Magnet Acrylique", ref: "MA 01", img: "images/mugs/magnetbois.png", qtyType: "magnet" }
+                    { name: "Magnet Plexiglass", ref: "MP 01", img: IMG+"magnetbois.jpeg", qtyType: "magnet" },
+                    { name: "Magnet Bois", ref: "MB 01", img: IMG+"magnetbois.jpeg", qtyType: "magnet" },
+                    { name: "Magnet Acrylique", ref: "MA 01", img: IMG+"magnetbois.jpeg", qtyType: "magnet" }
                 ]},
                 { key: "stickers", label: "Stickers", items: [
-                    { name: "Sticker", ref: "STI 01", detail: "75 x 75", img: "images/mugs/cartepostale.png", qtyType: "sticker" }
+                    { name: "Sticker", ref: "STI 01", detail: "75 x 75", img: IMG+"tassebois.jpg", qtyType: "sticker" }
                 ]}
             ]},
             { key: "sacs-pochettes", label: "Sacs & Pochettes", sub: [
                 { key: "sacs", label: "Sacs", items: [
-                    { name: "Sac de plage Naturel", ref: "S-001", img: "images/mugs/sacdeplage.png", qtyType: "default" },
-                    { name: "Sac de plage XL", ref: "S-002", img: "images/mugs/sacdeplage.png", qtyType: "default" },
-                    { name: "Sac Polochon en Molleton", ref: "S-003", img: "images/mugs/sacdeplage.png", qtyType: "default" },
-                    { name: "Tote Bag en Coton BIO", ref: "S-004", img: "images/mugs/sacdeplage.png", qtyType: "default" }
+                    { name: "Sac de plage Naturel", ref: "S-001", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Sac de plage XL", ref: "S-002", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Sac Polochon en Molleton", ref: "S-003", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Tote Bag en Coton BIO", ref: "S-004", img: IMG+"sacdeplage.jpg", qtyType: "default" }
                 ]},
                 { key: "pochettes", label: "Pochettes", items: [
-                    { name: "Trousse de toilette", ref: "P-001", img: "images/mugs/tassebois.png", qtyType: "default" },
-                    { name: "Pochette EarthAware Bio S", ref: "P-002", img: "images/mugs/tassebois.png", qtyType: "default" },
-                    { name: "Pochette EarthAware Bio L", ref: "P-003", img: "images/mugs/tassebois.png", qtyType: "default" },
-                    { name: "Pochette Zippée S", ref: "P-004", img: "images/mugs/tassebois.png", qtyType: "default" },
-                    { name: "Pochette Zippée M", ref: "P-005", img: "images/mugs/tassebois.png", qtyType: "default" },
-                    { name: "Pochette Vintage", ref: "P-006", img: "images/mugs/tassebois.png", qtyType: "default" },
-                    { name: "Pochette Coton S", ref: "P-007", img: "images/mugs/tassebois.png", qtyType: "default" },
-                    { name: "Pochette Coton M", ref: "P-008", img: "images/mugs/tassebois.png", qtyType: "default" }
+                    { name: "Trousse de toilette", ref: "P-001", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Pochette EarthAware Bio S", ref: "P-002", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Pochette EarthAware Bio L", ref: "P-003", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Pochette Zippée S", ref: "P-004", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Pochette Zippée M", ref: "P-005", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Pochette Vintage", ref: "P-006", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Pochette Coton S", ref: "P-007", img: IMG+"sacdeplage.jpg", qtyType: "default" },
+                    { name: "Pochette Coton M", ref: "P-008", img: IMG+"sacdeplage.jpg", qtyType: "default" }
                 ]}
             ]},
             { key: "accessoires", label: "Accessoires", sub: [
                 { key: "quotidien", label: "Quotidien", items: [
-                    { name: "Porte sac", ref: "PS 01", img: "images/mugs/portesac.png", qtyType: "quotidien" },
-                    { name: "Flasque Bois Clair", ref: "FBC 01", color: "Clair", img: "images/mugs/flasqueboisclair.png", qtyType: "quotidien" },
-                    { name: "Flasque Bois Foncé", ref: "FBF 01", color: "Foncé", img: "images/mugs/flasqueboisfonce.png", qtyType: "quotidien" },
-                    { name: "Limonadier Bois Foncé", ref: "LBF 01", color: "Foncé", img: "images/mugs/limonadierboisfonce.png", qtyType: "quotidien" },
-                    { name: "Limonadier Bois Clair", ref: "LBC 01", color: "Clair", img: "images/mugs/limonadierboisclair.png", qtyType: "quotidien" },
-                    { name: "Identificateur Valise Liège", ref: "IVL 01", img: "images/mugs/ivl01.png", qtyType: "quotidien" },
-                    { name: "Petit Miroir Liège", ref: "PML 01", img: "images/mugs/petitmiroirliege.png", qtyType: "quotidien" },
-                    { name: "Couteau Multi Bois", ref: "CMB 01", img: "images/mugs/couteaumultibois.png", qtyType: "quotidien" },
-                    { name: "Pince à billet Argent", ref: "PBA 01", img: "images/mugs/pincebilletargent.png", qtyType: "quotidien" }
+                    { name: "Porte sac", ref: "PS 01", img: IMG+"portesac.jpg", qtyType: "quotidien" },
+                    { name: "Flasque Bois Clair", ref: "FBC 01", color: "Clair", img: IMG+"flasqueboisclair.png", qtyType: "quotidien" },
+                    { name: "Flasque Bois Foncé", ref: "FBF 01", color: "Foncé", img: IMG+"flasqueboisclair.png", qtyType: "quotidien" },
+                    { name: "Limonadier Bois Foncé", ref: "LBF 01", color: "Foncé", img: IMG+"limonadierboisfonce.jpg", qtyType: "quotidien" },
+                    { name: "Limonadier Bois Clair", ref: "LBC 01", color: "Clair", img: IMG+"limonadierboisclair.png", qtyType: "quotidien" },
+                    { name: "Identificateur Valise Liège", ref: "IVL 01", img: IMG+"ivl01.jpg", qtyType: "quotidien" },
+                    { name: "Petit Miroir Liège", ref: "PML 01", img: IMG+"petitmiroirliege.png", qtyType: "quotidien" },
+                    { name: "Couteau Multi Bois", ref: "CMB 01", img: IMG+"couteaumultibois.png", qtyType: "quotidien" },
+                    { name: "Pince à billet Argent", ref: "PBA 01", img: IMG+"pincebilletargent.png", qtyType: "quotidien" }
                 ]},
                 { key: "art-table", label: "Art de la Table", items: [
-                    { name: "Bouchon Bois", ref: "BB 01", img: "images/mugs/bouchonbois.png", qtyType: "bouchon" },
-                    { name: "Dessous de plat Liège", ref: "DPL 01", img: "images/mugs/dessousdeplatliege.png", qtyType: "dpl" },
-                    { name: "Dessous de Verre Liège (par 1)", ref: "DVL 01", img: "images/mugs/dessousdeverreliege.png", qtyType: "dvl" },
-                    { name: "Plateau en Liège", ref: "PL 01", img: "images/mugs/plateauliege.png", qtyType: "quotidien" }
+                    { name: "Bouchon Bois", ref: "BB 01", img: IMG+"bouchonbois.png", qtyType: "bouchon" },
+                    { name: "Dessous de plat Liège", ref: "DPL 01", img: IMG+"dessousdeplatliege.png", qtyType: "dpl" },
+                    { name: "Dessous de Verre Liège (par 1)", ref: "DVL 01", img: IMG+"dessousdeverreliege.png", qtyType: "dvl" },
+                    { name: "Plateau en Liège", ref: "PL 01", img: IMG+"plateauliege.png", qtyType: "quotidien" }
                 ]},
                 { key: "papeterie", label: "Papeterie & Impressions", items: [
-                    { name: "Crayon papier bois", ref: "CPB 01", img: "images/mugs/tassebois.png", qtyType: "crayon" },
-                    { name: "Stylo à bille en bois", ref: "SBB 01", img: "images/mugs/tassebois.png", qtyType: "stylo" },
-                    { name: "Bloc Note Liège", ref: "BNLA6", detail: "A6 (105 x 148)", img: "images/mugs/blocnotesimilicuir.png", qtyType: "blocnote" },
-                    { name: "Bloc Note Similicuir", ref: "BNSA6", detail: "A6 (105 x 148)", img: "images/mugs/blocnotesimilicuir.png", qtyType: "blocnote" },
-                    { name: "Bloc Note Liège", ref: "BNLA5", detail: "A5 (148 x 210)", img: "images/mugs/blocnotesimilicuir.png", qtyType: "blocnote" },
-                    { name: "Bloc Note Similicuir", ref: "BNSA5", color: "Bleu", detail: "A5 (148 x 210)", img: "images/mugs/blocnotesimilicuir.png", qtyType: "blocnote" },
-                    { name: "Carte Postale", ref: "CPA6", detail: "A6 (105 x 148)", img: "images/mugs/cartepostale.png", qtyType: "cartepostale" },
-                    { name: "Affiche A3 + Tube", ref: "AFFA3", detail: "A3 (297 x 420)", img: "images/mugs/tableaua3.png", qtyType: "affiche" }
+                    { name: "Crayon papier bois", ref: "CPB 01", img: IMG+"tassebois.jpg", qtyType: "crayon" },
+                    { name: "Stylo à bille en bois", ref: "SBB 01", img: IMG+"tassebois.jpg", qtyType: "stylo" },
+                    { name: "Bloc Note Liège", ref: "BNLA6", detail: "A6 (105 x 148)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
+                    { name: "Bloc Note Similicuir", ref: "BNSA6", detail: "A6 (105 x 148)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
+                    { name: "Bloc Note Liège", ref: "BNLA5", detail: "A5 (148 x 210)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
+                    { name: "Bloc Note Similicuir", ref: "BNSA5", color: "Bleu", detail: "A5 (148 x 210)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
+                    { name: "Carte Postale", ref: "CPA6", detail: "A6 (105 x 148)", img: IMG+"tassebois.jpg", qtyType: "cartepostale" },
+                    { name: "Affiche A3 + Tube", ref: "AFFA3", detail: "A3 (297 x 420)", img: IMG+"tassebois.jpg", qtyType: "affiche" }
                 ]},
                 { key: "jeux-loisirs", label: "Jeux & Loisirs", items: [
-                    { name: "Morpion", ref: "MOR 01", img: "images/mugs/morpion.png", qtyType: "jeux" },
-                    { name: "Dominos", ref: "DOM 01", img: "images/mugs/morpion.png", qtyType: "jeux" },
-                    { name: "Mikado", ref: "MIK 01", img: "images/mugs/morpion.png", qtyType: "jeux" },
-                    { name: "Yoyo", ref: "YOY 01", img: "images/mugs/morpion.png", qtyType: "jeux" },
-                    { name: "Jeux de Cartes", ref: "JDC 01", img: "images/mugs/morpion.png", qtyType: "jeux" },
-                    { name: "Raquette Bois", ref: "RB 01", img: "images/mugs/morpion.png", qtyType: "jeux" }
+                    { name: "Morpion", ref: "MOR 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
+                    { name: "Dominos", ref: "DOM 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
+                    { name: "Mikado", ref: "MIK 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
+                    { name: "Yoyo", ref: "YOY 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
+                    { name: "Jeux de Cartes", ref: "JDC 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
+                    { name: "Raquette Bois", ref: "RB 01", img: IMG+"morpion.jpg", qtyType: "jeux" }
                 ]},
                 { key: "bijoux", label: "Bijoux", items: [
-                    { name: "Bracelet en Acrylique", ref: "BA 01", img: "images/mugs/porteclesplexiglass.png", qtyType: "jeux" }
+                    { name: "Bracelet en Acrylique", ref: "BA 01", img: IMG+"porteclesplexiglass.jpg", qtyType: "jeux" }
                 ]},
                 { key: "decoration", label: "Décoration", items: [
-                    { name: "Tableau Black A4", ref: "TBA4", img: "images/mugs/tableaua3.png", qtyType: "tableau" },
-                    { name: "Tableau Black A3", ref: "TBA3", img: "images/mugs/tableaua3.png", qtyType: "tableau" }
+                    { name: "Tableau Black A4", ref: "TBA4", img: IMG+"tassebois.jpg", qtyType: "tableau" },
+                    { name: "Tableau Black A3", ref: "TBA3", img: IMG+"tassebois.jpg", qtyType: "tableau" }
                 ]}
             ]},
             { key: "offres", label: "Offres Spéciales", isDiscount: true, sub: [{ key: "promo", label: "Promotions", items: [
-                { name: "Porte Carte Liège", ref: "PCL 01", img: "images/mugs/ivl01.png", qtyType: "offre" },
-                { name: "Couteau Multi Liège", ref: "CML 01", img: "images/mugs/couteaumultibois.png", qtyType: "offre" },
-                { name: "Porte Monnaie Liège", ref: "PML 01", img: "images/mugs/ivl01.png", qtyType: "offre" },
-                { name: "Boîte à bijoux en bois", ref: "BAB 01", img: "images/mugs/morpion.png", qtyType: "offre" },
-                { name: "Décapsuleur Bois", ref: "DB 01", img: "images/mugs/limonadierboisclair.png", qtyType: "offre" },
-                { name: "Boîte à clic-clac", ref: "BCC 01", img: "images/mugs/morpion.png", qtyType: "offre" },
-                { name: "Cendrier Liège", ref: "CL 01", img: "images/mugs/dessousdeplatliege.png", qtyType: "offre" }
+                { name: "Porte Carte Liège", ref: "PCL 01", img: IMG+"ivl01.jpg", qtyType: "offre" },
+                { name: "Couteau Multi Liège", ref: "CML 01", img: IMG+"couteaumultibois.png", qtyType: "offre" },
+                { name: "Porte Monnaie Liège", ref: "PML 01", img: IMG+"ivl01.jpg", qtyType: "offre" },
+                { name: "Boîte à bijoux en bois", ref: "BAB 01", img: IMG+"morpion.jpg", qtyType: "offre" },
+                { name: "Décapsuleur Bois", ref: "DB 01", img: IMG+"limonadierboisclair.png", qtyType: "offre" },
+                { name: "Boîte à clic-clac", ref: "BCC 01", img: IMG+"morpion.jpg", qtyType: "offre" },
+                { name: "Cendrier Liège", ref: "CL 01", img: IMG+"dessousdeplatliege.png", qtyType: "offre" }
             ]}]}
         ];
         const QTY_CONFIG = {
