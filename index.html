@@ -9,9 +9,9 @@
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root {
-            --white: #ffffff;
-            --off-white: #fdfcfa;
-            --sand: #f5f1eb;
+            --white: #f8f8f8;
+            --off-white: #f5f5f5;
+            --sand: #f0f0f0;
             --sand-dark: #e8e2d9;
             --black: #1d1d1f;
             --charcoal: #2c2c2e;
@@ -32,7 +32,7 @@
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
         body { font-family: var(--font-main); background: var(--white); color: var(--black); -webkit-font-smoothing: antialiased; line-height: 1.5; overflow-x: hidden; }
-        .home-page { position: fixed; inset: 0; background: var(--white); z-index: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
+        .home-page { position: fixed; inset: 0; background: #ffffff; z-index: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
         .home-page.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
         .home-logo { width: clamp(180px, 40vw, 280px); height: auto; margin-bottom: 50px; animation: fadeInUp 0.8s ease; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease; }
         .home-page.transitioning .home-logo { transform: scale(0.85) translateY(-20px); opacity: 0; }
@@ -44,7 +44,7 @@
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         .shop-container { opacity: 0; transform: translateY(30px); transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s; }
         .shop-container.visible { opacity: 1; transform: translateY(0); }
-        .header { position: sticky; top: 0; z-index: 100; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 clamp(20px, 5vw, 40px); height: 65px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
+        .header { position: sticky; top: 0; z-index: 100; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 0 clamp(20px, 5vw, 40px); height: 65px; background: rgba(248, 248, 248, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
         .logo { height: 40px; width: auto; cursor: pointer; transition: opacity var(--transition-fast), transform 0.3s ease; grid-column: 2; justify-self: center; }
         .logo:hover { opacity: 0.7; transform: scale(1.02); }
         .cart-trigger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: none; border: none; cursor: pointer; transition: transform var(--transition-fast); grid-column: 3; justify-self: end; }
@@ -122,7 +122,7 @@
         .cart-submit { width: 100%; padding: 14px; background: var(--black); border: none; border-radius: var(--radius); color: var(--white); font-family: var(--font-main); font-size: 12px; font-weight: 500; letter-spacing: 0.5px; cursor: pointer; transition: all var(--transition-fast); }
         .cart-submit:hover:not(:disabled) { background: var(--charcoal); transform: translateY(-1px); }
         .cart-submit:disabled { opacity: 0.4; cursor: not-allowed; }
-        .confirmation-overlay { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
+        .confirmation-overlay { position: fixed; inset: 0; background: rgba(248, 248, 248, 0.98); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
         .confirmation-overlay.visible { opacity: 1; visibility: visible; }
         .confirmation-logo { width: clamp(140px, 30vw, 200px); height: auto; margin-bottom: 40px; animation: confirmFadeIn 0.8s ease 0.2s both; }
         .confirmation-message { font-size: clamp(14px, 3vw, 18px); font-weight: 400; color: var(--charcoal); text-align: center; letter-spacing: 0.5px; animation: confirmFadeIn 0.8s ease 0.4s both; padding: 0 20px; }
@@ -248,7 +248,7 @@
                     { name: "Tasse Fuck", ref: "TCF 17", size: "350ml", color: "Noir & Orange", img: IMG+"TCF17.jpg", qtyType: "tasse" }
                 ]},
                 { key: "ceramique", label: "Tasse Céramique", items: [
-                    { name: "Tasse Céramique", ref: "TC 01", size: "350ml", color: "Rouge & Blanc", img: IMG+"TC01.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 01", size: "350ml", color: "Rouge & Blanc", img: IMG+"TC01.jpg", qtyType: "tasse" },
                     { name: "Tasse Céramique", ref: "TC 02", size: "350ml", color: "Orange & Blanc", img: IMG+"TC02.jpg", qtyType: "tasse" },
                     { name: "Tasse Céramique", ref: "TC 03", size: "350ml", color: "Rose & Blanc", img: IMG+"TC03.jpg", qtyType: "tasse" },
                     { name: "Tasse Céramique", ref: "TC 04", size: "350ml", color: "Bleu & Blanc", img: IMG+"TC04.jpg", qtyType: "tasse" },
