@@ -212,11 +212,11 @@
     <script>
     (function() {
         'use strict';
-        const IMG = "/public/images/";
+        const IMG = "/images/";
         let PRICES = {};
 
         // Charger les prix depuis le fichier JSON
-        fetch('/public/prices.json')
+        fetch('/prices.json')
             .then(res => res.json())
             .then(data => { PRICES = data; renderProducts(); })
             .catch(err => console.warn('Prices file not found, using defaults'));
