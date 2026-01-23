@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="OLDA Atelier — Boutique B2B de souvenirs premium Saint-Martin">
+    <meta name="description" content="OLDA Atelier — Boutique Officielle">
     <meta name="theme-color" content="#ffffff">
     <title>OLDA Atelier | Boutique Officielle</title>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
@@ -514,6 +514,12 @@
                 return;
             }
 
+            // Vérifier que EmailJS est bien chargé
+            if (typeof emailjs === 'undefined') {
+                alert('Service d\'envoi non disponible. Veuillez recharger la page.');
+                return;
+            }
+
             cartSubmit.disabled = true;
             cartSubmit.textContent = 'Envoi en cours...';
 
@@ -542,8 +548,16 @@
 
             console.log('Envoi de la commande...', templateParams);
 
+            // Créer un timeout de 30 secondes pour Safari iOS
+            let timeoutId = setTimeout(() => {
+                cartSubmit.disabled = false;
+                cartSubmit.textContent = 'Confirmer la commande';
+                alert('Délai d\'attente dépassé. Vérifiez votre connexion internet et réessayez.');
+            }, 30000);
+
             emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams)
                 .then((response) => {
+                    clearTimeout(timeoutId);
                     console.log('Succès EmailJS:', response);
                     confirmationOverlay.classList.add('visible');
                     cart = [];
@@ -554,9 +568,10 @@
                     cartSubmit.textContent = 'Confirmer la commande';
                 })
                 .catch((error) => {
+                    clearTimeout(timeoutId);
                     console.error('Erreur EmailJS complète:', error);
-                    const errorMsg = error && error.text ? error.text : (error && error.message ? error.message : JSON.stringify(error));
-                    alert('Erreur lors de l\'envoi : ' + errorMsg);
+                    const errorMsg = error && error.text ? error.text : (error && error.message ? error.message : 'Service temporairement indisponible');
+                    alert('Erreur lors de l\'envoi : ' + errorMsg + '. Veuillez réessayer.');
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 });
