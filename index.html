@@ -519,18 +519,52 @@
             const templateParams = { order_number: orderNumber, customer_name: customerName.value, customer_email: customerEmail.value, customer_comment: customerComment.value || '', order_table_rows: orderTableRows, total_items: cart.reduce((sum, i) => sum + i.qty, 0) };
             cartSubmit.disabled = true;
             cartSubmit.textContent = 'Envoi en cours...';
-            emailjs.init('Y9NKwhNvCNtb_SRry');
+            nom et votre email.');
+                return;
+            }
+
+            cartSubmit.disabled = true;
+            cartSubmit.textContent = 'Envoi en cours...';
+
+            const templateParams = {
+                order_number: Math.floor(Math.random() * 90000) + 10000,
+                customer_name: customerName.value,
+                customer_email: customerEmail.value,
+                customer_comment: customerComment.value || 'Aucun commentaire',
+                order_table_rows: cart.map(item => `
+                    <tr style="border-bottom: 1px solid #f2f2f7;">
+                        <td style="padding: 14px 0; font-weight: 700; font-size: 15px;">${item.name} (${item.ref})</td>
+                        <td style="padding: 14px 0; text-align: right; width: 100px;">
+                            <span style="color: #8e8e93; font-size: 14px;">Qté :</span>
+                            <span style="color: #ff3b30; font-weight: 800; font-size: 18px; margin-left: 5px;">${item.quantity}</span>
+                        </td>
+                    </tr>
+                `).join('')
+            };
+
+            // Utilisation des IDs de votre compte (Vérifiez-les dans EmailJS)
             emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams)
                 .then(() => {
-                    closeCart();
+                    // SUCCÈS
                     confirmationOverlay.classList.add('visible');
                     cart = [];
+                    localStorage.removeItem('olda_cart');
                     updateCartUI();
-                    customerName.value = '';
-                    customerEmail.value = '';
-                    customerComment.value = '';
+                    cartPanel.classList.remove('open');
+                    cartOverlay.classList.remove('open');
+                    orderForm.reset();
+                    cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
-               }, (error) => {
+                })
+                .catch((error) => {
+                    // DIAGNOSTIC : Ce message vous dira la vérité
+                    alert('ERREUR TECHNIQUE : ' + error.text + ' (Status: ' + error.status + ')');
+                    console.error('EmailJS error:', error);
+                    cartSubmit.disabled = false;
+                    cartSubmit.textContent = 'Confirmer la commande';
+                });
+        });
+        // --- FIN DU BLOC ---
     // Ce code va vous afficher une alerte avec la vraie raison du blocage
     alert('Erreur EmailJS : ' + error.text + ' (Status: ' + error.status + ')');
     console.error('EmailJS error:', error);
