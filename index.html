@@ -513,103 +513,52 @@
             const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
 
-            let productRows = cart.map(i => {
-                let spec = i.color || i.size || i.detail || '—';
-                return `
-                    <tr>
-                        <td style="padding: 18px 0; border-bottom: 1px solid #f0f0f0;">
-                            <div style="font-size: 14px; font-weight: 600; color: #1d1d1f; text-transform: uppercase; letter-spacing: 0.5px;">${i.name}</div>
-                            <div style="font-size: 12px; color: #86868b; margin-top: 4px;">Réf: ${i.ref} • ${spec}</div>
-                        </td>
-                        <td style="padding: 18px 0; border-bottom: 1px solid #f0f0f0; text-align: right; vertical-align: middle;">
-                            <span style="font-size: 16px; font-weight: 400; color: #1d1d1f;">Qté: <strong>${i.qty}</strong></span>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
+            // Génération de la liste produits en TEXTE
+            let textProductList = '';
+            cart.forEach(i => {
+                textProductList += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
+                textProductList += `${i.name}\n`;
+                textProductList += `Réf: ${i.ref}`;
+                if (i.color) textProductList += ` | ${i.color}`;
+                if (i.size) textProductList += ` | ${i.size}`;
+                if (i.detail) textProductList += ` | ${i.detail}`;
+                textProductList += `\n► QUANTITÉ: ${i.qty}\n\n`;
+            });
 
-            const emailHTML = `
-<!DOCTYPE html>
-<html lang="fr">
-<head><meta charset="UTF-8"></head>
-<body style="margin: 0; padding: 0; background-color: #fcfcfc; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border: 1px solid #eeeeee; border-radius: 8px; overflow: hidden;">
-        <tr>
-            <td style="padding: 40px 20px; text-align: center; border-bottom: 1px solid #f9f9f9;">
-                <div style="font-size: 22px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: #1d1d1f;">Atelier OLDA</div>
-                <div style="font-size: 10px; color: #86868b; letter-spacing: 2px; margin-top: 5px;">ST MARTIN</div>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 30px 40px;">
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                    <tr>
-                        <td align="center" style="width: 33%;">
-                            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #1d1d1f; font-weight: 600;">Confirmée</div>
-                            <div style="height: 4px; background: #1d1d1f; margin-top: 10px; border-radius: 2px;"></div>
-                        </td>
-                        <td align="center" style="width: 33%; padding: 0 5px;">
-                            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aeaeb2;">Préparation</div>
-                            <div style="height: 4px; background: #eeeeee; margin-top: 10px; border-radius: 2px;"></div>
-                        </td>
-                        <td align="center" style="width: 33%;">
-                            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aeaeb2;">Expédition</div>
-                            <div style="height: 4px; background: #eeeeee; margin-top: 10px; border-radius: 2px;"></div>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 20px 40px 40px 40px; text-align: center;">
-                <h2 style="font-size: 20px; font-weight: 400; color: #1d1d1f; margin-bottom: 10px;">Merci pour votre commande.</h2>
-                <p style="font-size: 15px; color: #86868b; line-height: 1.6;">Nous avons bien reçu votre sélection. Un conseiller de l'Atelier OLDA reviendra vers vous pour finaliser les détails.</p>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 0 40px 40px 40px;">
-                <div style="border-top: 1px solid #1d1d1f; padding-top: 20px;">
-                    <table width="100%">
-                        <tr>
-                            <td>
-                                <div style="font-size: 11px; color: #86868b; text-transform: uppercase; letter-spacing: 1px;">Commande n°</div>
-                                <div style="font-size: 15px; font-weight: 600;">${orderNumber}</div>
-                            </td>
-                            <td style="text-align: right;">
-                                <div style="font-size: 11px; color: #86868b; text-transform: uppercase; letter-spacing: 1px;">Client</div>
-                                <div style="font-size: 15px; font-weight: 600;">${customerName.value}</div>
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 0 40px 40px 40px;">
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                    ${productRows}
-                    <tr>
-                        <td style="padding: 30px 0; font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Total Articles</td>
-                        <td style="padding: 30px 0; text-align: right; font-size: 22px; font-weight: 300;">${totalItems}</td>
-                    </tr>
-                </table>
-                ${customerComment.value ? `<div style="padding: 20px; background: #f9f9f9; border-radius: 4px; font-size: 14px; color: #444; line-height: 1.5;"><strong>Note client :</strong><br>${customerComment.value}</div>` : ''}
-            </td>
-        </tr>
-        <tr>
-            <td style="padding: 40px; background-color: #f9f9f9; text-align: center; font-size: 11px; color: #aeaeb2; letter-spacing: 0.5px; text-transform: uppercase;">
-                © 2026 Atelier OLDA — Saint-Martin, Antilles françaises
-            </td>
-        </tr>
-    </table>
-</body>
-</html>`;
+            // Message TEXTE simple
+            const plainMessage = `
+╔════════════════════════════════════════╗
+    NOUVELLE COMMANDE ATELIER OLDA    
+╚════════════════════════════════════════╝
+
+📋 COMMANDE N°: ${orderNumber}
+📅 DATE: ${new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
+
+┌────────────────────────────────────────┐
+│ CLIENT                                 │
+└────────────────────────────────────────┘
+👤 Nom: ${customerName.value}
+📧 Email: ${customerEmail.value}
+
+┌────────────────────────────────────────┐
+│ PRODUITS COMMANDÉS                     │
+└────────────────────────────────────────┘
+
+${textProductList}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📦 TOTAL ARTICLES: ${totalItems} unités
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${customerComment.value ? `\n┌────────────────────────────────────────┐\n│ COMMENTAIRE CLIENT                     │\n└────────────────────────────────────────┘\n${customerComment.value}\n\n` : ''}
+╔════════════════════════════════════════╗
+  © 2026 Atelier OLDA - Saint-Martin   
+╚════════════════════════════════════════╝
+`.trim();
 
             const formData = new FormData();
             formData.append('access_key', '3f8169ef-4dbd-49ea-9d88-27b6ecfe1d34');
-            formData.append('subject', `Nouvelle commande : ${customerName.value} - ${orderNumber}`);
-            formData.append('from_name', 'Atelier OLDA - Commande');
-            formData.append('message', emailHTML);
+            formData.append('subject', `📦 Commande ${orderNumber} - ${customerName.value}`);
+            formData.append('from_name', 'Boutique OLDA');
+            formData.append('message', plainMessage);
             formData.append('email', customerEmail.value);
             formData.append('replyto', customerEmail.value);
 
