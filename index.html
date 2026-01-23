@@ -208,6 +208,7 @@
             </button>
         </div>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
     <script>
     (function() {
         'use strict';
@@ -513,54 +514,29 @@
             const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
 
-            // Génération de la liste produits en TEXTE
-            let textProductList = '';
-            cart.forEach(i => {
-                textProductList += '━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n';
-                textProductList += `${i.name}\n`;
-                textProductList += `Réf: ${i.ref}`;
-                if (i.color) textProductList += ` | ${i.color}`;
-                if (i.size) textProductList += ` | ${i.size}`;
-                if (i.detail) textProductList += ` | ${i.detail}`;
-                textProductList += `\n► QUANTITÉ: ${i.qty}\n\n`;
-            });
-
-            // Message TEXTE simple
-            const plainMessage = `
-╔════════════════════════════════════════╗
-    NOUVELLE COMMANDE ATELIER OLDA    
-╚════════════════════════════════════════╝
-
-📋 COMMANDE N°: ${orderNumber}
-📅 DATE: ${new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' })}
-
-┌────────────────────────────────────────┐
-│ CLIENT                                 │
-└────────────────────────────────────────┘
-👤 Nom: ${customerName.value}
-📧 Email: ${customerEmail.value}
-
-┌────────────────────────────────────────┐
-│ PRODUITS COMMANDÉS                     │
-└────────────────────────────────────────┘
-
-${textProductList}
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-📦 TOTAL ARTICLES: ${totalItems} unités
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-${customerComment.value ? `\n┌────────────────────────────────────────┐\n│ COMMENTAIRE CLIENT                     │\n└────────────────────────────────────────┘\n${customerComment.value}\n\n` : ''}
-╔════════════════════════════════════════╗
-  © 2026 Atelier OLDA - Saint-Martin   
-╚════════════════════════════════════════╝
-`.trim();
-
             const formData = new FormData();
             formData.append('access_key', '3f8169ef-4dbd-49ea-9d88-27b6ecfe1d34');
-            formData.append('subject', `📦 Commande ${orderNumber} - ${customerName.value}`);
-            formData.append('from_name', 'Boutique OLDA');
-            formData.append('message', plainMessage);
-            formData.append('email', customerEmail.value);
-            formData.append('replyto', customerEmail.value);
+            formData.append('subject', `Commande ${orderNumber} - ${customerName.value}`);
+            formData.append('from_name', 'Atelier OLDA');
+            formData.append('Numero_commande', orderNumber);
+            formData.append('Nom_client', customerName.value);
+            formData.append('Email_client', customerEmail.value);
+            formData.append('Total_articles', totalItems);
+            
+            cart.forEach((item, index) => {
+                let produitDetails = item.name;
+                if (item.color) produitDetails += ' - ' + item.color;
+                if (item.size) produitDetails += ' - ' + item.size;
+                if (item.detail) produitDetails += ' - ' + item.detail;
+                
+                formData.append(`Produit_${index + 1}`, produitDetails);
+                formData.append(`Reference_${index + 1}`, item.ref);
+                formData.append(`Quantite_${index + 1}`, item.qty);
+            });
+            
+            if (customerComment.value) {
+                formData.append('Commentaire', customerComment.value);
+            }
 
             try {
                 const response = await fetch('https://api.web3forms.com/submit', {
