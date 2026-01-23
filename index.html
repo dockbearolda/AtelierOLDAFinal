@@ -509,6 +509,11 @@
                 return;
             }
 
+            if (typeof emailjs === 'undefined') {
+                alert('Service EmailJS non chargé. Veuillez recharger la page.');
+                return;
+            }
+
             cartSubmit.disabled = true;
             cartSubmit.textContent = 'Envoi en cours...';
 
@@ -535,7 +540,13 @@
                 to_email: 'atelierolda@gmail.com'
             };
 
-            emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams, 'Y9NKwhNvCNtb_SRry')
+            const timeoutPromise = new Promise((_, reject) => {
+                setTimeout(() => reject(new Error('timeout')), 15000);
+            });
+
+            const sendPromise = emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams, 'Y9NKwhNvCNtb_SRry');
+
+            Promise.race([sendPromise, timeoutPromise])
                 .then(() => {
                     confirmationOverlay.classList.add('visible');
                     cart = [];
@@ -546,8 +557,11 @@
                     cartSubmit.textContent = 'Confirmer la commande';
                 })
                 .catch((error) => {
-                    alert('Erreur lors de l\'envoi : ' + (error.text || 'Erreur inconnue'));
-                    console.error('EmailJS error:', error);
+                    if (error.message === 'timeout') {
+                        alert('La connexion prend trop de temps. Vérifiez que vous êtes connecté à Internet et réessayez. Si le problème persiste, votre commande a peut-être été envoyée, vérifiez vos emails.');
+                    } else {
+                        alert('Erreur lors de l\'envoi : ' + (error.text || error.message || 'Erreur inconnue'));
+                    }
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 });
