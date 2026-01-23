@@ -509,14 +509,12 @@
                 return;
             }
 
+            cartSubmit.disabled = true;
+            cartSubmit.textContent = 'Envoi en cours...';
+
             const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
 
-            let orderDetails = 'COMMANDE N° ' + orderNumber + '\n\n';
-            orderDetails += 'CLIENT: ' + customerName.value + '\n';
-            orderDetails += 'EMAIL: ' + customerEmail.value + '\n\n';
-            orderDetails += 'ARTICLES COMMANDÉS:\n';
-            orderDetails += '─────────────────────\n';
-
+            let orderDetails = '';
             cart.forEach(i => {
                 let spec = '';
                 if (i.color && i.selectedSize) spec = i.color + ' / Taille ' + i.selectedSize;
@@ -529,25 +527,38 @@
                 orderDetails += '\n• ' + i.name + '\n  Réf: ' + i.ref + '\n  ' + spec + '\n  Quantité: ' + i.qty + '\n';
             });
 
-            orderDetails += '\n─────────────────────\n';
-            orderDetails += 'TOTAL ARTICLES: ' + cart.reduce((sum, i) => sum + i.qty, 0) + '\n\n';
+            const formData = new FormData();
+            formData.append('order_number', orderNumber);
+            formData.append('customer_name', customerName.value);
+            formData.append('customer_email', customerEmail.value);
+            formData.append('customer_comment', customerComment.value || 'Aucun commentaire');
+            formData.append('order_details', orderDetails);
+            formData.append('total_items', cart.reduce((sum, i) => sum + i.qty, 0));
 
-            if (customerComment.value) {
-                orderDetails += 'COMMENTAIRE:\n' + customerComment.value;
-            }
-
-            const subject = 'Nouvelle commande ' + orderNumber;
-            const mailtoLink = 'mailto:atelierolda@gmail.com?subject=' + encodeURIComponent(subject) + '&body=' + encodeURIComponent(orderDetails);
-
-            window.location.href = mailtoLink;
-
-            setTimeout(() => {
-                confirmationOverlay.classList.add('visible');
-                cart = [];
-                updateCartUI();
-                closeCart();
-                orderForm.reset();
-            }, 500);
+            fetch('/send-order.php', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    confirmationOverlay.classList.add('visible');
+                    cart = [];
+                    updateCartUI();
+                    closeCart();
+                    orderForm.reset();
+                } else {
+                    alert('Erreur: ' + data.message);
+                }
+            })
+            .catch((error) => {
+                alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                cartSubmit.disabled = false;
+                cartSubmit.textContent = 'Confirmer la commande';
+            });
         });
 
         // Image Zoom Feature
