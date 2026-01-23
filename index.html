@@ -6,7 +6,6 @@
     <meta name="description" content="OLDA Atelier — Boutique Officielle">
     <meta name="theme-color" content="#ffffff">
     <title>OLDA Atelier | Boutique Officielle</title>
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <style>
         :root {
             --white: #ffffff;
@@ -212,11 +211,6 @@
     <script>
     (function() {
         'use strict';
-
-        // Initialize EmailJS
-        (function() {
-            emailjs.init('Y9NKwhNvCNtb_SRry');
-        })();
 
         const IMG = "/images/";
         let PRICES = {};
@@ -519,7 +513,8 @@
             cartSubmit.textContent = 'Envoi en cours...';
 
             const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
-            let orderTableRows = cart.map(i => {
+
+            let orderDetails = cart.map(i => {
                 let spec = '';
                 if (i.color && i.selectedSize) spec = i.color + ' / Taille ' + i.selectedSize;
                 else if (i.color && i.size) spec = i.color + ' / ' + i.size;
@@ -528,35 +523,44 @@
                 else if (i.size) spec = 'Taille ' + i.size;
                 else if (i.detail) spec = i.detail;
                 else spec = '—';
-                return '<tr style="border-bottom: 1px solid #f2f2f7;"><td style="padding: 14px 0; font-weight: 700; font-size: 15px;">' + i.name + ' (' + i.ref + ')</td><td style="padding: 14px 0;">' + spec + '</td><td style="padding: 14px 0; text-align: right;"><span style="color: #ff3b30; font-weight: 800; font-size: 18px;">' + i.qty + '</span></td></tr>';
-            }).join('');
+                return i.name + ' (' + i.ref + ') - ' + spec + ' x ' + i.qty;
+            }).join('\n');
 
-            const templateParams = {
-                order_number: orderNumber,
-                customer_name: customerName.value,
-                customer_email: customerEmail.value,
-                customer_comment: customerComment.value || 'Aucun commentaire',
-                order_table_rows: orderTableRows,
-                total_items: cart.reduce((sum, i) => sum + i.qty, 0),
-                to_email: 'atelierolda@gmail.com'
-            };
+            const formData = new FormData();
+            formData.append('_subject', 'Nouvelle commande ' + orderNumber);
+            formData.append('Numero_commande', orderNumber);
+            formData.append('Client', customerName.value);
+            formData.append('Email', customerEmail.value);
+            formData.append('Articles', orderDetails);
+            formData.append('Total_articles', cart.reduce((sum, i) => sum + i.qty, 0));
+            formData.append('Commentaire', customerComment.value || 'Aucun commentaire');
 
-            emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams)
-                .then(() => {
+            fetch('https://formsubmit.co/atelierolda@gmail.com', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            })
+            .then(response => {
+                if (response.ok) {
                     confirmationOverlay.classList.add('visible');
                     cart = [];
                     updateCartUI();
                     closeCart();
                     orderForm.reset();
-                    cartSubmit.disabled = false;
-                    cartSubmit.textContent = 'Confirmer la commande';
-                })
-                .catch((error) => {
-                    alert('Erreur lors de l\'envoi : ' + (error.text || 'Erreur inconnue'));
-                    console.error('EmailJS error:', error);
-                    cartSubmit.disabled = false;
-                    cartSubmit.textContent = 'Confirmer la commande';
-                });
+                } else {
+                    throw new Error('Erreur réseau');
+                }
+            })
+            .catch((error) => {
+                alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+                console.error('Error:', error);
+            })
+            .finally(() => {
+                cartSubmit.disabled = false;
+                cartSubmit.textContent = 'Confirmer la commande';
+            });
         });
 
         // Image Zoom Feature
