@@ -503,7 +503,7 @@
         cartClose.addEventListener('click', closeCart);
         cartOverlay.addEventListener('click', closeCart);
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart(); });
-        cartSubmit.addEventListener('click', () => {
+        cartSubmit.addEventListener('click', async () => {
             if (!customerName.value || !customerEmail.value) {
                 alert('Veuillez remplir votre nom et votre email.');
                 return;
@@ -514,7 +514,10 @@
 
             const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
 
-            let orderDetails = '';
+            let orderDetails = 'COMMANDE N° ' + orderNumber + '\n\n';
+            orderDetails += 'CLIENT: ' + customerName.value + '\n';
+            orderDetails += 'EMAIL: ' + customerEmail.value + '\n\n';
+            orderDetails += 'ARTICLES:\n';
             cart.forEach(i => {
                 let spec = '';
                 if (i.color && i.selectedSize) spec = i.color + ' / Taille ' + i.selectedSize;
@@ -524,23 +527,24 @@
                 else if (i.size) spec = 'Taille ' + i.size;
                 else if (i.detail) spec = i.detail;
                 else spec = '—';
-                orderDetails += '\n• ' + i.name + '\n  Réf: ' + i.ref + '\n  ' + spec + '\n  Quantité: ' + i.qty + '\n';
+                orderDetails += '• ' + i.name + ' (' + i.ref + ') - ' + spec + ' x' + i.qty + '\n';
             });
+            orderDetails += '\nTOTAL: ' + cart.reduce((sum, i) => sum + i.qty, 0) + ' articles';
+            if (customerComment.value) orderDetails += '\n\nCOMMENTAIRE:\n' + customerComment.value;
 
             const formData = new FormData();
-            formData.append('order_number', orderNumber);
-            formData.append('customer_name', customerName.value);
-            formData.append('customer_email', customerEmail.value);
-            formData.append('customer_comment', customerComment.value || 'Aucun commentaire');
-            formData.append('order_details', orderDetails);
-            formData.append('total_items', cart.reduce((sum, i) => sum + i.qty, 0));
+            formData.append('access_key', 'YOUR_WEB3FORMS_KEY');
+            formData.append('subject', 'Nouvelle commande ' + orderNumber);
+            formData.append('from_name', customerName.value);
+            formData.append('email', customerEmail.value);
+            formData.append('message', orderDetails);
 
-            fetch('/send-order.php', {
-                method: 'POST',
-                body: formData
-            })
-            .then(response => response.json())
-            .then(data => {
+            try {
+                const response = await fetch('https://api.web3forms.com/submit', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
                 if (data.success) {
                     confirmationOverlay.classList.add('visible');
                     cart = [];
@@ -548,17 +552,14 @@
                     closeCart();
                     orderForm.reset();
                 } else {
-                    alert('Erreur: ' + data.message);
+                    alert('Erreur lors de l\'envoi. Veuillez réessayer.');
                 }
-            })
-            .catch((error) => {
-                alert('Erreur lors de l\'envoi. Veuillez réessayer.');
-                console.error('Error:', error);
-            })
-            .finally(() => {
+            } catch (error) {
+                alert('Erreur lors de l\'envoi. Vérifiez votre connexion.');
+            } finally {
                 cartSubmit.disabled = false;
                 cartSubmit.textContent = 'Confirmer la commande';
-            });
+            }
         });
 
         // Image Zoom Feature
