@@ -24,512 +24,482 @@
             --border-light: #f2f2f2;
             --discount: #bf4800;
             --discount-light: #fff8f5;
-            --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Helvetica, Arial, sans-serif;
-            --transition-fast: 0.2s ease;
-            --transition-smooth: 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-            --radius: 8px;
+            --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
         }
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        html { -webkit-tap-highlight-color: transparent; scroll-behavior: smooth; }
-        body { font-family: var(--font-main); background: var(--white); color: var(--black); -webkit-font-smoothing: antialiased; line-height: 1.5; overflow-x: hidden; }
-        .home-page { position: fixed; inset: 0; background: var(--white); z-index: 500; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.8s cubic-bezier(0.4, 0, 0.2, 1); }
-        .home-page.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-        .home-logo { width: clamp(180px, 40vw, 280px); height: auto; margin-bottom: 50px; animation: fadeInUp 0.8s ease; transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease; }
-        .home-page.transitioning .home-logo { transform: scale(0.85) translateY(-20px); opacity: 0; }
-        .home-btn { padding: 16px 32px; background: transparent; border: none; color: var(--black); font-family: var(--font-main); font-size: 13px; font-weight: 400; letter-spacing: 0.8px; cursor: pointer; transition: all var(--transition-smooth); animation: fadeInUp 0.8s ease 0.2s both; position: relative; overflow: hidden; }
-        .home-btn::after { content: ''; position: absolute; bottom: 8px; left: 50%; width: 0; height: 1px; background: var(--ocean); transition: all 0.3s ease; transform: translateX(-50%); }
-        .home-btn:hover { color: var(--ocean); }
-        .home-btn:hover::after { width: 60%; }
-        .home-page.transitioning .home-btn { opacity: 0; transform: translateY(10px); }
-        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .shop-container { opacity: 0; transform: translateY(30px); transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s, transform 0.6s cubic-bezier(0.4, 0, 0.2, 1) 0.4s; }
-        .shop-container.visible { opacity: 1; transform: translateY(0); }
-        .header { position: sticky; top: 0; z-index: 100; display: flex; align-items: center; justify-content: center; padding: 0 clamp(20px, 5vw, 40px); height: 65px; background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); }
-        .logo { height: 40px; width: auto; cursor: pointer; transition: opacity var(--transition-fast), transform 0.3s ease; }
-        .logo:hover { opacity: 0.7; transform: scale(1.02); }
-        .cart-trigger { position: absolute; right: clamp(20px, 5vw, 40px); display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: none; border: none; cursor: pointer; transition: transform var(--transition-fast); }
-        .cart-trigger:hover { transform: scale(1.05); }
-        .cart-trigger svg { width: 22px; height: 22px; stroke: var(--black); stroke-width: 1.5; fill: none; }
-        .cart-count { position: absolute; top: 4px; right: 4px; min-width: 18px; height: 18px; padding: 0 5px; background: var(--black); color: var(--white); font-size: 10px; font-weight: 400; border-radius: 9px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5); transition: all var(--transition-fast); }
-        .cart-count.visible { opacity: 1; transform: scale(1); }
-        .nav-main { position: relative; display: flex; gap: 8px; padding: 14px clamp(20px, 5vw, 40px); overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); background: var(--white); }
-        .nav-main::-webkit-scrollbar { display: none; }
-        .tab-btn { flex-shrink: 0; padding: 10px 18px; background: none; border: none; font-size: 11px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; color: var(--charcoal); cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; border-bottom: 1px solid transparent; }
-        .tab-btn:hover { color: var(--black); }
-        .tab-btn.active { color: var(--black); border-bottom-color: var(--black); font-weight: 500; }
-        .nav-sub { position: relative; display: flex; gap: 20px; padding: 12px clamp(20px, 5vw, 40px); overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); background: var(--white); }
-        .nav-sub::-webkit-scrollbar { display: none; }
-        .sub-btn { flex-shrink: 0; padding: 6px 0; background: none; border: none; border-bottom: 1px solid transparent; font-size: 10px; font-weight: 400; letter-spacing: 0.8px; text-transform: uppercase; color: var(--charcoal); cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; }
-        .sub-btn:hover { color: var(--black); }
-        .sub-btn.active { color: var(--black); border-bottom-color: var(--black); }
-        .promo-banner { display: none; padding: 10px 20px; background: var(--discount-light); border-bottom: 1px solid rgba(191, 72, 0, 0.1); text-align: center; font-size: 12px; color: var(--discount); font-weight: 500; letter-spacing: 0.3px; }
-        .promo-banner.visible { display: block; }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); position: relative; }
-        .product-grid::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--border); pointer-events: none; }
-        @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(3, 1fr); } .product-grid::after { display: none; } }
-        @media (min-width: 1200px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
-        .product-card { padding: clamp(30px, 6vw, 50px) clamp(15px, 4vw, 25px); display: flex; flex-direction: column; align-items: center; text-align: center; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; position: relative; }
-        .product-card.visible { opacity: 1; transform: translateY(0); }
-        @media (min-width: 768px) { .product-card { border-right: 1px solid var(--border); } .product-card:nth-child(3n) { border-right: none; } }
-        @media (min-width: 1200px) { .product-card:nth-child(3n) { border-right: 1px solid var(--border); } .product-card:nth-child(4n) { border-right: none; } }
-        .discount-badge { position: absolute; top: 15px; right: 15px; background: var(--discount); color: var(--white); font-size: 11px; font-weight: 600; padding: 5px 10px; border-radius: 4px; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(191, 72, 0, 0.3); }
-        .product-img-wrapper { position: relative; width: 100%; max-width: 140px; margin: 0 auto 24px auto; }
-        .product-img { width: 100%; max-width: 140px; height: 140px; background-color: var(--white); background-size: contain; background-position: center bottom; background-repeat: no-repeat; border-radius: var(--radius); transition: transform var(--transition-smooth); display: block; }
-        .product-card:hover .product-img { transform: scale(1.03); }
-        .product-title { font-size: 13px; font-weight: 500; line-height: 1.4; margin-bottom: 6px; min-height: 36px; display: flex; align-items: center; justify-content: center; }
-        .product-info { font-size: 10px; color: var(--gray); letter-spacing: 0.5px; text-transform: uppercase; margin-bottom: 22px; font-weight: 400; }
-        .product-pricing { margin-bottom: 16px; display: none; }
-        .product-pricing.visible { display: block; }
-        .price-original { font-size: 11px; color: var(--gray); text-decoration: line-through; margin-bottom: 2px; }
-        .price-discounted { font-size: 14px; font-weight: 600; color: var(--discount); }
-        .qty-select { appearance: none; -webkit-appearance: none; width: 100px; padding: 5px 20px 5px 8px; background: var(--white); border: 1px solid var(--border); border-radius: 4px; font-family: var(--font-main); font-size: 10px; font-weight: 400; letter-spacing: 0.5px; color: var(--black); cursor: pointer; margin-bottom: 12px; transition: border-color var(--transition-fast); background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='8' height='8' viewBox='0 0 24 24' fill='none' stroke='%2386868b' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 6px center; }
-        .qty-select:hover { border-color: var(--gray-light); }
-        .qty-select:focus { outline: none; border-color: var(--ocean); box-shadow: 0 0 0 3px var(--ocean-light); }
-        .add-btn { padding: 10px 18px; background: none; border: none; color: var(--ocean); font-family: var(--font-main); font-size: 11px; font-weight: 500; letter-spacing: 0.5px; text-transform: uppercase; cursor: pointer; transition: all var(--transition-fast); border-radius: 6px; min-height: 44px; }
-        .add-btn:hover { background: var(--ocean-light); }
-        .add-btn.added { color: var(--tropique); }
-        .cart-overlay { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.3); backdrop-filter: blur(4px); z-index: 200; opacity: 0; visibility: hidden; transition: all var(--transition-smooth); }
-        .cart-overlay.open { opacity: 1; visibility: visible; }
-        .cart-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 100%; max-width: 380px; background: var(--white); z-index: 201; display: flex; flex-direction: column; transform: translateX(100%); transition: transform var(--transition-smooth); box-shadow: -10px 0 40px rgba(0, 0, 0, 0.1); }
-        .cart-panel.open { transform: translateX(0); }
-        .cart-header { display: flex; align-items: center; justify-content: space-between; padding: 20px clamp(16px, 4vw, 24px); border-bottom: 1px solid var(--border); }
-        .cart-title { font-size: 16px; font-weight: 500; letter-spacing: 0.5px; }
-        .cart-close { display: flex; align-items: center; justify-content: center; width: 40px; height: 40px; background: none; border: none; cursor: pointer; border-radius: 50%; transition: background var(--transition-fast); }
-        .cart-close:hover { background: var(--sand); }
-        .cart-close svg { width: 18px; height: 18px; stroke: var(--black); stroke-width: 1.5; }
-        .cart-body { flex: 1; overflow-y: auto; padding: clamp(16px, 4vw, 24px); }
-        .cart-empty { text-align: center; padding: 40px 16px; color: var(--gray); font-size: 13px; font-weight: 400; }
-        .cart-empty-icon { font-size: 40px; margin-bottom: 12px; opacity: 0.5; }
-        .cart-item { display: flex; justify-content: space-between; align-items: flex-start; padding: 14px 0; border-bottom: 1px solid var(--border-light); animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body { font-family: var(--font-main); background-color: var(--white); color: var(--black); line-height: 1.47; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+
+        /* Header */
+        header { position: sticky; top: 0; z-index: 1000; background: rgba(255,255,255,0.8); backdrop-filter: saturate(180%) blur(20px); -webkit-backdrop-filter: saturate(180%) blur(20px); border-bottom: 1px solid var(--border-light); }
+        .header-content { max-width: 1024px; margin: 0 auto; height: 52px; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; }
+        .logo { font-size: 20px; font-weight: 600; letter-spacing: -0.02em; cursor: pointer; color: var(--black); text-decoration: none; }
+
+        /* Navigation */
+        .nav-main-scroll { border-bottom: 1px solid var(--border-light); background: var(--white); overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+        .nav-main-scroll::-webkit-scrollbar { display: none; }
+        .nav-main { max-width: 1024px; margin: 0 auto; display: flex; height: 48px; padding: 0 10px; }
+        .nav-item { padding: 0 15px; display: flex; align-items: center; font-size: 14px; color: var(--charcoal); cursor: pointer; white-space: nowrap; transition: color 0.2s; position: relative; font-weight: 400; }
+        .nav-item:hover { color: var(--ocean); }
+        .nav-item.active { color: var(--ocean); font-weight: 600; }
+        .nav-item.active::after { content: ''; position: absolute; bottom: 0; left: 15px; right: 15px; height: 2px; background: var(--ocean); }
+        .nav-item.is-discount { color: var(--discount); }
+
+        .nav-sub-scroll { background: var(--sand); overflow-x: auto; scrollbar-width: none; }
+        .nav-sub-scroll::-webkit-scrollbar { display: none; }
+        .nav-sub { max-width: 1024px; margin: 0 auto; display: flex; height: 44px; padding: 0 10px; }
+        .sub-item { padding: 0 15px; display: flex; align-items: center; font-size: 13px; color: var(--charcoal); cursor: pointer; white-space: nowrap; }
+        .sub-item.active { color: var(--black); font-weight: 600; }
+
+        /* Main Content */
+        main { max-width: 1024px; margin: 0 auto; padding: 40px 20px; min-height: 80vh; }
+        .section-header { margin-bottom: 30px; }
+        .section-header h1 { font-size: 32px; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 8px; }
+        .section-header p { color: var(--gray); font-size: 17px; }
+
+        /* Grid */
+        .product-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; }
+        @media (max-width: 834px) { .product-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; } }
+        @media (max-width: 550px) { .product-grid { grid-template-columns: 1fr; gap: 15px; } }
+
+        /* Card */
+        .card { background: var(--white); border-radius: 18px; overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, box-shadow 0.3s ease; border: 1px solid var(--border-light); }
+        .card:hover { transform: translateY(-4px); box-shadow: 0 12px 24px rgba(0,0,0,0.08); }
+        
+        .image-container { position: relative; padding-top: 100%; background: var(--sand); overflow: hidden; }
+        .image-container img { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .card:hover img { transform: scale(1.05); }
+
+        .card-content { padding: 20px; display: flex; flex-direction: column; gap: 8px; }
+        .product-ref { font-size: 12px; font-weight: 600; color: var(--ocean); text-transform: uppercase; letter-spacing: 0.05em; }
+        .product-name { font-size: 19px; font-weight: 600; color: var(--black); margin-bottom: 2px; }
+        .product-detail { font-size: 14px; color: var(--gray); margin-bottom: 4px; }
+
+        /* Quantity Controls */
+        .qty-wrapper { margin-top: 12px; padding-top: 12px; border-top: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; }
+        .qty-input-group { display: flex; align-items: center; background: var(--sand); border-radius: 10px; padding: 4px; }
+        .qty-btn { width: 32px; height: 32px; border-radius: 8px; border: none; background: var(--white); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 18px; transition: background 0.2s; box-shadow: 0 1px 2px rgba(0,0,0,0.05); }
+        .qty-btn:active { transform: scale(0.95); background: var(--sand-dark); }
+        .qty-value { width: 44px; text-align: center; font-weight: 600; font-size: 15px; border: none; background: transparent; }
+        .qty-step { font-size: 11px; color: var(--gray); font-weight: 500; }
+
+        /* Cart UI */
+        .cart-toggle { position: relative; background: var(--black); color: var(--white); border: none; border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 500; cursor: pointer; display: flex; align-items: center; gap: 8px; transition: transform 0.2s; }
+        .cart-toggle:active { transform: scale(0.98); }
+        .cart-count { background: var(--white); color: var(--black); border-radius: 10px; min-width: 20px; padding: 0 6px; height: 20px; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 11px; }
+
+        /* Modal Cart */
+        .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 2000; opacity: 0; visibility: hidden; transition: all 0.3s ease; }
+        .modal-overlay.visible { opacity: 1; visibility: visible; }
+        .cart-panel { position: fixed; top: 0; right: 0; bottom: 0; width: 440px; background: var(--white); z-index: 2001; transform: translateX(100%); transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1); display: flex; flex-direction: column; box-shadow: -10px 0 30px rgba(0,0,0,0.1); }
+        .modal-overlay.visible .cart-panel { transform: translateX(0); }
+        @media (max-width: 440px) { .cart-panel { width: 100%; } }
+
+        .cart-header { padding: 24px; border-bottom: 1px solid var(--border-light); display: flex; align-items: center; justify-content: space-between; }
+        .cart-header h2 { font-size: 24px; font-weight: 600; }
+        .close-btn { background: var(--sand); border: none; width: 36px; height: 36px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+
+        .cart-items { flex: 1; overflow-y: auto; padding: 24px; }
+        .cart-item { display: flex; gap: 16px; padding-bottom: 20px; margin-bottom: 20px; border-bottom: 1px solid var(--border-light); }
+        .cart-item img { width: 80px; height: 80px; border-radius: 12px; object-fit: cover; background: var(--sand); }
         .cart-item-info { flex: 1; }
-        .cart-item-name { font-size: 12px; font-weight: 500; margin-bottom: 3px; }
-        .cart-item-ref { font-size: 10px; color: var(--gray); letter-spacing: 0.3px; font-weight: 400; }
-        .cart-item-qty { font-size: 11px; color: var(--ocean); font-weight: 500; margin-top: 4px; }
-        .cart-item-remove { padding: 6px; background: none; border: none; color: var(--gray-light); cursor: pointer; transition: color var(--transition-fast); font-size: 16px; line-height: 1; }
-        .cart-item-remove:hover { color: var(--black); }
-        .cart-footer { padding: clamp(16px, 4vw, 20px); border-top: 1px solid var(--border); background: var(--off-white); }
-        .cart-summary { display: flex; justify-content: space-between; margin-bottom: 14px; font-size: 12px; color: var(--gray); font-weight: 400; }
-        .cart-summary strong { color: var(--black); font-weight: 500; }
-        .order-form { display: none; margin-bottom: 14px; }
-        .order-form.visible { display: block; }
-        .form-row { display: flex; gap: 8px; margin-bottom: 8px; }
-        .form-row .form-group { flex: 1; margin-bottom: 0; }
-        .form-group { margin-bottom: 8px; }
-        .form-group:last-child { margin-bottom: 0; }
-        .form-label { display: block; font-size: 9px; font-weight: 500; color: var(--charcoal); margin-bottom: 4px; letter-spacing: 0.5px; text-transform: uppercase; }
-        .form-input, .form-textarea { width: 100%; padding: 8px 10px; background: var(--white); border: 1px solid var(--border); border-radius: 5px; font-family: var(--font-main); font-size: 12px; color: var(--black); transition: border-color var(--transition-fast); }
-        .form-input:focus, .form-textarea:focus { outline: none; border-color: var(--ocean); box-shadow: 0 0 0 2px var(--ocean-light); }
-        .form-textarea { resize: none; min-height: 50px; }
-        .cart-submit { width: 100%; padding: 14px; background: var(--black); border: none; border-radius: var(--radius); color: var(--white); font-family: var(--font-main); font-size: 12px; font-weight: 500; letter-spacing: 0.5px; cursor: pointer; transition: all var(--transition-fast); }
-        .cart-submit:hover:not(:disabled) { background: var(--charcoal); transform: translateY(-1px); }
-        .cart-submit:disabled { opacity: 0.4; cursor: not-allowed; }
-        .confirmation-overlay { position: fixed; inset: 0; background: rgba(255, 255, 255, 0.98); z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; opacity: 0; visibility: hidden; transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); }
-        .confirmation-overlay.visible { opacity: 1; visibility: visible; }
-        .confirmation-logo { width: clamp(140px, 30vw, 200px); height: auto; margin-bottom: 40px; animation: confirmFadeIn 0.8s ease 0.2s both; }
-        .confirmation-message { font-size: clamp(14px, 3vw, 18px); font-weight: 400; color: var(--charcoal); text-align: center; letter-spacing: 0.5px; animation: confirmFadeIn 0.8s ease 0.4s both; padding: 0 20px; }
-        .confirmation-close { margin-top: 50px; padding: 12px 28px; background: none; border: 1px solid var(--border); border-radius: 6px; color: var(--charcoal); font-family: var(--font-main); font-size: 12px; font-weight: 400; letter-spacing: 0.5px; cursor: pointer; transition: all var(--transition-fast); animation: confirmFadeIn 0.8s ease 0.6s both; }
-        .confirmation-close:hover { background: var(--sand); border-color: var(--sand-dark); }
-        @keyframes confirmFadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        .footer { padding: 40px clamp(20px, 5vw, 40px); text-align: center; border-top: 1px solid var(--border); background: var(--off-white); }
-        .footer-text { font-size: 11px; color: var(--gray); letter-spacing: 0.5px; font-weight: 400; }
+        .cart-item-info h4 { font-size: 16px; font-weight: 600; margin-bottom: 4px; }
+        .cart-item-info p { font-size: 13px; color: var(--gray); }
+
+        .cart-footer { padding: 24px; background: var(--off-white); border-top: 1px solid var(--border-light); }
+        .form-group { margin-bottom: 16px; }
+        .form-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 12px; font-size: 15px; font-family: inherit; transition: border-color 0.2s; }
+        .form-group input:focus { border-color: var(--ocean); outline: none; }
+        
+        .btn-submit { width: 100%; padding: 16px; background: var(--ocean); color: var(--white); border: none; border-radius: 14px; font-size: 16px; font-weight: 600; cursor: pointer; transition: background 0.2s; margin-top: 8px; }
+        .btn-submit:hover { background: #086a8a; }
+        .btn-submit:disabled { background: var(--gray-light); cursor: not-allowed; }
+
+        /* Confirmation Overlay */
+        .conf-overlay { position: fixed; inset: 0; background: var(--white); z-index: 3000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; opacity: 0; visibility: hidden; transition: all 0.4s; }
+        .conf-overlay.visible { opacity: 1; visibility: visible; }
+        .conf-icon { width: 80px; height: 80px; background: var(--tropique); color: var(--white); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 40px; margin-bottom: 24px; }
+        .conf-overlay h2 { font-size: 32px; margin-bottom: 12px; }
+        .conf-overlay p { color: var(--gray); margin-bottom: 32px; font-size: 17px; max-width: 400px; }
     </style>
 </head>
 <body>
-    <section class="home-page" id="homePage">
-        <svg class="home-logo" viewBox="0 0 283.46 283.46" aria-label="OLDA Atelier">
-            <g><path d="M81.27,54.16h-5.48l-.97,2.51h-4.94l6.3-14.42h4.78l6.3,14.42h-5.03l-.97-2.51ZM79.93,50.65l-1.4-3.63-1.4,3.63h2.8Z"/><path d="M96.93,46.02h-4.22v-3.77h13.31v3.77h-4.22v10.65h-4.86v-10.65Z"/><path d="M125.72,53v3.67h-11.99v-14.42h11.73v3.67h-6.94v1.69h6.1v3.5h-6.1v1.9h7.21Z"/><path d="M134.06,42.25h4.86v10.65h6.51v3.77h-11.38v-14.42Z"/><path d="M153.24,42.25h4.86v14.42h-4.86v-14.42Z"/><path d="M178.91,53v3.67h-11.99v-14.42h11.73v3.67h-6.94v1.69h6.1v3.5h-6.1v1.9h7.21Z"/><path d="M193.43,53.04h-1.32v3.63h-4.86v-14.42h6.94c4.02,0,6.57,2.1,6.57,5.44,0,2.08-.99,3.65-2.72,4.53l3.03,4.45h-5.19l-2.45-3.63ZM193.88,46h-1.77v3.38h1.77c1.34,0,1.98-.64,1.98-1.69s-.64-1.69-1.98-1.69Z"/></g>
-            <path d="M187.85,114.63h33.12c.82,0,1.48.66,1.48,1.48v34.05c0,.82-.66,1.48-1.48,1.48h-73.22c-.82,0-1.48-.66-1.48-1.48v-76.52c0-.82.66-1.48,1.48-1.48h37.15c.82,0,1.48.66,1.48,1.48v39.51c0,.82.66,1.48,1.48,1.48Z"/>
-            <path d="M141.24,238.96l41.28-77.18c.58-1.05,2.09-1.05,2.67,0l41.39,77.18c.56,1.02-.18,2.26-1.34,2.26h-82.67c-1.16,0-1.89-1.24-1.34-2.26Z"/>
-            <g><path d="M101.44,161.74h-2.56l.48,79.48h1.16c20.68,0,38.61-15.44,40.49-36.03,2.14-23.57-16.43-43.44-39.57-43.44Z"/><path d="M95.36,161.74h-32.71c-.82,0-1.48.66-1.48,1.48v76.52c0,.82.66,1.48,1.48,1.48h32.26l.45-79.48Z"/></g>
-            <path d="M140.12,108.5c-1.61-20.24-18-36.63-38.24-38.24-25.72-2.04-47.09,19.32-45.05,45.04,1.6,20.24,18,36.64,38.24,38.25.12,0,.23,0,.34.02l.23-39.79v-.05l-11.32,11.07s-1.19-11.25,6.13-12.84h-13s4.12-7.32,14.54-4.85l-7.67-7.67s11.86-1.72,12.82,6.62c1.07-8.9,12.54-6.48,12.54-6.48l-7.92,8.04c8.81-3.63,14.91,4.33,14.91,4.33h-13.05c4.85,1.4,6.01,6.08,6.2,9.41.14,2.05-.12,3.59-.12,3.59l-3.54-3.59-7.55-7.62.24,39.91c24-.2,43.23-20.71,41.29-45.17Z"/>
-        </svg>
-        <button class="home-btn" id="enterShop">Découvrir les produits</button>
-    </section>
-    <div class="shop-container" id="shopContainer">
-        <header class="header" role="banner">
-            <svg class="logo" viewBox="0 0 283.46 283.46" aria-label="OLDA Atelier">
-                <g><path d="M81.27,54.16h-5.48l-.97,2.51h-4.94l6.3-14.42h4.78l6.3,14.42h-5.03l-.97-2.51ZM79.93,50.65l-1.4-3.63-1.4,3.63h2.8Z"/><path d="M96.93,46.02h-4.22v-3.77h13.31v3.77h-4.22v10.65h-4.86v-10.65Z"/><path d="M125.72,53v3.67h-11.99v-14.42h11.73v3.67h-6.94v1.69h6.1v3.5h-6.1v1.9h7.21Z"/><path d="M134.06,42.25h4.86v10.65h6.51v3.77h-11.38v-14.42Z"/><path d="M153.24,42.25h4.86v14.42h-4.86v-14.42Z"/><path d="M178.91,53v3.67h-11.99v-14.42h11.73v3.67h-6.94v1.69h6.1v3.5h-6.1v1.9h7.21Z"/><path d="M193.43,53.04h-1.32v3.63h-4.86v-14.42h6.94c4.02,0,6.57,2.1,6.57,5.44,0,2.08-.99,3.65-2.72,4.53l3.03,4.45h-5.19l-2.45-3.63ZM193.88,46h-1.77v3.38h1.77c1.34,0,1.98-.64,1.98-1.69s-.64-1.69-1.98-1.69Z"/></g>
-                <path d="M187.85,114.63h33.12c.82,0,1.48.66,1.48,1.48v34.05c0,.82-.66,1.48-1.48,1.48h-73.22c-.82,0-1.48-.66-1.48-1.48v-76.52c0-.82.66-1.48,1.48-1.48h37.15c.82,0,1.48.66,1.48,1.48v39.51c0,.82.66,1.48,1.48,1.48Z"/>
-                <path d="M141.24,238.96l41.28-77.18c.58-1.05,2.09-1.05,2.67,0l41.39,77.18c.56,1.02-.18,2.26-1.34,2.26h-82.67c-1.16,0-1.89-1.24-1.34-2.26Z"/>
-                <g><path d="M101.44,161.74h-2.56l.48,79.48h1.16c20.68,0,38.61-15.44,40.49-36.03,2.14-23.57-16.43-43.44-39.57-43.44Z"/><path d="M95.36,161.74h-32.71c-.82,0-1.48.66-1.48,1.48v76.52c0,.82.66,1.48,1.48,1.48h32.26l.45-79.48Z"/></g>
-                <path d="M140.12,108.5c-1.61-20.24-18-36.63-38.24-38.24-25.72-2.04-47.09,19.32-45.05,45.04,1.6,20.24,18,36.64,38.24,38.25.12,0,.23,0,.34.02l.23-39.79v-.05l-11.32,11.07s-1.19-11.25,6.13-12.84h-13s4.12-7.32,14.54-4.85l-7.67-7.67s11.86-1.72,12.82,6.62c1.07-8.9,12.54-6.48,12.54-6.48l-7.92,8.04c8.81-3.63,14.91,4.33,14.91,4.33h-13.05c4.85,1.4,6.01,6.08,6.2,9.41.14,2.05-.12,3.59-.12,3.59l-3.54-3.59-7.55-7.62.24,39.91c24-.2,43.23-20.71,41.29-45.17Z"/>
-            </svg>
-            <button class="cart-trigger" id="cartTrigger" aria-label="Ouvrir le panier">
-                <svg viewBox="0 0 24 24"><path d="M5 8h14l1 13H4L5 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
-                <span class="cart-count" id="cartCount">0</span>
+
+    <header>
+        <div class="header-content">
+            <a href="#" class="logo" onclick="location.reload()">OLDA ATELIER</a>
+            <button class="cart-toggle" onclick="openCart()">
+                Panier <span class="cart-count" id="cart-count">0</span>
             </button>
-        </header>
-        <nav class="nav-main" id="navMain"></nav>
-        <nav class="nav-sub" id="navSub"></nav>
-        <div class="promo-banner" id="promoBanner">Remise de 20% appliquée automatiquement au panier</div>
-        <main class="product-grid" id="productGrid"></main>
-        <footer class="footer"><p class="footer-text">© 2026 OLDA Atelier — Saint-Martin, Antilles françaises</p></footer>
-    </div>
-    <div class="cart-overlay" id="cartOverlay"></div>
-    <aside class="cart-panel" id="cartPanel">
-        <header class="cart-header">
-            <h2 class="cart-title">Votre Sélection</h2>
-            <button class="cart-close" id="cartClose"><svg viewBox="0 0 24 24"><path d="M18 6L6 18M6 6l12 12" stroke-linecap="round"/></svg></button>
-        </header>
-        <div class="cart-body" id="cartBody"><div class="cart-empty"><div class="cart-empty-icon">☀️</div><p>Votre sélection est vide</p></div></div>
-        <footer class="cart-footer">
-            <div class="cart-summary"><span>Articles</span><strong id="cartTotal">0</strong></div>
-            <form class="order-form" id="orderForm">
-                <div class="form-row">
-                    <div class="form-group"><label class="form-label" for="customerName">Nom</label><input type="text" class="form-input" id="customerName" placeholder="Votre nom" required></div>
-                    <div class="form-group"><label class="form-label" for="customerEmail">Email</label><input type="email" class="form-input" id="customerEmail" placeholder="votre@email.com" required></div>
+        </div>
+        <div class="nav-main-scroll">
+            <nav class="nav-main" id="nav-main"></nav>
+        </div>
+        <div class="nav-sub-scroll">
+            <nav class="nav-sub" id="nav-sub"></nav>
+        </div>
+    </header>
+
+    <main>
+        <div id="section-info" class="section-header"></div>
+        <div class="product-grid" id="product-grid"></div>
+    </main>
+
+    <div class="modal-overlay" id="modal-overlay">
+        <div class="cart-panel">
+            <div class="cart-header">
+                <h2>Votre Commande</h2>
+                <button class="close-btn" onclick="closeCart()">×</button>
+            </div>
+            <div class="cart-items" id="cart-items-list"></div>
+            <div class="cart-footer">
+                <div class="form-group">
+                    <label>Nom de l'établissement</label>
+                    <input type="text" id="customer-name" placeholder="Ex: Grand Case Beach Club">
                 </div>
-                <div class="form-group"><label class="form-label" for="customerComment">Commentaire</label><textarea class="form-textarea" id="customerComment" placeholder="Informations complémentaires..."></textarea></div>
-            </form>
-            <button class="cart-submit" id="cartSubmit" disabled>Confirmer la commande</button>
-        </footer>
-    </aside>
-    <div class="confirmation-overlay" id="confirmationOverlay">
-        <svg class="confirmation-logo" viewBox="0 0 283.46 283.46" aria-label="OLDA Atelier">
-            <g><path d="M81.27,54.16h-5.48l-.97,2.51h-4.94l6.3-14.42h4.78l6.3,14.42h-5.03l-.97-2.51ZM79.93,50.65l-1.4-3.63-1.4,3.63h2.8Z"/><path d="M96.93,46.02h-4.22v-3.77h13.31v3.77h-4.22v10.65h-4.86v-10.65Z"/><path d="M125.72,53v3.67h-11.99v-14.42h11.73v3.67h-6.94v1.69h6.1v3.5h-6.1v1.9h7.21Z"/><path d="M134.06,42.25h4.86v10.65h6.51v3.77h-11.38v-14.42Z"/><path d="M153.24,42.25h4.86v14.42h-4.86v-14.42Z"/><path d="M178.91,53v3.67h-11.99v-14.42h11.73v3.67h-6.94v1.69h6.1v3.5h-6.1v1.9h7.21Z"/><path d="M193.43,53.04h-1.32v3.63h-4.86v-14.42h6.94c4.02,0,6.57,2.1,6.57,5.44,0,2.08-.99,3.65-2.72,4.53l3.03,4.45h-5.19l-2.45-3.63ZM193.88,46h-1.77v3.38h1.77c1.34,0,1.98-.64,1.98-1.69s-.64-1.69-1.98-1.69Z"/></g>
-            <path d="M187.85,114.63h33.12c.82,0,1.48.66,1.48,1.48v34.05c0,.82-.66,1.48-1.48,1.48h-73.22c-.82,0-1.48-.66-1.48-1.48v-76.52c0-.82.66-1.48,1.48-1.48h37.15c.82,0,1.48.66,1.48,1.48v39.51c0,.82.66,1.48,1.48,1.48Z"/>
-            <path d="M141.24,238.96l41.28-77.18c.58-1.05,2.09-1.05,2.67,0l41.39,77.18c.56,1.02-.18,2.26-1.34,2.26h-82.67c-1.16,0-1.89-1.24-1.34-2.26Z"/>
-            <g><path d="M101.44,161.74h-2.56l.48,79.48h1.16c20.68,0,38.61-15.44,40.49-36.03,2.14-23.57-16.43-43.44-39.57-43.44Z"/><path d="M95.36,161.74h-32.71c-.82,0-1.48.66-1.48,1.48v76.52c0,.82.66,1.48,1.48,1.48h32.26l.45-79.48Z"/></g>
-            <path d="M140.12,108.5c-1.61-20.24-18-36.63-38.24-38.24-25.72-2.04-47.09,19.32-45.05,45.04,1.6,20.24,18,36.64,38.24,38.25.12,0,.23,0,.34.02l.23-39.79v-.05l-11.32,11.07s-1.19-11.25,6.13-12.84h-13s4.12-7.32,14.54-4.85l-7.67-7.67s11.86-1.72,12.82,6.62c1.07-8.9,12.54-6.48,12.54-6.48l-7.92,8.04c8.81-3.63,14.91,4.33,14.91,4.33h-13.05c4.85,1.4,6.01,6.08,6.2,9.41.14,2.05-.12,3.59-.12,3.59l-3.54-3.59-7.55-7.62.24,39.91c24-.2,43.23-20.71,41.29-45.17Z"/>
-        </svg>
-        <p class="confirmation-message">Atelier OLDA vous remercie pour votre commande</p>
-        <button class="confirmation-close" id="confirmationClose">Continuer mes achats</button>
+                <div class="form-group">
+                    <label>Email de contact</label>
+                    <input type="email" id="customer-email" placeholder="votre@email.com">
+                </div>
+                <div class="form-group">
+                    <label>Commentaires / Instructions</label>
+                    <textarea id="customer-comment" rows="2" placeholder="Un message ?"></textarea>
+                </div>
+                <button class="btn-submit" id="cart-submit" onclick="submitOrder()">Confirmer la commande</button>
+            </div>
+        </div>
     </div>
+
+    <div class="conf-overlay" id="conf-overlay">
+        <div class="conf-icon">✓</div>
+        <h2>Commande Envoyée</h2>
+        <p>Merci ! Votre commande a été transmise à notre atelier. Nous vous contacterons très prochainement.</p>
+        <button class="btn-submit" style="width: auto; padding: 12px 30px;" onclick="location.reload()">Retour à la boutique</button>
+    </div>
+
     <script>
     (function() {
-        'use strict';
-        // Images basées sur les noms exacts des fichiers
-const IMG = "images/";
-
+        const IMG = "https://olda.fr/wp-content/uploads/Boutique/IMG/";
+        
         const DATA = [
             { key: "nouveautes", label: "Nouveautés", sub: [{ key: "arrivages", label: "Arrivages", items: [
-                { name: "Support Mobile Acrylique", ref: "SM 01", img: IMG+"supportmobile.jpg", qtyType: "default" },
-                { name: "Bloc Note Similicuir", ref: "BNSA6", detail: "A6 (105 x 148)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
-                { name: "Bloc Note Similicuir", ref: "BNS5", detail: "A5 (148 x 210)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" }
+                { name: "Support Mobile Acrylique", ref: "SM 01", img: IMG+"SM01.webp", qtyType: "default" },
+                { name: "Bloc Note Similicuir", ref: "BNSA6", detail: "A6 (105 x 148)", img: IMG+"BNS.5.webp", qtyType: "blocnote" },
+                { name: "Bloc Note Similicuir", ref: "BNS5", detail: "A5 (148 x 210)", img: IMG+"BNS.5.webp", qtyType: "blocnote" }
             ]}]},
             { key: "tasses", label: "Tasses", sub: [
                 { key: "ceramique-fuck", label: "Tasse Céramique Fuck", items: [
-                    { name: "Tasse Fuck", ref: "TCF 01", size: "350ml", color: "Rouge & Blanc", img: IMG+"fuckrougeblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 02", size: "350ml", color: "Orange & Blanc", img: IMG+"fuckorangeblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 03", size: "350ml", color: "Rose & Blanc", img: IMG+"fuckroseblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 04", size: "350ml", color: "Bleu & Blanc", img: IMG+"fuckbleublanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 05", size: "350ml", color: "Vert & Blanc", img: IMG+"fuckvertblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 06", size: "350ml", color: "Noir & Blanc", img: IMG+"fucknoirblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 07", size: "350ml", color: "Blanc & Bleu", img: IMG+"fuckblancvert.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 08", size: "350ml", color: "Blanc & Jaune", img: IMG+"fuckblancjaune.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 09", size: "350ml", color: "Blanc & Orange", img: IMG+"fuckblancorange.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 10", size: "350ml", color: "Blanc & Rouge", img: IMG+"fuckblancrouge.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 11", size: "350ml", color: "Blanc & Vert", img: IMG+"fuckblancvert.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 12", size: "350ml", color: "Blanc & Noir", img: IMG+"fuckblancnoir.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 13", size: "350ml", color: "Noir & Rose", img: IMG+"fucknoirrose.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 14", size: "350ml", color: "Noir & Jaune", img: IMG+"fucknoirjaune.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 15", size: "350ml", color: "Noir & Rouge", img: IMG+"fucknoirrouge.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 16", size: "350ml", color: "Noir & Vert", img: IMG+"fucknoirvert.jpg", qtyType: "tasse" },
-                    { name: "Tasse Fuck", ref: "TCF 17", size: "350ml", color: "Noir & Orange", img: IMG+"fucknoirorange.jpg", qtyType: "tasse" }
+                    { name: "Tasse Fuck", ref: "TCF 01", size: "350ml", color: "Rouge & Blanc", img: IMG+"TCF.01.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 02", size: "350ml", color: "Orange & Blanc", img: IMG+"TCF.02.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 03", size: "350ml", color: "Rose & Blanc", img: IMG+"TCF.03.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 04", size: "350ml", color: "Bleu & Blanc", img: IMG+"TCF.04.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 05", size: "350ml", color: "Vert & Blanc", img: IMG+"TCF.05.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 06", size: "350ml", color: "Noir & Blanc", img: IMG+"TCF.06.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 07", size: "350ml", color: "Blanc & Bleu", img: IMG+"TCF.07.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 08", size: "350ml", color: "Blanc & Jaune", img: IMG+"TCF.08.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 09", size: "350ml", color: "Blanc & Orange", img: IMG+"TCF.09.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 10", size: "350ml", color: "Blanc & Rouge", img: IMG+"TCF.10.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 11", size: "350ml", color: "Blanc & Vert", img: IMG+"TCF.11.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 12", size: "350ml", color: "Blanc & Noir", img: IMG+"TCF.12.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 13", size: "350ml", color: "Noir & Rose", img: IMG+"TCF.13.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 14", size: "350ml", color: "Noir & Jaune", img: IMG+"TCF.14.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 15", size: "350ml", color: "Noir & Rouge", img: IMG+"TCF.15.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 16", size: "350ml", color: "Noir & Vert", img: IMG+"TCF.16.webp", qtyType: "tasse" },
+                    { name: "Tasse Fuck", ref: "TCF 17", size: "350ml", color: "Noir & Orange", img: IMG+"TCF.17.webp", qtyType: "tasse" }
                 ]},
                 { key: "ceramique", label: "Tasse Céramique", items: [
-                    { name: "Tasse Céramique", ref: "TC 01", size: "350ml", color: "Rouge & Blanc", img: IMG+"rougeblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 02", size: "350ml", color: "Orange & Blanc", img: IMG+"orangeblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 03", size: "350ml", color: "Rose & Blanc", img: IMG+"roseblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 04", size: "350ml", color: "Bleu & Blanc", img: IMG+"bleublanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 05", size: "350ml", color: "Vert & Blanc", img: IMG+"vertblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 06", size: "350ml", color: "Noir & Blanc", img: IMG+"noirblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 07", size: "350ml", color: "Blanc & Bleu", img: IMG+"bleublanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 08", size: "350ml", color: "Blanc & Jaune", img: IMG+"blancjaune.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 09", size: "350ml", color: "Blanc & Orange", img: IMG+"blancorange.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 10", size: "350ml", color: "Blanc & Rouge", img: IMG+"blancrouge.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 11", size: "350ml", color: "Blanc & Vert", img: IMG+"blancvert.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 12", size: "350ml", color: "Blanc & Noir", img: IMG+"blancnoir.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 13", size: "350ml", color: "Noir & Rose", img: IMG+"noirrose.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 14", size: "350ml", color: "Noir & Jaune", img: IMG+"noirjaune.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 15", size: "350ml", color: "Noir & Rouge", img: IMG+"noirrouge.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 16", size: "350ml", color: "Noir & Vert", img: IMG+"noirvert.jpg", qtyType: "tasse" },
-                    { name: "Tasse Céramique", ref: "TC 17", size: "350ml", color: "Noir & Orange", img: IMG+"noirorange.jpg", qtyType: "tasse" }
+                    { name: "Tasse Céramique", ref: "TC 01", size: "350ml", color: "Rouge & Blanc", img: IMG+"TC.01.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 02", size: "350ml", color: "Orange & Blanc", img: IMG+"TC.02.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 03", size: "350ml", color: "Rose & Blanc", img: IMG+"TC.03.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 04", size: "350ml", color: "Bleu & Blanc", img: IMG+"TC.04.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 05", size: "350ml", color: "Vert & Blanc", img: IMG+"TC.05.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 06", size: "350ml", color: "Noir & Blanc", img: IMG+"TC.06.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 07", size: "350ml", color: "Blanc & Bleu", img: IMG+"TC.07.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 08", size: "350ml", color: "Blanc & Jaune", img: IMG+"TC.08.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 09", size: "350ml", color: "Blanc & Orange", img: IMG+"TC.09.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 10", size: "350ml", color: "Blanc & Rouge", img: IMG+"TC.10.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 11", size: "350ml", color: "Blanc & Vert", img: IMG+"TC.11.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 12", size: "350ml", color: "Blanc & Noir", img: IMG+"TC.12.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 13", size: "350ml", color: "Noir & Rose", img: IMG+"TC.13.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 14", size: "350ml", color: "Noir & Jaune", img: IMG+"TC.14.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 15", size: "350ml", color: "Noir & Rouge", img: IMG+"TC.15.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 16", size: "350ml", color: "Noir & Vert", img: IMG+"TC.16.webp", qtyType: "tasse" },
+                    { name: "Tasse Céramique", ref: "TC 17", size: "350ml", color: "Noir & Orange", img: IMG+"TC.17.webp", qtyType: "tasse" }
                 ]},
                 { key: "metal", label: "Tasse Métal", items: [
-                    { name: "Tasse Métal", ref: "TM 01", size: "300ml", color: "Blanc", img: IMG+"metalblanc.jpg", qtyType: "tasse" },
-                    { name: "Tasse Métal", ref: "TM 02", size: "300ml", color: "Bleu", img: IMG+"metalbleu.jpeg", qtyType: "tasse" },
-                    { name: "Tasse Métal", ref: "TM 03", size: "300ml", color: "Jaune", img: IMG+"metaljaune.PNG", qtyType: "tasse" },
-                    { name: "Tasse Métal", ref: "TM 04", size: "300ml", color: "Rouge", img: IMG+"metalrouge.jpg", qtyType: "tasse" }
+                    { name: "Tasse Métal", ref: "TM 01", size: "300ml", color: "Blanc", img: IMG+"TM01.webp", qtyType: "tasse" },
+                    { name: "Tasse Métal", ref: "TM 02", size: "300ml", color: "Bleu", img: IMG+"TM.02.webp", qtyType: "tasse" },
+                    { name: "Tasse Métal", ref: "TM 03", size: "300ml", color: "Jaune", img: IMG+"TM.03.webp", qtyType: "tasse" },
+                    { name: "Tasse Métal", ref: "TM 04", size: "300ml", color: "Rouge", img: IMG+"TM.04.webp", qtyType: "tasse" }
                 ]}
             ]},
             { key: "goodies", label: "Goodies", sub: [
                 { key: "porte-cles", label: "Porte-Clés", items: [
-                    { name: "Porte-Clés Plexiglass", ref: "PCP 01", img: IMG+"porteclesplexiglass.jpg", qtyType: "portecles" },
-                    { name: "Porte-Clés Bois", ref: "PCPB 01", img: IMG+"porteclesplexi.jpg", qtyType: "portecles" },
-                    { name: "Porte-Clés Acrylique", ref: "PCA 01", img: IMG+"portecleeplexiglass.jpg", qtyType: "portecles" },
-                    { name: "Porte-Clés Flotteur Liège", ref: "PCFL 01", img: IMG+"portecleflotteur.jpg", qtyType: "flotteur" }
+                    { name: "Porte-Clés Plexiglass", ref: "PCP 01", img: IMG+"PCP.01.webp", qtyType: "portecles" },
+                    { name: "Porte-Clés Bois", ref: "PCPB 01", img: IMG+"PCB.01.webp", qtyType: "portecles" },
+                    { name: "Porte-Clés Acrylique", ref: "PCA 01", img: IMG+"PCA.01.webp", qtyType: "portecles" },
+                    { name: "Porte-Clés Flotteur Liège", ref: "PCFL 01", img: IMG+"PML01.webp", qtyType: "flotteur" }
                 ]},
                 { key: "magnets", label: "Magnets", items: [
-                    { name: "Magnet Plexiglass", ref: "MP 01", img: IMG+"magnetbois.jpeg", qtyType: "magnet" },
-                    { name: "Magnet Bois", ref: "MB 01", img: IMG+"magnetbois.jpeg", qtyType: "magnet" },
-                    { name: "Magnet Acrylique", ref: "MA 01", img: IMG+"magnetbois.jpeg", qtyType: "magnet" }
+                    { name: "Magnet Plexiglass", ref: "MP 01", img: IMG+"MP01.webp", qtyType: "magnet" },
+                    { name: "Magnet Bois", ref: "MB 01", img: IMG+"MB.01.webp", qtyType: "magnet" },
+                    { name: "Magnet Acrylique", ref: "MA 01", img: IMG+"MA.01.webp", qtyType: "magnet" }
                 ]},
                 { key: "stickers", label: "Stickers", items: [
-                    { name: "Sticker", ref: "STI 01", detail: "75 x 75", img: IMG+"tassebois.jpg", qtyType: "sticker" }
+                    { name: "Sticker", ref: "STI 01", detail: "75 x 75", img: IMG+"STI.01.webp", qtyType: "sticker" }
                 ]}
             ]},
             { key: "sacs-pochettes", label: "Sacs & Pochettes", sub: [
                 { key: "sacs", label: "Sacs", items: [
-                    { name: "Sac de plage Naturel", ref: "S-001", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Sac de plage XL", ref: "S-002", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Sac Polochon en Molleton", ref: "S-003", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Tote Bag en Coton BIO", ref: "S-004", img: IMG+"sacdeplage.jpg", qtyType: "default" }
+                    { name: "Sac de plage Naturel", ref: "S-001", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Sac de plage XL", ref: "S-002", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Sac Polochon en Molleton", ref: "S-003", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Tote Bag en Coton BIO", ref: "S-004", img: IMG+"PS.01.webp", qtyType: "default" }
                 ]},
                 { key: "pochettes", label: "Pochettes", items: [
-                    { name: "Trousse de toilette", ref: "P-001", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Pochette EarthAware Bio S", ref: "P-002", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Pochette EarthAware Bio L", ref: "P-003", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Pochette Zippée S", ref: "P-004", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Pochette Zippée M", ref: "P-005", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Pochette Vintage", ref: "P-006", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Pochette Coton S", ref: "P-007", img: IMG+"sacdeplage.jpg", qtyType: "default" },
-                    { name: "Pochette Coton M", ref: "P-008", img: IMG+"sacdeplage.jpg", qtyType: "default" }
+                    { name: "Trousse de toilette", ref: "P-001", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Pochette EarthAware Bio S", ref: "P-002", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Pochette EarthAware Bio L", ref: "P-003", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Pochette Zippée S", ref: "P-004", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Pochette Zippée M", ref: "P-005", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Pochette Vintage", ref: "P-006", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Pochette Coton S", ref: "P-007", img: IMG+"PS.01.webp", qtyType: "default" },
+                    { name: "Pochette Coton M", ref: "P-008", img: IMG+"PS.01.webp", qtyType: "default" }
                 ]}
             ]},
             { key: "accessoires", label: "Accessoires", sub: [
                 { key: "quotidien", label: "Quotidien", items: [
-                    { name: "Porte sac", ref: "PS 01", img: IMG+"portesac.jpg", qtyType: "quotidien" },
-                    { name: "Flasque Bois Clair", ref: "FBC 01", color: "Clair", img: IMG+"flasqueboisclair.png", qtyType: "quotidien" },
-                    { name: "Flasque Bois Foncé", ref: "FBF 01", color: "Foncé", img: IMG+"flasqueboisclair.png", qtyType: "quotidien" },
-                    { name: "Limonadier Bois Foncé", ref: "LBF 01", color: "Foncé", img: IMG+"limonadierboisfonce.jpg", qtyType: "quotidien" },
-                    { name: "Limonadier Bois Clair", ref: "LBC 01", color: "Clair", img: IMG+"limonadierboisclair.png", qtyType: "quotidien" },
-                    { name: "Identificateur Valise Liège", ref: "IVL 01", img: IMG+"ivl01.jpg", qtyType: "quotidien" },
-                    { name: "Petit Miroir Liège", ref: "PML 01", img: IMG+"petitmiroirliege.png", qtyType: "quotidien" },
-                    { name: "Couteau Multi Bois", ref: "CMB 01", img: IMG+"couteaumultibois.png", qtyType: "quotidien" },
-                    { name: "Pince à billet Argent", ref: "PBA 01", img: IMG+"pincebilletargent.png", qtyType: "quotidien" }
+                    { name: "Porte sac", ref: "PS 01", img: IMG+"PS.01.webp", qtyType: "quotidien" },
+                    { name: "Flasque Bois Clair", ref: "FBC 01", color: "Clair", img: IMG+"FBC.01.webp", qtyType: "quotidien" },
+                    { name: "Flasque Bois Foncé", ref: "FBF 01", color: "Foncé", img: IMG+"FBF.01.webp", qtyType: "quotidien" },
+                    { name: "Limonadier Bois Foncé", ref: "LBF 01", color: "Foncé", img: IMG+"LBF01.webp", qtyType: "quotidien" },
+                    { name: "Limonadier Bois Clair", ref: "LBC 01", color: "Clair", img: IMG+"LBC01.webp", qtyType: "quotidien" },
+                    { name: "Identificateur Valise Liège", ref: "IVL 01", img: IMG+"IVL.01.webp", qtyType: "quotidien" },
+                    { name: "Petit Miroir Liège", ref: "PML 01", img: IMG+"PML01.webp", qtyType: "quotidien" },
+                    { name: "Couteau Multi Bois", ref: "CMB 01", img: IMG+"CML.01.webp", qtyType: "quotidien" },
+                    { name: "Pince à billet Argent", ref: "PBA 01", img: IMG+"PBA01.webp", qtyType: "quotidien" }
                 ]},
                 { key: "art-table", label: "Art de la Table", items: [
-                    { name: "Bouchon Bois", ref: "BB 01", img: IMG+"bouchonbois.png", qtyType: "bouchon" },
-                    { name: "Dessous de plat Liège", ref: "DPL 01", img: IMG+"dessousdeplatliege.png", qtyType: "dpl" },
-                    { name: "Dessous de Verre Liège (par 1)", ref: "DVL 01", img: IMG+"dessousdeverreliege.png", qtyType: "dvl" },
-                    { name: "Plateau en Liège", ref: "PL 01", img: IMG+"plateauliege.png", qtyType: "quotidien" }
+                    { name: "Bouchon Bois", ref: "BB 01", img: IMG+"BB.01.webp", qtyType: "bouchon" },
+                    { name: "Dessous de plat Liège", ref: "DPL 01", img: IMG+"DPL.01.webp", qtyType: "dpl" },
+                    { name: "Dessous de Verre Liège (par 1)", ref: "DVL 01", img: IMG+"DVL.01.webp", qtyType: "dvl" },
+                    { name: "Plateau en Liège", ref: "PL 01", img: IMG+"PL.01.webp", qtyType: "quotidien" }
                 ]},
                 { key: "papeterie", label: "Papeterie & Impressions", items: [
-                    { name: "Crayon papier bois", ref: "CPB 01", img: IMG+"tassebois.jpg", qtyType: "crayon" },
-                    { name: "Stylo à bille en bois", ref: "SBB 01", img: IMG+"tassebois.jpg", qtyType: "stylo" },
-                    { name: "Bloc Note Liège", ref: "BNLA6", detail: "A6 (105 x 148)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
-                    { name: "Bloc Note Similicuir", ref: "BNSA6", detail: "A6 (105 x 148)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
-                    { name: "Bloc Note Liège", ref: "BNLA5", detail: "A5 (148 x 210)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
-                    { name: "Bloc Note Similicuir", ref: "BNSA5", color: "Bleu", detail: "A5 (148 x 210)", img: IMG+"blocnotesimilicuir.jpg", qtyType: "blocnote" },
-                    { name: "Carte Postale", ref: "CPA6", detail: "A6 (105 x 148)", img: IMG+"tassebois.jpg", qtyType: "cartepostale" },
-                    { name: "Affiche A3 + Tube", ref: "AFFA3", detail: "A3 (297 x 420)", img: IMG+"tassebois.jpg", qtyType: "affiche" }
+                    { name: "Crayon papier bois", ref: "CPB 01", img: IMG+"CPB.01.webp", qtyType: "crayon" },
+                    { name: "Stylo à bille en bois", ref: "SBB 01", img: IMG+"SBB.01.webp", qtyType: "stylo" },
+                    { name: "Bloc Note Liège", ref: "BNLA6", detail: "A6 (105 x 148)", img: IMG+"BNLA6.webp", qtyType: "blocnote" },
+                    { name: "Bloc Note Similicuir", ref: "BNSA6", detail: "A6 (105 x 148)", img: IMG+"BNS.5.webp", qtyType: "blocnote" },
+                    { name: "Bloc Note Liège", ref: "BNLA5", detail: "A5 (148 x 210)", img: IMG+"BLCA5.webp", qtyType: "blocnote" },
+                    { name: "Bloc Note Similicuir", ref: "BNSA5", color: "Bleu", detail: "A5 (148 x 210)", img: IMG+"BNS.5.webp", qtyType: "blocnote" },
+                    { name: "Carte Postale", ref: "CPA6", detail: "A6 (105 x 148)", img: IMG+"CPA.6.webp", qtyType: "cartepostale" },
+                    { name: "Affiche A3 + Tube", ref: "AFFA3", detail: "A3 (297 x 420)", img: IMG+"CPA.6.webp", qtyType: "affiche" }
                 ]},
                 { key: "jeux-loisirs", label: "Jeux & Loisirs", items: [
-                    { name: "Morpion", ref: "MOR 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
-                    { name: "Dominos", ref: "DOM 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
-                    { name: "Mikado", ref: "MIK 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
-                    { name: "Yoyo", ref: "YOY 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
-                    { name: "Jeux de Cartes", ref: "JDC 01", img: IMG+"morpion.jpg", qtyType: "jeux" },
-                    { name: "Raquette Bois", ref: "RB 01", img: IMG+"morpion.jpg", qtyType: "jeux" }
+                    { name: "Morpion", ref: "MOR 01", img: IMG+"MOR.01.webp", qtyType: "jeux" },
+                    { name: "Dominos", ref: "DOM 01", img: IMG+"DOM.01.webp", qtyType: "jeux" },
+                    { name: "Mikado", ref: "MIK 01", img: IMG+"MIK.01.webp", qtyType: "jeux" },
+                    { name: "Yoyo", ref: "YOY 01", img: IMG+"YOY.01.webp", qtyType: "jeux" },
+                    { name: "Jeux de Cartes", ref: "JDC 01", img: IMG+"JDC.01.webp", qtyType: "jeux" },
+                    { name: "Raquette Bois", ref: "RB 01", img: IMG+"RB01.webp", qtyType: "jeux" }
                 ]},
                 { key: "bijoux", label: "Bijoux", items: [
-                    { name: "Bracelet en Acrylique", ref: "BA 01", img: IMG+"porteclesplexiglass.jpg", qtyType: "jeux" }
+                    { name: "Bracelet en Acrylique", ref: "BA 01", img: IMG+"PCA.01.webp", qtyType: "jeux" }
                 ]},
                 { key: "decoration", label: "Décoration", items: [
-                    { name: "Tableau Black A4", ref: "TBA4", img: IMG+"tassebois.jpg", qtyType: "tableau" },
-                    { name: "Tableau Black A3", ref: "TBA3", img: IMG+"tassebois.jpg", qtyType: "tableau" }
+                    { name: "Tableau Black A4", ref: "TBA4", img: IMG+"CPA.6.webp", qtyType: "tableau" },
+                    { name: "Tableau Black A3", ref: "TBA3", img: IMG+"CPA.6.webp", qtyType: "tableau" }
                 ]}
             ]},
             { key: "offres", label: "Offres Spéciales", isDiscount: true, sub: [{ key: "promo", label: "Promotions", items: [
-                { name: "Porte Carte Liège", ref: "PCL 01", img: IMG+"ivl01.jpg", qtyType: "offre" },
-                { name: "Couteau Multi Liège", ref: "CML 01", img: IMG+"couteaumultibois.png", qtyType: "offre" },
-                { name: "Porte Monnaie Liège", ref: "PML 01", img: IMG+"ivl01.jpg", qtyType: "offre" },
-                { name: "Boîte à bijoux en bois", ref: "BAB 01", img: IMG+"morpion.jpg", qtyType: "offre" },
-                { name: "Décapsuleur Bois", ref: "DB 01", img: IMG+"limonadierboisclair.png", qtyType: "offre" },
-                { name: "Boîte à clic-clac", ref: "BCC 01", img: IMG+"morpion.jpg", qtyType: "offre" },
-                { name: "Cendrier Liège", ref: "CL 01", img: IMG+"dessousdeplatliege.png", qtyType: "offre" }
+                { name: "Porte Carte Liège", ref: "PCL 01", img: IMG+"PCL.01.webp", qtyType: "offre" },
+                { name: "Couteau Multi Liège", ref: "CML 01", img: IMG+"CML.01.webp", qtyType: "offre" },
+                { name: "Porte Monnaie Liège", ref: "PML 01", img: IMG+"PML01.webp", qtyType: "offre" },
+                { name: "Boîte à bijoux en bois", ref: "BAB 01", img: IMG+"BAB01.webp", qtyType: "offre" },
+                { name: "Décapsuleur Bois", ref: "DB 01", img: IMG+"LBC01.webp", qtyType: "offre" },
+                { name: "Boîte à clic-clac", ref: "BCC 01", img: IMG+"BCC.01.webp", qtyType: "offre" },
+                { name: "Cendrier Liège", ref: "CL 01", img: IMG+"CL.01.webp", qtyType: "offre" }
             ]}]}
         ];
-        const QTY_CONFIG = {
-            tasse: { min: 3, max: 36, step: 3, cartonAt: 36 },
-            portecles: { min: 10, max: 200, step: 10 },
-            flotteur: { min: 5, max: 150, step: 5 },
-            magnet: { min: 10, max: 200, step: 10 },
-            sticker: { min: 10, max: 300, step: 10 },
-            quotidien: { min: 3, max: 99, step: 3 },
-            bouchon: { min: 5, max: 100, step: 5 },
-            dpl: { min: 5, max: 100, step: 5 },
-            dvl: { min: 6, max: 102, step: 6 },
-            crayon: { min: 10, max: 200, step: 10 },
-            stylo: { min: 10, max: 200, step: 10 },
-            blocnote: { min: 4, max: 100, step: 4 },
-            cartepostale: { min: 10, max: 200, step: 10 },
-            affiche: { min: 5, max: 100, step: 5 },
-            jeux: { min: 4, max: 100, step: 4 },
-            offre: { min: 4, max: 100, step: 4 },
-            tableau: { min: 1, max: 50, step: 1 },
-            default: { min: 1, max: 50, step: 1 }
+
+        const QTY_CONFIGS = {
+            tasse: { min: 6, step: 6 },
+            portecles: { min: 10, step: 5 },
+            magnet: { min: 10, step: 5 },
+            sticker: { min: 50, step: 50 },
+            bouchon: { min: 10, step: 1 },
+            dpl: { min: 5, step: 1 },
+            dvl: { min: 20, step: 1 },
+            crayon: { min: 50, step: 50 },
+            stylo: { min: 20, step: 1 },
+            blocnote: { min: 10, step: 1 },
+            cartepostale: { min: 100, step: 100 },
+            affiche: { min: 10, step: 10 },
+            quotidien: { min: 10, step: 1 },
+            jeux: { min: 10, step: 1 },
+            tableau: { min: 5, step: 1 },
+            offre: { min: 1, step: 1 },
+            default: { min: 10, step: 1 }
         };
-        function generateQtyOptions(qtyType) {
-            const config = QTY_CONFIG[qtyType] || QTY_CONFIG.default;
-            const options = [];
-            for (let i = config.min; i <= config.max; i += config.step) {
-                let label = i.toString();
-                if (config.cartonAt && i === config.cartonAt) label = i + ' 📦';
-                options.push({ val: i, label: label });
-            }
-            return options;
-        }
-        let currentMainCat = DATA[0];
-        let currentSubCat = DATA[0].sub[0];
+
+        let currentMain = DATA[0].key;
+        let currentSub = DATA[0].sub[0].key;
         let cart = [];
-        const $ = id => document.getElementById(id);
-        const homePage = $('homePage'), enterShop = $('enterShop'), shopContainer = $('shopContainer');
-        const navMain = $('navMain'), navSub = $('navSub'), productGrid = $('productGrid');
-        const cartTrigger = $('cartTrigger'), cartOverlay = $('cartOverlay'), cartPanel = $('cartPanel');
-        const cartClose = $('cartClose'), cartBody = $('cartBody'), cartCount = $('cartCount');
-        const cartTotal = $('cartTotal'), cartSubmit = $('cartSubmit');
-        const orderForm = $('orderForm'), customerName = $('customerName');
-        const customerEmail = $('customerEmail'), customerComment = $('customerComment');
-        const promoBanner = $('promoBanner');
-        const confirmationOverlay = $('confirmationOverlay');
-        const confirmationClose = $('confirmationClose');
-        enterShop.addEventListener('click', () => { 
-            homePage.classList.add('transitioning');
-            setTimeout(() => { homePage.classList.add('hidden'); shopContainer.classList.add('visible'); }, 600);
-        });
-        document.querySelector('.logo').addEventListener('click', () => { 
-            homePage.classList.remove('hidden'); 
-            homePage.classList.remove('transitioning');
-            shopContainer.classList.remove('visible'); 
-        });
-        confirmationClose.addEventListener('click', () => { confirmationOverlay.classList.remove('visible'); });
+
+        const navMain = document.getElementById('nav-main');
+        const navSub = document.getElementById('nav-sub');
+        const productGrid = document.getElementById('product-grid');
+        const sectionInfo = document.getElementById('section-info');
+        const cartCount = document.getElementById('cart-count');
+        const cartItemsList = document.getElementById('cart-items-list');
+        const modalOverlay = document.getElementById('modal-overlay');
+        const confOverlay = document.getElementById('conf-overlay');
+        const customerName = document.getElementById('customer-name');
+        const customerEmail = document.getElementById('customer-email');
+        const customerComment = document.getElementById('customer-comment');
+        const cartSubmit = document.getElementById('cart-submit');
+
         function renderNavMain() {
-            navMain.innerHTML = DATA.map(c => '<button class="tab-btn' + (c.key === currentMainCat.key ? ' active' : '') + '" data-key="' + c.key + '">' + c.label + '</button>').join('');
-            navMain.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const cat = DATA.find(c => c.key === btn.dataset.key);
-                    if (cat) { currentMainCat = cat; currentSubCat = cat.sub[0]; renderNavMain(); renderNavSub(); renderProducts(); updatePromoBanner(); }
-                });
-            });
+            navMain.innerHTML = DATA.map(cat => `
+                <div class="nav-item ${cat.key === currentMain ? 'active' : ''} ${cat.isDiscount ? 'is-discount' : ''}" 
+                     onclick="switchMain('${cat.key}')">${cat.label}</div>
+            `).join('');
         }
+
         function renderNavSub() {
-            navSub.innerHTML = currentMainCat.sub.map(s => '<button class="sub-btn' + (s.key === currentSubCat.key ? ' active' : '') + '" data-key="' + s.key + '">' + s.label + '</button>').join('');
-            navSub.querySelectorAll('.sub-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const sub = currentMainCat.sub.find(s => s.key === btn.dataset.key);
-                    if (sub) { currentSubCat = sub; renderNavSub(); renderProducts(); }
-                });
-            });
+            const cat = DATA.find(c => c.key === currentMain);
+            navSub.innerHTML = cat.sub.map(s => `
+                <div class="sub-item ${s.key === currentSub ? 'active' : ''}" 
+                     onclick="switchSub('${s.key}')">${s.label}</div>
+            `).join('');
         }
-        function updatePromoBanner() { promoBanner.classList.toggle('visible', currentMainCat.isDiscount === true); }
+
+        window.switchMain = (key) => {
+            currentMain = key;
+            currentSub = DATA.find(c => c.key === key).sub[0].key;
+            renderNavMain(); renderNavSub(); renderProducts();
+        };
+
+        window.switchSub = (key) => {
+            currentSub = key;
+            renderNavSub(); renderProducts();
+        };
+
         function renderProducts() {
-            const isDiscount = currentMainCat.isDiscount === true;
-            productGrid.innerHTML = currentSubCat.items.map(item => {
-                let info = item.ref;
-                if (item.color) info += ' | ' + item.color;
-                if (item.size) info += ' | ' + item.size;
-                if (item.detail) info += ' | ' + item.detail;
-                const qtyOptions = generateQtyOptions(item.qtyType || 'default');
-                let discountBadge = '', pricingHtml = '';
-                if (isDiscount) {
-                    discountBadge = '<span class="discount-badge">-20%</span>';
-                    pricingHtml = '<div class="product-pricing visible"><div class="price-original">Prix catalogue</div><div class="price-discounted">-20% appliqué</div></div>';
-                }
-                return '<article class="product-card" data-ref="' + item.ref + '">' +
-                    discountBadge +
-                    '<div class="product-img-wrapper"><div class="product-img"' + (item.img ? ' style="background-image: url(\'' + item.img + '\')"' : '') + '></div></div>' +
-                    '<h3 class="product-title">' + item.name + '</h3>' +
-                    '<p class="product-info">' + info + '</p>' +
-                    pricingHtml +
-                    '<select class="qty-select">' + qtyOptions.map(o => '<option value="' + o.val + '">' + o.label + '</option>').join('') + '</select>' +
-                    '<button class="add-btn" data-ref="' + item.ref + '">Ajouter</button>' +
-                    '</article>';
+            const cat = DATA.find(c => c.key === currentMain);
+            const sub = cat.sub.find(s => s.key === currentSub);
+            
+            sectionInfo.innerHTML = `<h1>${sub.label}</h1><p>${cat.label} — Sélection Professionnelle</p>`;
+            
+            productGrid.innerHTML = sub.items.map(i => {
+                const config = QTY_CONFIGS[i.qtyType] || QTY_CONFIGS.default;
+                const cartItem = cart.find(ci => ci.ref === i.ref);
+                const currentQty = cartItem ? cartItem.qty : 0;
+                
+                return `
+                    <div class="card">
+                        <div class="image-container">
+                            <img src="${i.img}" alt="${i.name}" loading="lazy">
+                        </div>
+                        <div class="card-content">
+                            <div class="product-ref">${i.ref}</div>
+                            <div class="product-name">${i.name}</div>
+                            <div class="product-detail">${i.detail || (i.size ? i.size + ' • ' + i.color : '')}</div>
+                            <div class="qty-wrapper">
+                                <div class="qty-step">Min. ${config.min} (par ${config.step})</div>
+                                <div class="qty-input-group">
+                                    <button class="qty-btn" onclick="updateQty('${i.ref}', -${config.step})">−</button>
+                                    <input type="text" class="qty-value" value="${currentQty}" readonly>
+                                    <button class="qty-btn" onclick="updateQty('${i.ref}', ${config.step})">+</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
             }).join('');
-            productGrid.querySelectorAll('.add-btn').forEach(btn => {
-                btn.addEventListener('click', () => {
-                    const card = btn.closest('.product-card');
-                    const item = currentSubCat.items.find(i => i.ref === btn.dataset.ref);
-                    const qty = parseInt(card.querySelector('.qty-select').value);
-                    if (item) {
-                        addToCart(item, qty, null, currentMainCat.isDiscount);
-                        btn.textContent = '✓ Ajouté';
-                        btn.classList.add('added');
-                        setTimeout(() => { btn.textContent = 'Ajouter'; btn.classList.remove('added'); }, 1500);
-                    }
-                });
-            });
-            observeProducts();
         }
-        function observeProducts() {
-            const observer = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }); }, { threshold: 0.1, rootMargin: '50px' });
-            productGrid.querySelectorAll('.product-card').forEach(card => observer.observe(card));
-        }
-        function addToCart(item, qty, selectedSize, hasDiscount) {
-            const cartKey = selectedSize ? item.ref + '-' + selectedSize : item.ref;
-            const existing = cart.find(i => { const existingKey = i.selectedSize ? i.ref + '-' + i.selectedSize : i.ref; return existingKey === cartKey; });
-            if (existing) { existing.qty += qty; } 
-            else { const cartItem = { ...item, qty }; if (selectedSize) cartItem.selectedSize = selectedSize; if (hasDiscount) cartItem.hasDiscount = true; cart.push(cartItem); }
+
+        window.updateQty = (ref, delta) => {
+            const allItems = DATA.flatMap(c => c.sub.flatMap(s => s.items));
+            const product = allItems.find(i => i.ref === ref);
+            const config = QTY_CONFIGS[product.qtyType] || QTY_CONFIGS.default;
+            
+            let item = cart.find(i => i.ref === ref);
+            if (!item) {
+                if (delta > 0) {
+                    cart.push({ ...product, qty: config.min });
+                }
+            } else {
+                item.qty += delta;
+                if (item.qty < config.min) {
+                    cart = cart.filter(i => i.ref !== ref);
+                }
+            }
             updateCartUI();
-        }
-        function removeFromCart(ref, selectedSize) {
-            cart = cart.filter(i => { const cartKey = i.selectedSize ? i.ref + '-' + i.selectedSize : i.ref; const removeKey = selectedSize ? ref + '-' + selectedSize : ref; return cartKey !== removeKey; });
-            updateCartUI();
-        }
+            renderProducts();
+        };
+
         function updateCartUI() {
             const total = cart.reduce((sum, i) => sum + i.qty, 0);
-            cartCount.textContent = total; cartCount.classList.toggle('visible', total > 0);
-            cartTotal.textContent = total; cartSubmit.disabled = cart.length === 0;
-            orderForm.classList.toggle('visible', cart.length > 0);
-            if (cart.length === 0) { cartBody.innerHTML = '<div class="cart-empty"><div class="cart-empty-icon">☀️</div><p>Votre sélection est vide</p></div>'; }
-            else {
-                cartBody.innerHTML = cart.map(i => {
-                    let details = i.ref;
-                    if (i.color) details += ' | ' + i.color;
-                    if (i.selectedSize) details += ' | Taille ' + i.selectedSize;
-                    else if (i.size) details += ' | ' + i.size;
-                    if (i.hasDiscount) details += ' | -20%';
-                    const removeKey = i.selectedSize || '';
-                    return '<div class="cart-item"><div class="cart-item-info"><div class="cart-item-name">' + i.name + '</div><div class="cart-item-ref">' + details + '</div><div class="cart-item-qty">Quantité : ' + i.qty + '</div></div><button class="cart-item-remove" data-ref="' + i.ref + '" data-size="' + removeKey + '">×</button></div>';
-                }).join('');
-                cartBody.querySelectorAll('.cart-item-remove').forEach(btn => { btn.addEventListener('click', () => removeFromCart(btn.dataset.ref, btn.dataset.size || null)); });
-            }
+            cartCount.textContent = total;
+            
+            cartItemsList.innerHTML = cart.map(i => `
+                <div class="cart-item">
+                    <img src="${i.img}">
+                    <div class="cart-item-info">
+                        <h4>${i.name}</h4>
+                        <p>Réf: ${i.ref} | Qté: <strong>${i.qty}</strong></p>
+                        <p style="color:var(--ocean); cursor:pointer; margin-top:5px;" onclick="updateQty('${i.ref}', -9999)">Supprimer</p>
+                    </div>
+                </div>
+            `).join('');
+            
+            cartSubmit.disabled = cart.length === 0;
         }
-        function openCart() { cartOverlay.classList.add('open'); cartPanel.classList.add('open'); document.body.style.overflow = 'hidden'; }
-        function closeCart() { cartOverlay.classList.remove('open'); cartPanel.classList.remove('open'); document.body.style.overflow = ''; }
-        cartTrigger.addEventListener('click', openCart);
-        cartClose.addEventListener('click', closeCart);
-        cartOverlay.addEventListener('click', closeCart);
-        document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart(); });
-        cartSubmit.addEventListener('click', () => {
-            if (!customerName.value || !customerEmail.value) { alert('Veuillez remplir votre nom et email.'); return; }
-            const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
-            let orderTableRows = cart.map(i => {
-                let spec = '';
-                if (i.color && i.selectedSize) spec = i.color + ' / Taille ' + i.selectedSize;
-                else if (i.color && i.size) spec = i.color + ' / ' + i.size;
-                else if (i.selectedSize) spec = 'Taille ' + i.selectedSize;
-                else if (i.color) spec = i.color;
-                else if (i.size) spec = 'Taille ' + i.size;
-                else if (i.detail) spec = i.detail;
-                else spec = '—';
-                if (i.hasDiscount) spec += ' (Remise -20%)';
-                return '<tr><td class="product-name">' + i.name + '</td><td class="product-ref">' + i.ref + '</td><td class="product-spec">' + spec + '</td><td class="product-qty">' + i.qty + '</td></tr>';
+
+        window.openCart = () => modalOverlay.classList.add('visible');
+        window.closeCart = () => modalOverlay.classList.remove('visible');
+
+        window.submitOrder = () => {
+            if (!customerName.value || !customerEmail.value) {
+                alert("Merci de renseigner votre établissement et votre email.");
+                return;
+            }
+
+            const orderNumber = Math.floor(1000 + Math.random() * 9000);
+            const orderTableRows = cart.map(i => {
+                const spec = i.detail || (i.size ? i.size + ' - ' + i.color : '-');
+                return `<tr><td style="padding:8px; border-bottom:1px solid #eee;">${i.name}</td><td style="padding:8px; border-bottom:1px solid #eee;">${i.ref}</td><td style="padding:8px; border-bottom:1px solid #eee;">${spec}</td><td style="padding:8px; border-bottom:1px solid #eee; font-weight:bold;">${i.qty}</td></tr>`;
             }).join('');
-            const templateParams = { order_number: orderNumber, customer_name: customerName.value, customer_email: customerEmail.value, customer_comment: customerComment.value || '', order_table_rows: orderTableRows, total_items: cart.reduce((sum, i) => sum + i.qty, 0) };
+
+            const templateParams = {
+                order_number: orderNumber,
+                customer_name: customerName.value,
+                customer_email: customerEmail.value,
+                customer_comment: customerComment.value || 'Aucun commentaire',
+                order_table_rows: orderTableRows,
+                total_items: cart.reduce((sum, i) => sum + i.qty, 0)
+            };
+
             cartSubmit.disabled = true;
-            cartSubmit.textContent = 'Envoi en cours...';
-            emailjs.init('Y9NKwhNvCNtb_SRry');
-            emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams)
+            cartSubmit.textContent = "Envoi en cours...";
+
+            emailjs.init("Y9NKwhNvCNtb_SRry");
+            emailjs.send("service_1cvmozk", "template_ptouuob", templateParams)
                 .then(() => {
                     closeCart();
-                    confirmationOverlay.classList.add('visible');
+                    confOverlay.classList.add('visible');
                     cart = [];
                     updateCartUI();
-                    customerName.value = '';
-                    customerEmail.value = '';
-                    customerComment.value = '';
-                    cartSubmit.textContent = 'Confirmer la commande';
                 }, (error) => {
-                    alert('Erreur lors de l\'envoi. Veuillez réessayer.');
-                    console.error('EmailJS error:', error);
+                    alert("Erreur lors de l'envoi. Veuillez réessayer.");
                     cartSubmit.disabled = false;
-                    cartSubmit.textContent = 'Confirmer la commande';
+                    cartSubmit.textContent = "Confirmer la commande";
                 });
-        });
-        renderNavMain(); renderNavSub(); renderProducts(); updateCartUI(); updatePromoBanner();
+        };
+
+        renderNavMain(); renderNavSub(); renderProducts();
     })();
     </script>
 </body>
