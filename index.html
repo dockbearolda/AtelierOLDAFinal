@@ -394,9 +394,6 @@
         const confirmationOverlay = $('confirmationOverlay');
         const confirmationClose = $('confirmationClose');
 
-        // Initialize EmailJS with your public key
-        emailjs.init('Y9NKwhNvCNtb_SRry');
-
         enterShop.addEventListener('click', () => { 
             homePage.classList.add('transitioning');
             setTimeout(() => { homePage.classList.add('hidden'); shopContainer.classList.add('visible'); }, 600);
@@ -538,7 +535,7 @@
                 to_email: 'atelierolda@gmail.com'
             };
 
-            emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams)
+            emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams, 'Y9NKwhNvCNtb_SRry')
                 .then(() => {
                     confirmationOverlay.classList.add('visible');
                     cart = [];
