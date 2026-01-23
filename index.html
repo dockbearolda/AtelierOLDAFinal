@@ -530,12 +530,13 @@
                     customerEmail.value = '';
                     customerComment.value = '';
                     cartSubmit.textContent = 'Confirmer la commande';
-                }, (error) => {
-                    alert('Erreur lors de l\'envoi. Veuillez réessayer.');
-                    console.error('EmailJS error:', error);
-                    cartSubmit.disabled = false;
-                    cartSubmit.textContent = 'Confirmer la commande';
-                });
+               }, (error) => {
+    // Ce code va vous afficher une alerte avec la vraie raison du blocage
+    alert('Erreur EmailJS : ' + error.text + ' (Status: ' + error.status + ')');
+    console.error('EmailJS error:', error);
+    cartSubmit.disabled = false;
+    cartSubmit.textContent = 'Confirmer la commande';
+});
         });
 
         // Image Zoom Feature
