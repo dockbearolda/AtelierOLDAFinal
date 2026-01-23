@@ -1,104 +1,249 @@
-(function() {
-    'use strict';
-
-    // 1. Chemin vers votre dossier d'images sur GitHub
-    const IMG = "public/images/";
-
-    const DATA = [
-        { 
-            key: "nouveautes", 
-            label: "Nouveautés", 
-            sub: [{ 
-                key: "arrivages", 
-                label: "Arrivages", 
-                items: [
-                    { name: "Support Mobile Acrylique", ref: "SM 01", img: IMG + "SM01.png", qtyType: "default" },
-                    { name: "Bloc Note Similicuir", ref: "BNSA6", detail: "A6 (105 x 148)", img: IMG + "BNLA6.png", qtyType: "blocnote" },
-                    { name: "Bloc Note Similicuir", ref: "BNS5", detail: "A5 (148 x 210)", img: IMG + "BNS5.png", qtyType: "blocnote" }
-                ]
-            }]
-        },
-        { 
-            key: "tasses", 
-            label: "Tasses", 
-            sub: [
-                { 
-                    key: "ceramique-fuck", 
-                    label: "Tasse Céramique Fuck", 
-                    items: [
-                        // Utilisation des noms compacts vus sur votre écran (ex: TCF01)
-                        { name: "Tasse Fuck", ref: "TCF 01", size: "350ml", color: "Rouge & Blanc", img: IMG + "TCF01.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 02", size: "350ml", color: "Orange & Blanc", img: IMG + "TCF02.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 03", size: "350ml", color: "Rose & Blanc", img: IMG + "TCF03.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 04", size: "350ml", color: "Bleu & Blanc", img: IMG + "TCF04.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 05", size: "350ml", color: "Vert & Blanc", img: IMG + "TCF05.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 06", size: "350ml", color: "Noir & Blanc", img: IMG + "TCF06.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 07", size: "350ml", color: "Blanc & Bleu", img: IMG + "TCF07.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 08", size: "350ml", color: "Blanc & Jaune", img: IMG + "TCF08.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 09", size: "350ml", color: "Blanc & Orange", img: IMG + "TCF09.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 10", size: "350ml", color: "Blanc & Rouge", img: IMG + "TCF10.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 11", size: "350ml", color: "Blanc & Vert", img: IMG + "TCF11.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 12", size: "350ml", color: "Blanc & Noir", img: IMG + "TCF12.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 13", size: "350ml", color: "Noir & Rose", img: IMG + "TCF13.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 14", size: "350ml", color: "Noir & Jaune", img: IMG + "TCF14.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 15", size: "350ml", color: "Noir & Rouge", img: IMG + "TCF15.png", qtyType: "tasse" },
-                        { name: "Tasse Fuck", ref: "TCF 16", size: "350ml", color: "Noir & Vert", img: IMG + "TCF16.png", qtyType: "tasse" },
-                        // Correction spécifique pour le point dans le nom vu sur image_037b96.png
-                        { name: "Tasse Fuck", ref: "TCF 17", size: "350ml", color: "Noir & Orange", img: IMG + "TCF.17.png", qtyType: "tasse" }
-                    ]
-                },
-                { 
-                    key: "ceramique", 
-                    label: "Tasse Céramique", 
-                    items: [
-                        { name: "Tasse Céramique", ref: "TC 01", size: "350ml", color: "Rouge & Blanc", img: IMG + "TC01.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 02", size: "350ml", color: "Orange & Blanc", img: IMG + "TC02.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 03", size: "350ml", color: "Rose & Blanc", img: IMG + "TC03.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 04", size: "350ml", color: "Bleu & Blanc", img: IMG + "TC04.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 05", size: "350ml", color: "Vert & Blanc", img: IMG + "TC05.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 06", size: "350ml", color: "Noir & Blanc", img: IMG + "TC06.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 07", size: "350ml", color: "Blanc & Bleu", img: IMG + "TC07.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 08", size: "350ml", color: "Blanc & Jaune", img: IMG + "TC08.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 09", size: "350ml", color: "Blanc & Orange", img: IMG + "TC09.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 10", size: "350ml", color: "Blanc & Rouge", img: IMG + "TC10.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 11", size: "350ml", color: "Blanc & Vert", img: IMG + "TC11.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 12", size: "350ml", color: "Blanc & Noir", img: IMG + "TC12.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 13", size: "350ml", color: "Noir & Rose", img: IMG + "TC13.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 14", size: "350ml", color: "Noir & Jaune", img: IMG + "TC14.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 15", size: "350ml", color: "Noir & Rouge", img: IMG + "TC15.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 16", size: "350ml", color: "Noir & Vert", img: IMG + "TC16.png", qtyType: "tasse" },
-                        { name: "Tasse Céramique", ref: "TC 17", size: "350ml", color: "Noir & Orange", img: IMG + "TC.17.png", qtyType: "tasse" }
-                    ]
-                },
-                { 
-                    key: "metal", 
-                    label: "Tasse Métal", 
-                    items: [
-                        { name: "Tasse Métal", ref: "TM 01", size: "300ml", color: "Blanc", img: IMG + "TM01.png", qtyType: "tasse" },
-                        { name: "Tasse Métal", ref: "TM 02", size: "300ml", color: "Bleu", img: IMG + "TM02.png", qtyType: "tasse" },
-                        { name: "Tasse Métal", ref: "TM 03", size: "300ml", color: "Jaune", img: IMG + "TM03.png", qtyType: "tasse" },
-                        { name: "Tasse Métal", ref: "TM 04", size: "300ml", color: "Rouge", img: IMG + "TM04.png", qtyType: "tasse" }
-                    ]
-                }
-            ]
-        },
-        { 
-            key: "goodies", 
-            label: "Goodies", 
-            sub: [
-                { 
-                    key: "porte-cles", 
-                    label: "Porte-Clés", 
-                    items: [
-                        { name: "Porte-Clés Plexiglass", ref: "PCP 01", img: IMG + "PCP01.png", qtyType: "portecles" },
-                        { name: "Porte-Clés Bois", ref: "PCB 01", img: IMG + "PCB01.png", qtyType: "portecles" },
-                        { name: "Porte-Clés Acrylique", ref: "PCA 01", img: IMG + "PCA01.png", qtyType: "portecles" },
-                        { name: "Porte-Clés Flotteur Liège", ref: "PCFL 01", img: IMG + "LBF01.png", qtyType: "flotteur" }
-                    ]
-                }
-            ]
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atelier OLDA - Catalogue</title>
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --accent: #e67e22;
+            --bg: #f9f9f9;
+            --card-bg: #ffffff;
         }
-    ];
 
-    // Reste du script...
-})();
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            margin: 0;
+            display: flex;
+        }
+
+        /* Sidebar Navigation */
+        nav {
+            width: 250px;
+            background: var(--primary);
+            color: white;
+            height: 100vh;
+            position: fixed;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        nav h1 { font-size: 1.2rem; border-bottom: 1px solid #455a64; padding-bottom: 10px; }
+        
+        .menu-cat { margin-bottom: 20px; }
+        .menu-cat h3 { font-size: 0.9rem; text-transform: uppercase; color: #bdc3c7; }
+        .menu-cat ul { list-style: none; padding: 0; }
+        .menu-cat li { 
+            padding: 8px 10px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            border-radius: 4px;
+        }
+        .menu-cat li:hover { background: rgba(255,255,255,0.1); }
+        .active-cat { background: var(--accent) !important; color: white; }
+
+        /* Main Content */
+        main {
+            margin-left: 290px;
+            padding: 40px;
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.2s;
+        }
+
+        .card:hover { transform: translateY(-5px); }
+
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: contain;
+            margin-bottom: 15px;
+            /* L'ombre portée sera déjà sur vos images PNG grâce à Photoroom/Photoshop */
+        }
+
+        .card h4 { margin: 10px 0 5px; color: var(--primary); }
+        .card p { font-size: 0.8rem; color: #7f8c8d; margin-bottom: 15px; }
+
+        .ref { font-weight: bold; color: var(--accent); }
+
+    </style>
+</head>
+<body>
+
+    <nav id="sidebar">
+        <h1>Atelier OLDA</h1>
+        <div id="categories-menu"></div>
+    </nav>
+
+    <main>
+        <h2 id="current-category-title">Sélectionnez une catégorie</h2>
+        <div class="grid" id="product-grid">
+            </div>
+    </main>
+
+    <script>
+        const IMG = "public/images/";
+
+        const DATA = [
+            { 
+                key: "nouveautes", 
+                label: "Nouveautés", 
+                sub: [{ 
+                    key: "arrivages", 
+                    label: "Arrivages", 
+                    items: [
+                        { name: "Support Mobile Acrylique", ref: "SM 01", img: IMG + "SM01.png" },
+                        { name: "Bloc Note Similicuir A6", ref: "BNSA6", img: IMG + "BNLA6.png" },
+                        { name: "Bloc Note Similicuir A5", ref: "BNS5", img: IMG + "BNS5.png" },
+                        { name: "Yoyo", ref: "YOY 01", img: IMG + "YOY01.png" }
+                    ]
+                }]
+            },
+            { 
+                key: "tasses", 
+                label: "Tasses", 
+                sub: [
+                    { 
+                        key: "ceramique-fuck", 
+                        label: "Tasse Céramique Fuck", 
+                        items: Array.from({length: 17}, (_, i) => {
+                            const id = (i + 1).toString().padStart(2, '0');
+                            const fileName = (i + 1 === 17) ? "TCF.17.png" : `TCF${id}.png`;
+                            return { name: "Tasse Fuck", ref: `TCF ${id}`, img: IMG + fileName };
+                        })
+                    },
+                    { 
+                        key: "ceramique-standard", 
+                        label: "Tasse Céramique", 
+                        items: Array.from({length: 17}, (_, i) => {
+                            const id = (i + 1).toString().padStart(2, '0');
+                            const fileName = (i + 1 === 17) ? "TC.17.png" : `TC${id}.png`;
+                            return { name: "Tasse Céramique", ref: `TC ${id}`, img: IMG + fileName };
+                        })
+                    },
+                    { 
+                        key: "metal", 
+                        label: "Tasse Métal", 
+                        items: [
+                            { name: "Tasse Métal", ref: "TM 01", img: IMG + "TM01.png" },
+                            { name: "Tasse Métal", ref: "TM 02", img: IMG + "TM02.png" },
+                            { name: "Tasse Métal", ref: "TM 03", img: IMG + "TM03.png" },
+                            { name: "Tasse Métal", ref: "TM 04", img: IMG + "TM04.png" }
+                        ]
+                    }
+                ]
+            },
+            { 
+                key: "goodies", 
+                label: "Goodies", 
+                sub: [
+                    { 
+                        key: "porte-cles", 
+                        label: "Porte-Clés", 
+                        items: [
+                            { name: "Porte-Clés Plexi", ref: "PCP 01", img: IMG + "PCP01.png" },
+                            { name: "Porte-Clés Bois", ref: "PCB 01", img: IMG + "PCB01.png" },
+                            { name: "Porte-Clés Acrylique", ref: "PCA 01", img: IMG + "PCA01.png" },
+                            { name: "Flotteur Liège Rond", ref: "LBF 01", img: IMG + "LBF01.png" },
+                            { name: "Flotteur Liège Carré", ref: "LBC 01", img: IMG + "LBC01.png" }
+                        ]
+                    },
+                    { 
+                        key: "magnets", 
+                        label: "Magnets", 
+                        items: [
+                            { name: "Magnet Plexi", ref: "MP 01", img: IMG + "MP01.png" },
+                            { name: "Magnet Bois", ref: "MB 01", img: IMG + "MB01.png" }
+                        ]
+                    }
+                ]
+            },
+            { 
+                key: "sacs-pochettes", 
+                label: "Sacs & Pochettes", 
+                sub: [
+                    { 
+                        key: "sacs", 
+                        label: "Sacs", 
+                        items: [
+                            { name: "Sac Shopping", ref: "SB 01", img: IMG + "SB01.png" },
+                            { name: "Sac Bicolor", ref: "SBB 01", img: IMG + "SBB01.png" },
+                            { name: "Beach Bag", ref: "BB 01", img: IMG + "BB01.png" }
+                        ]
+                    },
+                    { 
+                        key: "pochettes", 
+                        label: "Pochettes", 
+                        items: [
+                            { name: "Clutch", ref: "CL 01", img: IMG + "CL.01.png" },
+                            { name: "Pochette L", ref: "PL 01", img: IMG + "PL.01.png" },
+                            { name: "Pochette Canvas", ref: "PCL 01", img: IMG + "PCL.01.png" }
+                        ]
+                    }
+                ]
+            }
+        ];
+
+        function init() {
+            const menuContainer = document.getElementById('categories-menu');
+            
+            DATA.forEach(cat => {
+                const section = document.createElement('div');
+                section.className = 'menu-cat';
+                section.innerHTML = `<h3>${cat.label}</h3>`;
+                const ul = document.createElement('ul');
+                
+                cat.sub.forEach(sub => {
+                    const li = document.createElement('li');
+                    li.textContent = sub.label;
+                    li.onclick = () => renderProducts(sub);
+                    ul.appendChild(li);
+                });
+                
+                section.appendChild(ul);
+                menuContainer.appendChild(section);
+            });
+        }
+
+        function renderProducts(subCat) {
+            const grid = document.getElementById('product-grid');
+            const title = document.getElementById('current-category-title');
+            
+            title.textContent = subCat.label;
+            grid.innerHTML = '';
+
+            subCat.items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <img src="${item.img}" alt="${item.name}" onerror="this.src='https://via.placeholder.com/200?text=Image+Manquante'">
+                    <h4>${item.name}</h4>
+                    <p class="ref">REF: ${item.ref}</p>
+                `;
+                grid.appendChild(card);
+            });
+
+            // Update active state in menu
+            document.querySelectorAll('li').forEach(li => li.classList.remove('active-cat'));
+            event.target.classList.add('active-cat');
+        }
+
+        init();
+    </script>
+</body>
+</html>
