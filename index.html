@@ -393,6 +393,10 @@
         const customerEmail = $('customerEmail'), customerComment = $('customerComment');
         const confirmationOverlay = $('confirmationOverlay');
         const confirmationClose = $('confirmationClose');
+
+        // Initialize EmailJS with your public key
+        emailjs.init('VOTRE_CLE_PUBLIQUE'); // REMPLACEZ par votre clé publique EmailJS
+
         enterShop.addEventListener('click', () => { 
             homePage.classList.add('transitioning');
             setTimeout(() => { homePage.classList.add('hidden'); shopContainer.classList.add('visible'); }, 600);
