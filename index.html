@@ -506,17 +506,9 @@
         cartClose.addEventListener('click', closeCart);
         cartOverlay.addEventListener('click', closeCart);
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart(); });
-        cartSubmit.addEventListener('click', (e) => {
-            e.preventDefault();
-
+        cartSubmit.addEventListener('click', () => {
             if (!customerName.value || !customerEmail.value) {
                 alert('Veuillez remplir votre nom et votre email.');
-                return;
-            }
-
-            // Vérifier que EmailJS est bien chargé
-            if (typeof emailjs === 'undefined') {
-                alert('Service d\'envoi non disponible. Veuillez recharger la page.');
                 return;
             }
 
@@ -546,19 +538,8 @@
                 to_email: 'atelierolda@gmail.com'
             };
 
-            console.log('Envoi de la commande...', templateParams);
-
-            // Créer un timeout de 30 secondes pour Safari iOS
-            let timeoutId = setTimeout(() => {
-                cartSubmit.disabled = false;
-                cartSubmit.textContent = 'Confirmer la commande';
-                alert('Délai d\'attente dépassé. Vérifiez votre connexion internet et réessayez.');
-            }, 30000);
-
             emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams)
-                .then((response) => {
-                    clearTimeout(timeoutId);
-                    console.log('Succès EmailJS:', response);
+                .then(() => {
                     confirmationOverlay.classList.add('visible');
                     cart = [];
                     updateCartUI();
@@ -568,10 +549,8 @@
                     cartSubmit.textContent = 'Confirmer la commande';
                 })
                 .catch((error) => {
-                    clearTimeout(timeoutId);
-                    console.error('Erreur EmailJS complète:', error);
-                    const errorMsg = error && error.text ? error.text : (error && error.message ? error.message : 'Service temporairement indisponible');
-                    alert('Erreur lors de l\'envoi : ' + errorMsg + '. Veuillez réessayer.');
+                    alert('Erreur lors de l\'envoi : ' + (error.text || 'Erreur inconnue'));
+                    console.error('EmailJS error:', error);
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 });
