@@ -214,7 +214,6 @@
         const IMG = "/images/";
         let PRICES = {};
 
-        // Charger les prix depuis le fichier JSON
         fetch('/prices.json')
             .then(res => res.json())
             .then(data => { PRICES = data; renderProducts(); })
@@ -501,6 +500,7 @@
         cartClose.addEventListener('click', closeCart);
         cartOverlay.addEventListener('click', closeCart);
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart(); });
+        
         cartSubmit.addEventListener('click', async () => {
             if (!customerName.value || !customerEmail.value) {
                 alert('Veuillez remplir votre nom et votre email.');
@@ -513,141 +513,104 @@
             const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
 
-            // Créer le tableau des produits pour l'email
             let productRows = cart.map(i => {
-                let spec = '';
-                if (i.color && i.selectedSize) spec = i.color + ' / Taille ' + i.selectedSize;
-                else if (i.color && i.size) spec = i.color + ' / ' + i.size;
-                else if (i.selectedSize) spec = 'Taille ' + i.selectedSize;
-                else if (i.color) spec = i.color;
-                else if (i.size) spec = 'Taille ' + i.size;
-                else if (i.detail) spec = i.detail;
-                else spec = '—';
-
+                let spec = i.color || i.size || i.detail || '—';
                 return `
                     <tr>
-                        <td style="padding: 16px 0; border-bottom: 1px solid #e5e5e5;">
-                            <div style="font-size: 15px; font-weight: 500; color: #1d1d1f; margin-bottom: 4px;">${i.name}</div>
-                            <div style="font-size: 13px; color: #86868b;">${i.ref} • ${spec}</div>
+                        <td style="padding: 18px 0; border-bottom: 1px solid #f0f0f0;">
+                            <div style="font-size: 14px; font-weight: 600; color: #1d1d1f; text-transform: uppercase; letter-spacing: 0.5px;">${i.name}</div>
+                            <div style="font-size: 12px; color: #86868b; margin-top: 4px;">Réf: ${i.ref} • ${spec}</div>
                         </td>
-                        <td style="padding: 16px 0; border-bottom: 1px solid #e5e5e5; text-align: right;">
-                            <span style="font-size: 17px; font-weight: 600; color: #1d1d1f;">×${i.qty}</span>
+                        <td style="padding: 18px 0; border-bottom: 1px solid #f0f0f0; text-align: right; vertical-align: middle;">
+                            <span style="font-size: 16px; font-weight: 400; color: #1d1d1f;">Qté: <strong>${i.qty}</strong></span>
                         </td>
                     </tr>
                 `;
             }).join('');
 
-            // Créer le template d'email style Apple
             const emailHTML = `
 <!DOCTYPE html>
 <html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nouvelle commande - ${orderNumber}</title>
-</head>
-<body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'SF Pro Display', 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f5f5f7; -webkit-font-smoothing: antialiased;">
-    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="background-color: #f5f5f7;">
+<head><meta charset="UTF-8"></head>
+<body style="margin: 0; padding: 0; background-color: #fcfcfc; font-family: -apple-system, BlinkMacSystemFont, sans-serif;">
+    <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 40px auto; background-color: #ffffff; border: 1px solid #eeeeee; border-radius: 8px; overflow: hidden;">
         <tr>
-            <td style="padding: 40px 20px;">
-                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
-
-                    <!-- Header -->
+            <td style="padding: 40px 20px; text-align: center; border-bottom: 1px solid #f9f9f9;">
+                <div style="font-size: 22px; font-weight: 300; letter-spacing: 4px; text-transform: uppercase; color: #1d1d1f;">Atelier OLDA</div>
+                <div style="font-size: 10px; color: #86868b; letter-spacing: 2px; margin-top: 5px;">ST MARTIN</div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 30px 40px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
                     <tr>
-                        <td style="background: linear-gradient(135deg, #0a7ea4 0%, #2d6a4f 100%); padding: 40px 40px 32px 40px; text-align: center;">
-                            <div style="font-size: 28px; font-weight: 600; color: #ffffff; margin-bottom: 8px; letter-spacing: -0.5px;">Nouvelle commande</div>
-                            <div style="font-size: 15px; color: rgba(255,255,255,0.9); font-weight: 400;">Atelier OLDA</div>
+                        <td align="center" style="width: 33%;">
+                            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #1d1d1f; font-weight: 600;">Confirmée</div>
+                            <div style="height: 4px; background: #1d1d1f; margin-top: 10px; border-radius: 2px;"></div>
+                        </td>
+                        <td align="center" style="width: 33%; padding: 0 5px;">
+                            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aeaeb2;">Préparation</div>
+                            <div style="height: 4px; background: #eeeeee; margin-top: 10px; border-radius: 2px;"></div>
+                        </td>
+                        <td align="center" style="width: 33%;">
+                            <div style="font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #aeaeb2;">Expédition</div>
+                            <div style="height: 4px; background: #eeeeee; margin-top: 10px; border-radius: 2px;"></div>
                         </td>
                     </tr>
-
-                    <!-- Order Number Badge -->
-                    <tr>
-                        <td style="padding: 0 40px;">
-                            <div style="background: #f5f5f7; border-radius: 8px; padding: 20px; margin: -20px 0 24px 0; text-align: center;">
-                                <div style="font-size: 12px; color: #86868b; text-transform: uppercase; letter-spacing: 1px; font-weight: 500; margin-bottom: 6px;">Numéro de commande</div>
-                                <div style="font-size: 24px; font-weight: 600; color: #1d1d1f; letter-spacing: 1px;">${orderNumber}</div>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Customer Info -->
-                    <tr>
-                        <td style="padding: 0 40px 32px 40px;">
-                            <div style="background: #fafafa; border-radius: 8px; padding: 20px;">
-                                <div style="font-size: 13px; font-weight: 600; color: #1d1d1f; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px;">Informations client</div>
-                                <div style="margin-bottom: 8px;">
-                                    <span style="font-size: 14px; color: #86868b; display: inline-block; width: 80px;">Nom</span>
-                                    <span style="font-size: 15px; color: #1d1d1f; font-weight: 500;">${customerName.value}</span>
-                                </div>
-                                <div style="margin-bottom: ${customerComment.value ? '8px' : '0'};">
-                                    <span style="font-size: 14px; color: #86868b; display: inline-block; width: 80px;">Email</span>
-                                    <span style="font-size: 15px; color: #0a7ea4; font-weight: 500;">${customerEmail.value}</span>
-                                </div>
-                                ${customerComment.value ? `
-                                <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e5e5;">
-                                    <div style="font-size: 13px; color: #86868b; margin-bottom: 6px;">Commentaire</div>
-                                    <div style="font-size: 14px; color: #1d1d1f; line-height: 1.5;">${customerComment.value}</div>
-                                </div>
-                                ` : ''}
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Products Table -->
-                    <tr>
-                        <td style="padding: 0 40px 32px 40px;">
-                            <div style="font-size: 13px; font-weight: 600; color: #1d1d1f; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px;">Articles commandés</div>
-                            <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%" style="border-top: 1px solid #e5e5e5;">
-                                ${productRows}
-                            </table>
-                        </td>
-                    </tr>
-
-                    <!-- Total -->
-                    <tr>
-                        <td style="padding: 0 40px 40px 40px;">
-                            <div style="background: linear-gradient(135deg, #0a7ea4 0%, #2d6a4f 100%); border-radius: 8px; padding: 20px; display: flex; justify-content: space-between; align-items: center;">
-                                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
-                                    <tr>
-                                        <td style="text-align: left;">
-                                            <span style="font-size: 15px; color: rgba(255,255,255,0.9); font-weight: 500;">Total des articles</span>
-                                        </td>
-                                        <td style="text-align: right;">
-                                            <span style="font-size: 28px; color: #ffffff; font-weight: 700;">${totalItems}</span>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
-                        </td>
-                    </tr>
-
-                    <!-- Footer -->
-                    <tr>
-                        <td style="background: #fafafa; padding: 24px 40px; border-top: 1px solid #e5e5e5;">
-                            <div style="text-align: center; font-size: 12px; color: #86868b; line-height: 1.6;">
-                                <div style="margin-bottom: 8px; font-weight: 500; color: #1d1d1f;">Atelier OLDA</div>
-                                <div>Saint-Martin, Antilles françaises</div>
-                                <div style="margin-top: 12px;">© 2026 Atelier OLDA — Tous droits réservés</div>
-                            </div>
-                        </td>
-                    </tr>
-
                 </table>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 20px 40px 40px 40px; text-align: center;">
+                <h2 style="font-size: 20px; font-weight: 400; color: #1d1d1f; margin-bottom: 10px;">Merci pour votre commande.</h2>
+                <p style="font-size: 15px; color: #86868b; line-height: 1.6;">Nous avons bien reçu votre sélection. Un conseiller de l'Atelier OLDA reviendra vers vous pour finaliser les détails.</p>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 0 40px 40px 40px;">
+                <div style="border-top: 1px solid #1d1d1f; padding-top: 20px;">
+                    <table width="100%">
+                        <tr>
+                            <td>
+                                <div style="font-size: 11px; color: #86868b; text-transform: uppercase; letter-spacing: 1px;">Commande n°</div>
+                                <div style="font-size: 15px; font-weight: 600;">${orderNumber}</div>
+                            </td>
+                            <td style="text-align: right;">
+                                <div style="font-size: 11px; color: #86868b; text-transform: uppercase; letter-spacing: 1px;">Client</div>
+                                <div style="font-size: 15px; font-weight: 600;">${customerName.value}</div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 0 40px 40px 40px;">
+                <table role="presentation" cellspacing="0" cellpadding="0" border="0" width="100%">
+                    ${productRows}
+                    <tr>
+                        <td style="padding: 30px 0; font-size: 15px; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Total Articles</td>
+                        <td style="padding: 30px 0; text-align: right; font-size: 22px; font-weight: 300;">${totalItems}</td>
+                    </tr>
+                </table>
+                ${customerComment.value ? `<div style="padding: 20px; background: #f9f9f9; border-radius: 4px; font-size: 14px; color: #444; line-height: 1.5;"><strong>Note client :</strong><br>${customerComment.value}</div>` : ''}
+            </td>
+        </tr>
+        <tr>
+            <td style="padding: 40px; background-color: #f9f9f9; text-align: center; font-size: 11px; color: #aeaeb2; letter-spacing: 0.5px; text-transform: uppercase;">
+                © 2026 Atelier OLDA — Saint-Martin, Antilles françaises
             </td>
         </tr>
     </table>
 </body>
-</html>
-            `;
+</html>`;
 
-            // Préparer les données pour web3form
             const formData = new FormData();
             formData.append('access_key', '3f8169ef-4dbd-49ea-9d88-27b6ecfe1d34');
-            formData.append('subject', `Vous avez recu une commande de ${customerName.value} - ${orderNumber}`);
-            formData.append('from_name', 'Atelier OLDA - Système de commande');
-            formData.append('email', customerEmail.value);
-            formData.append('name', customerName.value);
+            formData.append('subject', `Nouvelle commande : ${customerName.value} - ${orderNumber}`);
+            formData.append('from_name', 'Atelier OLDA - Commande');
             formData.append('message', emailHTML);
+            formData.append('email', customerEmail.value);
             formData.append('replyto', customerEmail.value);
 
             try {
@@ -655,9 +618,7 @@
                     method: 'POST',
                     body: formData
                 });
-
                 const data = await response.json();
-
                 if (data.success) {
                     confirmationOverlay.classList.add('visible');
                     cart = [];
@@ -667,17 +628,15 @@
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 } else {
-                    throw new Error(data.message || 'Erreur lors de l\'envoi');
+                    throw new Error(data.message);
                 }
             } catch (error) {
                 alert('Erreur lors de l\'envoi : ' + error.message);
-                console.error('Web3Forms error:', error);
                 cartSubmit.disabled = false;
                 cartSubmit.textContent = 'Confirmer la commande';
             }
         });
 
-        // Image Zoom Feature
         const zoomOverlay = document.getElementById('zoomOverlay');
         const zoomImg = document.getElementById('zoomImg');
         const zoomClose = document.getElementById('zoomClose');
@@ -695,13 +654,8 @@
         }
 
         zoomClose.addEventListener('click', closeZoom);
-        zoomOverlay.addEventListener('click', (e) => {
-            if (e.target === zoomOverlay) closeZoom();
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape' && zoomOverlay.classList.contains('active')) closeZoom();
-        });
+        zoomOverlay.addEventListener('click', (e) => { if (e.target === zoomOverlay) closeZoom(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && zoomOverlay.classList.contains('active')) closeZoom(); });
 
         renderNavMain(); renderNavSub(); renderProducts(); updateCartUI();
     })();
