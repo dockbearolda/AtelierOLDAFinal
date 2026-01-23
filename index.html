@@ -503,7 +503,14 @@
         cartOverlay.addEventListener('click', closeCart);
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart(); });
         cartSubmit.addEventListener('click', () => {
-            if (!customerName.value || !customerEmail.value) { alert('Veuillez remplir votre nom et email.'); return; }
+            if (!customerName.value || !customerEmail.value) {
+                alert('Veuillez remplir votre nom et votre email.');
+                return;
+            }
+
+            cartSubmit.disabled = true;
+            cartSubmit.textContent = 'Envoi en cours...';
+
             const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
             let orderTableRows = cart.map(i => {
                 let spec = '';
@@ -514,63 +521,35 @@
                 else if (i.size) spec = 'Taille ' + i.size;
                 else if (i.detail) spec = i.detail;
                 else spec = '—';
-                return '<tr><td class="product-name">' + i.name + '</td><td class="product-ref">' + i.ref + '</td><td class="product-spec">' + spec + '</td><td class="product-qty">' + i.qty + '</td></tr>';
+                return '<tr style="border-bottom: 1px solid #f2f2f7;"><td style="padding: 14px 0; font-weight: 700; font-size: 15px;">' + i.name + ' (' + i.ref + ')</td><td style="padding: 14px 0;">' + spec + '</td><td style="padding: 14px 0; text-align: right;"><span style="color: #ff3b30; font-weight: 800; font-size: 18px;">' + i.qty + '</span></td></tr>';
             }).join('');
-            const templateParams = { order_number: orderNumber, customer_name: customerName.value, customer_email: customerEmail.value, customer_comment: customerComment.value || '', order_table_rows: orderTableRows, total_items: cart.reduce((sum, i) => sum + i.qty, 0) };
-            cartSubmit.disabled = true;
-            cartSubmit.textContent = 'Envoi en cours...';
-            nom et votre email.');
-                return;
-            }
-
-            cartSubmit.disabled = true;
-            cartSubmit.textContent = 'Envoi en cours...';
 
             const templateParams = {
-                order_number: Math.floor(Math.random() * 90000) + 10000,
+                order_number: orderNumber,
                 customer_name: customerName.value,
                 customer_email: customerEmail.value,
                 customer_comment: customerComment.value || 'Aucun commentaire',
-                order_table_rows: cart.map(item => `
-                    <tr style="border-bottom: 1px solid #f2f2f7;">
-                        <td style="padding: 14px 0; font-weight: 700; font-size: 15px;">${item.name} (${item.ref})</td>
-                        <td style="padding: 14px 0; text-align: right; width: 100px;">
-                            <span style="color: #8e8e93; font-size: 14px;">Qté :</span>
-                            <span style="color: #ff3b30; font-weight: 800; font-size: 18px; margin-left: 5px;">${item.quantity}</span>
-                        </td>
-                    </tr>
-                `).join('')
+                order_table_rows: orderTableRows,
+                total_items: cart.reduce((sum, i) => sum + i.qty, 0),
+                to_email: 'atelierolda@gmail.com'
             };
 
-            // Utilisation des IDs de votre compte (Vérifiez-les dans EmailJS)
             emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams)
                 .then(() => {
-                    // SUCCÈS
                     confirmationOverlay.classList.add('visible');
                     cart = [];
-                    localStorage.removeItem('olda_cart');
                     updateCartUI();
-                    cartPanel.classList.remove('open');
-                    cartOverlay.classList.remove('open');
+                    closeCart();
                     orderForm.reset();
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 })
                 .catch((error) => {
-                    // DIAGNOSTIC : Ce message vous dira la vérité
-                    alert('ERREUR TECHNIQUE : ' + error.text + ' (Status: ' + error.status + ')');
+                    alert('Erreur lors de l\'envoi : ' + (error.text || 'Erreur inconnue'));
                     console.error('EmailJS error:', error);
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 });
-        });
-        // --- FIN DU BLOC ---
-    // Ce code va vous afficher une alerte avec la vraie raison du blocage
-    alert('Erreur EmailJS : ' + error.text + ' (Status: ' + error.status + ')');
-    console.error('EmailJS error:', error);
-    cartSubmit.disabled = false;
-    cartSubmit.textContent = 'Confirmer la commande';
-});
         });
 
         // Image Zoom Feature
