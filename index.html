@@ -506,7 +506,9 @@
         cartClose.addEventListener('click', closeCart);
         cartOverlay.addEventListener('click', closeCart);
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart(); });
-        cartSubmit.addEventListener('click', () => {
+        cartSubmit.addEventListener('click', (e) => {
+            e.preventDefault();
+
             if (!customerName.value || !customerEmail.value) {
                 alert('Veuillez remplir votre nom et votre email.');
                 return;
@@ -538,8 +540,11 @@
                 to_email: 'atelierolda@gmail.com'
             };
 
+            console.log('Envoi de la commande...', templateParams);
+
             emailjs.send('service_1cvmozk', 'template_ptouuob', templateParams)
-                .then(() => {
+                .then((response) => {
+                    console.log('Succès EmailJS:', response);
                     confirmationOverlay.classList.add('visible');
                     cart = [];
                     updateCartUI();
@@ -549,8 +554,9 @@
                     cartSubmit.textContent = 'Confirmer la commande';
                 })
                 .catch((error) => {
-                    alert('Erreur lors de l\'envoi : ' + (error.text || 'Erreur inconnue'));
-                    console.error('EmailJS error:', error);
+                    console.error('Erreur EmailJS complète:', error);
+                    const errorMsg = error && error.text ? error.text : (error && error.message ? error.message : JSON.stringify(error));
+                    alert('Erreur lors de l\'envoi : ' + errorMsg);
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 });
