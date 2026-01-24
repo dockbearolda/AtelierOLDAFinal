@@ -527,28 +527,20 @@
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
 
             // ─────────────────────────────────────────────────────────────
-            // Construction HTML formaté pour EmailJS
+            // Construction du BON DE PRÉPARATION INTERNE (Style Apple)
             // ─────────────────────────────────────────────────────────────
-            let productsRows = '';
+            let orderDetails = '';
             cart.forEach((item, index) => {
-                let productName = item.name;
-                let productDetails = '';
-
-                if (item.ref) productDetails += item.ref;
-                if (item.color) productDetails += (productDetails ? ' - ' : '') + item.color;
-                if (item.size) productDetails += (productDetails ? ' - ' : '') + item.size;
-                if (item.detail) productDetails += (productDetails ? ' - ' : '') + item.detail;
-
-                productsRows += '<div style="padding: 15px 0; border-bottom: 1px solid #f2f2f2; display: table; width: 100%;">';
-                productsRows += '<div style="display: table-row;">';
-                productsRows += '<div style="display: table-cell; font-size: 13px; color: #1d1d1f; font-weight: 500; padding-right: 20px;">' + productName + '</div>';
-                productsRows += '<div style="display: table-cell; font-size: 11px; color: #86868b; text-align: right; padding-right: 20px;">' + productDetails + '</div>';
-                productsRows += '<div style="display: table-cell; font-size: 13px; color: #1d1d1f; font-weight: 600; text-align: right; white-space: nowrap;">x' + item.qty + '</div>';
-                productsRows += '</div>';
-                productsRows += '</div>';
+                let ligne = item.name;
+                if (item.ref) ligne += ' — Réf: ' + item.ref;
+                if (item.color) ligne += ' — ' + item.color;
+                if (item.size) ligne += ' — ' + item.size;
+                if (item.detail) ligne += ' — ' + item.detail;
+                ligne += ' — Qté: ' + item.qty;
+                orderDetails += '• ' + ligne + '\n';
             });
 
-            console.log('DEBUG - HTML produits:', productsRows);
+            console.log('DEBUG - order_details:', orderDetails);
 
             // Paramètres pour le template EmailJS (variables du template)
             const templateParams = {
@@ -557,7 +549,7 @@
                 title: orderNumber,
                 order_number: orderNumber,
                 total_items: totalItems,
-                products_rows: productsRows,
+                order_details: orderDetails,
                 comment: customerComment.value || 'Aucun commentaire'
             };
 
