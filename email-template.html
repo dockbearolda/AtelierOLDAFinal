@@ -18,53 +18,16 @@
                     <tr>
                         <td align="left">
                             <h1 style="font-size:26px; font-weight:600; margin:0; color:#1d1d1f; letter-spacing:-0.5px;">{{name}}</h1>
-                            <p style="font-size:16px; color:#86868b; margin:4px 0 40px 0;">Commande n°{{order_number}}</p>
+                            <p style="font-size:16px; color:#86868b; margin:4px 0 8px 0;">Commande n°{{order_number}}</p>
+                            {{#comment}}
+                            <p style="font-size:13px; color:#1d1d1f; line-height:1.6; margin:8px 0 0 0; padding:12px; background-color:#f9f9f9; border-radius:6px;">{{comment}}</p>
+                            {{/comment}}
                         </td>
                     </tr>
 
                     <tr>
-                        <td style="border-top:1px solid #f2f2f2; padding-top:30px;">
-                            <div style="font-size:10px; font-weight:700; color:#d2d2d7; text-transform:uppercase; letter-spacing:1px; margin-bottom:20px;">Statut Workflow Atelier</div>
-
-                            <table border="0" cellspacing="0" cellpadding="0" style="margin-bottom:25px;">
-                                <tr>
-                                    <td width="16" style="padding-right:10px;">
-                                        <div style="width:16px; height:16px; background-color:#007AFF; border-radius:50%; text-align:center; line-height:16px; color:#ffffff; font-size:10px;">✓</div>
-                                    </td>
-                                    <td style="font-size:14px; font-weight:600; color:#000000;">Réception Commande</td>
-                                </tr>
-                            </table>
-
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                                <tr>
-                                    <td width="48%" valign="top">
-                                        <div style="font-size:10px; font-weight:700; color:#d2d2d7; text-transform:uppercase; margin-bottom:12px;">Disponible</div>
-                                        <table border="0" cellspacing="0" cellpadding="8">
-                                            <tr><td width="13"><div style="width:13px; height:13px; border:1.5px solid #d2d2d7; border-radius:50%;"></div></td><td style="font-size:13px; color:#86868b;">Préparation</td></tr>
-                                            <tr><td width="13"><div style="width:13px; height:13px; border:1.5px solid #d2d2d7; border-radius:50%;"></div></td><td style="font-size:13px; color:#86868b;">Prêt pour retrait</td></tr>
-                                            <tr><td width="13"><div style="width:13px; height:13px; border:1.5px solid #d2d2d7; border-radius:50%;"></div></td><td style="font-size:13px; color:#86868b;">Notification envoyée</td></tr>
-                                        </table>
-                                    </td>
-
-                                    <td width="1" bgcolor="#f2f2f2"></td>
-
-                                    <td width="48%" valign="top" style="padding-left:25px;">
-                                        <div style="font-size:10px; font-weight:700; color:#d2d2d7; text-transform:uppercase; margin-bottom:12px;">Non Disponible</div>
-                                        <table border="0" cellspacing="0" cellpadding="8">
-                                            <tr><td width="13"><div style="width:13px; height:13px; border:1.5px solid #d2d2d7; border-radius:50%;"></div></td><td style="font-size:13px; color:#86868b;">En attente appro.</td></tr>
-                                            <tr><td width="13"><div style="width:13px; height:13px; border:1.5px solid #d2d2d7; border-radius:50%;"></div></td><td style="font-size:13px; color:#86868b;">Client prévenu</td></tr>
-                                            <tr><td width="13"><div style="width:13px; height:13px; border:1.5px solid #d2d2d7; border-radius:50%;"></div></td><td style="font-size:13px; color:#86868b;">Loïc prévenu</td></tr>
-                                            <tr><td width="13"><div style="width:13px; height:13px; border:1.5px solid #d2d2d7; border-radius:50%;"></div></td><td style="font-size:13px; color:#86868b;">Réception stock</td></tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td style="padding-top:100px;">
-                            <div style="font-size:10px; font-weight:700; color:#d2d2d7; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px;">Détails des Collections</div>
+                        <td style="padding-top:50px;">
+                            <div style="font-size:10px; font-weight:700; color:#d2d2d7; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px;">Détails des produits</div>
 
                             {{products_html}}
 
@@ -76,15 +39,6 @@
                             </table>
                         </td>
                     </tr>
-
-                    {{#comment}}
-                    <tr>
-                        <td style="padding-top:40px; border-top:1px solid #f2f2f2; margin-top:40px;">
-                            <div style="font-size:10px; font-weight:700; color:#d2d2d7; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">Commentaire client</div>
-                            <p style="font-size:13px; color:#1d1d1f; line-height:1.6; margin:0;">{{comment}}</p>
-                        </td>
-                    </tr>
-                    {{/comment}}
 
                     <tr>
                         <td align="center" style="padding-top:80px; font-size:10px; color:#d2d2d7; letter-spacing:0.8px; text-transform:uppercase;">
