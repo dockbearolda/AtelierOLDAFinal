@@ -546,6 +546,9 @@
                 productsHtml += '</tr>';
             });
 
+            console.log('DEBUG - HTML envoyé:', productsHtml);
+            console.log('DEBUG - Longueur:', productsHtml.length);
+
             // Paramètres pour le template EmailJS (variables du template)
             const templateParams = {
                 name: customerName.value,
@@ -556,6 +559,8 @@
                 products_html: productsHtml,
                 comment: customerComment.value || 'Aucun commentaire'
             };
+
+            console.log('DEBUG - Tous les paramètres:', templateParams);
 
             try {
                 const response = await emailjs.send(
