@@ -29,7 +29,18 @@
                         <td style="padding-top:50px;">
                             <div style="font-size:10px; font-weight:700; color:#d2d2d7; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px;">Détails des produits</div>
 
-                            {{{products_html}}}
+                            {{#products}}
+                            <table width="100%" border="0" cellspacing="0" cellpadding="15" bgcolor="{{bg_color}}" style="border-radius:6px; margin-bottom:6px;">
+                                <tr>
+                                    <td width="13"><div style="width:13px; height:13px; border:1.5px solid {{dot_color}}; border-radius:50%; background-color:{{dot_color}};"></div></td>
+                                    <td style="font-size:14px; color:#1d1d1f;">
+                                        <strong>{{name}}</strong><br>
+                                        <span style="font-size:11px; color:#86868b; text-transform:uppercase;">{{details}}</span>
+                                    </td>
+                                    <td align="right" style="font-size:15px; font-weight:bold; color:#007AFF;">x {{qty}}</td>
+                                </tr>
+                            </table>
+                            {{/products}}
 
                             <table width="100%" border="0" cellspacing="0" cellpadding="15" style="margin-top:20px;">
                                 <tr>

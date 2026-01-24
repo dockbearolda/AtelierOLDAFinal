@@ -541,18 +541,11 @@
             });
 
             // ─────────────────────────────────────────────────────────────
-            // Génération du HTML des produits pour le template email
+            // Préparation des produits pour le template email (format tableau)
             // ─────────────────────────────────────────────────────────────
-            let productsHtml = '';
-            cart.forEach((item, index) => {
-                // Tous les produits sont disponibles par défaut (fond vert clair)
-                // Pour marquer un produit comme non disponible, ajouter item.available = false
+            const products = cart.map((item, index) => {
+                // Tous les produits sont disponibles par défaut
                 const isAvailable = item.available !== false;
-                const bgColor = isAvailable ? '#e8f5e9' : '#ffebee'; // Vert clair : Rouge clair
-                const dotColor = isAvailable ? '#2e7d32' : '#c62828'; // Vert foncé : Rouge foncé
-
-                // Construire le nom complet du produit
-                let productName = item.name;
 
                 // Construire les détails de la collection (ref, color, size, detail)
                 let collectionInfo = '';
@@ -561,19 +554,13 @@
                 if (item.size) collectionInfo += (collectionInfo ? ' | ' : '') + item.size;
                 if (item.detail) collectionInfo += (collectionInfo ? ' | ' : '') + item.detail;
 
-                // Générer le HTML pour chaque produit
-                productsHtml += `
-                    <table width="100%" border="0" cellspacing="0" cellpadding="15" bgcolor="${bgColor}" style="border-radius:6px; margin-bottom:6px;">
-                        <tr>
-                            <td width="13"><div style="width:13px; height:13px; border:1.5px solid ${dotColor}; border-radius:50%; background-color:${dotColor};"></div></td>
-                            <td style="font-size:14px; color:#1d1d1f;">
-                                <strong>${productName}</strong><br>
-                                <span style="font-size:11px; color:#86868b; text-transform:uppercase;">${collectionInfo}</span>
-                            </td>
-                            <td align="right" style="font-size:15px; font-weight:bold; color:#007AFF;">x ${item.qty}</td>
-                        </tr>
-                    </table>
-                `;
+                return {
+                    name: item.name,
+                    details: collectionInfo,
+                    qty: item.qty,
+                    bg_color: isAvailable ? '#e8f5e9' : '#ffebee',
+                    dot_color: isAvailable ? '#2e7d32' : '#c62828'
+                };
             });
 
             // Paramètres pour le template EmailJS (variables du template)
@@ -584,7 +571,7 @@
                 order_number: orderNumber,
                 total_items: totalItems,
                 order_details: orderDetails,
-                products_html: productsHtml,
+                products: products,
                 comment: customerComment.value || ''
             };
 
