@@ -209,6 +209,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
     (function() {
         'use strict';
@@ -503,19 +504,19 @@
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart(); });
         
         // ═══════════════════════════════════════════════════════════════
-        // WEB3FORMS CONFIGURATION - Atelier OLDA
+        // EMAILJS CONFIGURATION - Atelier OLDA
         // Email de réception : atelieroldacommande@gmail.com
         // ═══════════════════════════════════════════════════════════════
-        const WEB3FORMS_ACCESS_KEY = '2a99e165-8cf3-4da8-a28e-ae2024f6963a';
+        const EMAILJS_PUBLIC_KEY = 'skJW2Ge2SH15HZXNp';
+        const EMAILJS_SERVICE_ID = 'service_o3r7snn';
+        const EMAILJS_TEMPLATE_ID = 'template_sqg7vz2';
+
+        // Initialisation EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
 
         cartSubmit.addEventListener('click', async () => {
             if (!customerName.value || !customerEmail.value) {
                 alert('Veuillez remplir votre nom et votre email.');
-                return;
-            }
-
-            if (!WEB3FORMS_ACCESS_KEY) {
-                alert('Configuration requise : veuillez ajouter votre clé Web3Forms.');
                 return;
             }
 
@@ -539,35 +540,23 @@
                 orderDetails += `• ${ligne}\n`;
             });
 
-            const formData = new FormData();
-
-            // Clé d'accès Web3Forms
-            formData.append('access_key', WEB3FORMS_ACCESS_KEY);
-
-            // Configuration email interne
-            formData.append('subject', `BON DE PRÉPARATION ${orderNumber}`);
-            formData.append('from_name', 'Atelier OLDA - Commandes');
-
-            // ─────────────────────────────────────────────────────────────
-            // DONNÉES DU BON DE PRÉPARATION (format épuré)
-            // ─────────────────────────────────────────────────────────────
-            formData.append('Commande', orderNumber);
-            formData.append('Client', customerName.value);
-            formData.append('Email', customerEmail.value);
-            formData.append('Articles_Total', totalItems);
-            formData.append('Details_Commande', orderDetails);
-            if (customerComment.value) {
-                formData.append('Note', customerComment.value);
-            }
-
+            // Paramètres pour le template EmailJS
+            const templateParams = {
+                order_number: orderNumber,
+                customer_name: customerName.value,
+                customer_email: customerEmail.value,
+                total_items: totalItems,
+                order_details: orderDetails,
+                comment: customerComment.value || 'Aucun commentaire'
+            };
 
             try {
-                const response = await fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await response.json();
-                if (data.success) {
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+                if (response.status === 200) {
                     confirmationOverlay.classList.add('visible');
                     cart = [];
                     updateCartUI();
@@ -576,11 +565,11 @@
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 } else {
-                    throw new Error(data.message || 'Erreur Web3Forms');
+                    throw new Error('Erreur EmailJS');
                 }
             } catch (error) {
                 alert('Erreur lors de l\'envoi. Veuillez réessayer.');
-                console.error('Web3Forms Error:', error);
+                console.error('EmailJS Error:', error);
                 cartSubmit.disabled = false;
                 cartSubmit.textContent = 'Confirmer la commande';
             }
