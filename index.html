@@ -64,13 +64,14 @@
         .sub-btn { flex-shrink: 0; padding: 6px 0; background: none; border: none; border-bottom: 1px solid transparent; font-size: 10px; font-weight: 400; letter-spacing: 0.8px; text-transform: uppercase; color: var(--charcoal); cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; }
         .sub-btn:hover { color: var(--black); }
         .sub-btn.active { color: var(--black); border-bottom-color: var(--black); }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); position: relative; align-items: start; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); position: relative; align-items: stretch; }
         .product-grid::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--border); pointer-events: none; }
         @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(3, 1fr); } .product-grid::after { display: none; } }
         @media (min-width: 1200px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
-        .product-card { padding: clamp(25px, 5vw, 50px) clamp(12px, 3vw, 25px); display: flex; flex-direction: column; align-items: center; text-align: center; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; position: relative; min-height: 400px; }
+        .product-card { padding: 20px 10px 25px 10px; display: flex; flex-direction: column; align-items: center; justify-content: space-between; text-align: center; border-bottom: 1px solid var(--border); opacity: 0; transform: translateY(20px); transition: opacity 0.5s ease, transform 0.5s ease; position: relative; height: 100%; }
+        @media (min-width: 768px) { .product-card { padding: clamp(30px, 6vw, 50px) clamp(15px, 4vw, 25px); } }
         .product-card.visible { opacity: 1; transform: translateY(0); }
-        @media (min-width: 768px) { .product-card { border-right: 1px solid var(--border); min-height: unset; } .product-card:nth-child(3n) { border-right: none; } }
+        @media (min-width: 768px) { .product-card { border-right: 1px solid var(--border); } .product-card:nth-child(3n) { border-right: none; } }
         @media (min-width: 1200px) { .product-card:nth-child(3n) { border-right: 1px solid var(--border); } .product-card:nth-child(4n) { border-right: none; } }
         .discount-badge { position: absolute; top: 10px; right: 10px; background: var(--discount); color: var(--white); font-size: 10px; font-weight: 600; padding: 4px 8px; border-radius: 4px; letter-spacing: 0.5px; box-shadow: 0 2px 8px rgba(191, 72, 0, 0.3); }
         .product-img-wrapper { position: relative; width: 100%; max-width: 180px; margin: 0 auto 16px auto; cursor: pointer; }
@@ -78,9 +79,9 @@
         .product-img { width: 100%; max-width: 180px; height: 180px; background-size: 90%; background-position: center center; background-repeat: no-repeat; transition: transform var(--transition-smooth); display: block; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.05)); }
         @media (min-width: 768px) { .product-img { max-width: 242px; height: 242px; } }
         .product-card:hover .product-img { transform: scale(1.03); }
-        .product-title { font-size: 15px; font-weight: 500; line-height: 1.3; margin-bottom: 8px; min-height: auto; display: block; word-wrap: break-word; hyphens: auto; padding: 0 4px; }
-        @media (min-width: 768px) { .product-title { font-size: 18.7px; line-height: 1.4; padding: 0; } }
-        .product-info { font-size: 11px; color: var(--gray); letter-spacing: 0.3px; text-transform: uppercase; margin-bottom: 16px; font-weight: 400; line-height: 1.4; }
+        .product-title { font-size: 14px; font-weight: 500; line-height: 1.25; margin-bottom: 6px; min-height: 35px; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; text-overflow: ellipsis; word-wrap: break-word; padding: 0 2px; }
+        @media (min-width: 768px) { .product-title { font-size: 18.7px; line-height: 1.4; min-height: 43px; padding: 0; } }
+        .product-info { font-size: 10px; color: var(--gray); letter-spacing: 0.2px; text-transform: uppercase; margin-bottom: 12px; font-weight: 400; line-height: 1.3; }
         @media (min-width: 768px) { .product-info { font-size: 14.4px; letter-spacing: 0.5px; margin-bottom: 22px; } }
         .product-pricing { margin-bottom: 16px; display: none; }
         .product-pricing.visible { display: flex; flex-direction: column; align-items: center; gap: 4px; }
