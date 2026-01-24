@@ -30,22 +30,29 @@
                             <div style="font-size:10px; font-weight:700; color:#d2d2d7; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px;">Détails des produits</div>
 
                             {{#products}}
-                            <table width="100%" border="0" cellspacing="0" cellpadding="15" bgcolor="{{bg_color}}" style="border-radius:6px; margin-bottom:6px;">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom:8px;">
                                 <tr>
-                                    <td width="13"><div style="width:13px; height:13px; border:1.5px solid {{dot_color}}; border-radius:50%; background-color:{{dot_color}};"></div></td>
-                                    <td style="font-size:14px; color:#1d1d1f;">
-                                        <strong>{{name}}</strong><br>
-                                        <span style="font-size:11px; color:#86868b; text-transform:uppercase;">{{details}}</span>
+                                    <td bgcolor="{{bg_color}}" style="padding:15px; border-radius:8px;">
+                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                            <tr>
+                                                <td width="30" valign="top" style="font-size:18px; padding-right:10px;">{{status_icon}}</td>
+                                                <td valign="top">
+                                                    <div style="font-size:14px; font-weight:600; color:#1d1d1f; margin-bottom:4px;">{{name}}</div>
+                                                    <div style="font-size:11px; color:#86868b; text-transform:uppercase;">{{details}}</div>
+                                                </td>
+                                                <td width="60" align="right" valign="top" style="font-size:16px; font-weight:bold; color:#007AFF; white-space:nowrap;">x {{qty}}</td>
+                                            </tr>
+                                        </table>
                                     </td>
-                                    <td align="right" style="font-size:15px; font-weight:bold; color:#007AFF;">x {{qty}}</td>
                                 </tr>
                             </table>
                             {{/products}}
 
-                            <table width="100%" border="0" cellspacing="0" cellpadding="15" style="margin-top:20px;">
+                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;">
                                 <tr>
-                                    <td width="13"><div style="width:13px; height:13px; border:1.5px solid #248a3d; border-radius:50%;"></div></td>
-                                    <td style="font-size:14px; font-weight:600; color:#248a3d; letter-spacing:0.5px;">📦 COMMANDE COMPLÈTE — {{total_items}} articles</td>
+                                    <td bgcolor="#e8f5e9" style="padding:15px; border-radius:8px;">
+                                        <div style="font-size:14px; font-weight:600; color:#248a3d;">📦 COMMANDE COMPLÈTE — {{total_items}} articles</div>
+                                    </td>
                                 </tr>
                             </table>
                         </td>
