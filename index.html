@@ -527,9 +527,9 @@
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
 
             // ─────────────────────────────────────────────────────────────
-            // Construction HTML des articles avec cases commentaires
+            // Construction du BON DE PRÉPARATION INTERNE (Style Apple)
             // ─────────────────────────────────────────────────────────────
-            let articlesHtml = '';
+            let orderDetails = '';
             cart.forEach((item, index) => {
                 let ligne = item.name;
                 if (item.ref) ligne += ' — Réf: ' + item.ref;
@@ -537,14 +537,10 @@
                 if (item.size) ligne += ' — ' + item.size;
                 if (item.detail) ligne += ' — ' + item.detail;
                 ligne += ' — Qté: ' + item.qty;
-
-                articlesHtml += '<div style="margin-bottom: 15px; page-break-inside: avoid;">';
-                articlesHtml += '<div style="font-size: 11px; color: #1d1d1f; font-weight: 500; margin-bottom: 6px;">• ' + ligne + '</div>';
-                articlesHtml += '<div style="border-bottom: 1px solid #d2d2d7; padding-bottom: 3px; font-size: 8px; color: #86868b;">Commentaire préparateur: ___________________________________________</div>';
-                articlesHtml += '</div>';
+                orderDetails += '• ' + ligne + '\n\n';
             });
 
-            console.log('DEBUG - articles_html:', articlesHtml);
+            console.log('DEBUG - order_details:', orderDetails);
 
             // Paramètres pour le template EmailJS (variables du template)
             const templateParams = {
@@ -553,7 +549,7 @@
                 title: orderNumber,
                 order_number: orderNumber,
                 total_items: totalItems,
-                articles_html: articlesHtml,
+                order_details: orderDetails,
                 comment: customerComment.value || 'Aucun commentaire'
             };
 
