@@ -541,26 +541,36 @@
             });
 
             // ─────────────────────────────────────────────────────────────
-            // Préparation des produits pour le template email (format tableau)
+            // Génération HTML des produits pour EmailJS
             // ─────────────────────────────────────────────────────────────
-            const products = cart.map((item, index) => {
-                // Tous les produits sont disponibles par défaut
+            let productsHTML = '';
+            cart.forEach((item) => {
                 const isAvailable = item.available !== false;
+                const bgColor = isAvailable ? '#e8f5e9' : '#ffebee';
+                const statusIcon = isAvailable ? '🟢' : '🔴';
 
-                // Construire les détails de la collection (ref, color, size, detail)
-                let collectionInfo = '';
-                if (item.ref) collectionInfo = item.ref;
-                if (item.color) collectionInfo += (collectionInfo ? ' | ' : '') + item.color;
-                if (item.size) collectionInfo += (collectionInfo ? ' | ' : '') + item.size;
-                if (item.detail) collectionInfo += (collectionInfo ? ' | ' : '') + item.detail;
+                let details = '';
+                if (item.ref) details = item.ref;
+                if (item.color) details += (details ? ' | ' : '') + item.color;
+                if (item.size) details += (details ? ' | ' : '') + item.size;
+                if (item.detail) details += (details ? ' | ' : '') + item.detail;
 
-                return {
-                    name: item.name,
-                    details: collectionInfo,
-                    qty: item.qty,
-                    bg_color: isAvailable ? '#e8f5e9' : '#ffebee',
-                    status_icon: isAvailable ? '🟢' : '🔴'
-                };
+                productsHTML += `
+                    <table width="100%" style="margin-bottom: 40px;">
+                        <tr>
+                            <td width="35" style="vertical-align: top;">
+                                <div style="width: 20px; height: 20px; border: 1px solid #d2d2d7; border-radius: 4px; background-color: ${bgColor}; text-align: center; line-height: 18px; font-size: 12px;">${statusIcon}</div>
+                            </td>
+                            <td>
+                                <div style="font-size: 16px; font-weight: 500;">${item.name} <span style="font-size: 12px; color: #86868b;">(x${item.qty})</span></div>
+                                <div style="font-size: 11px; color: #86868b; margin-top: 4px;">${details}</div>
+                                <div style="margin-top: 12px; font-size: 11px; color: #86868b; border-bottom: 1px solid #f2f2f2; padding-bottom: 10px;">
+                                    Note préparateur : __________________________________________________________________________
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                `;
             });
 
             // Paramètres pour le template EmailJS (variables du template)
@@ -571,7 +581,7 @@
                 order_number: orderNumber,
                 total_items: totalItems,
                 order_details: orderDetails,
-                products: products,
+                products_html: productsHTML,
                 comment: customerComment.value || ''
             };
 
