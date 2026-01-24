@@ -2,70 +2,161 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <title>Bordereau Atelier OLDA</title>
+    <style>
+        body { margin: 0; padding: 0; background-color: #ffffff; font-family: -apple-system, "SF Pro Display", "Helvetica Neue", Arial, sans-serif; -webkit-font-smoothing: antialiased; color: #1d1d1f; }
+        .circle-container { position: relative; height: 0; }
+        .circle {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 1.5px solid #d2d2d7;
+            background-color: #ffffff;
+            display: inline-block;
+            position: absolute;
+            top: -11px;
+            left: 50%;
+            margin-left: -11px;
+        }
+        .label { font-size: 8px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: #86868b; margin-top: 20px; line-height: 1.2; }
+        .border-red { border-color: #ffb4ab !important; }
+        .text-red { color: #ffb4ab !important; }
+        .border-green { border-color: #c4ead2 !important; }
+        .text-green { color: #c4ead2 !important; }
+    </style>
 </head>
-<body style="margin:0; padding:0; background-color:#ffffff; font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-    <table width="100%" border="0" cellspacing="0" cellpadding="0" bgcolor="#ffffff">
+<body>
+
+    <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 850px; margin: 0 auto; padding: 40px;">
         <tr>
-            <td align="center">
-                <table width="600" border="0" cellspacing="0" cellpadding="0" style="width:600px; max-width:600px; padding:40px 20px;">
-
+            <td>
+                <table width="100%" style="margin-bottom: 60px;">
                     <tr>
-                        <td align="left" style="padding-bottom:50px;">
-                            <span style="font-size:11px; font-weight:bold; color:#b6b6bb; letter-spacing:1.5px; text-transform:uppercase;">OLDA</span>
-                        </td>
-                    </tr>
+                        <td align="center">
+                            <div style="font-size: 14px; font-weight: 700; letter-spacing: 0.4em; color: #000000; text-transform: uppercase;">OLDA</div>
+                            <div style="font-size: 8px; color: #86868b; letter-spacing: 0.15em; margin-top: 4px; margin-bottom: 30px;">BORDEREAU DE PRÉPARATION</div>
 
-                    <tr>
-                        <td align="left">
-                            <h1 style="font-size:26px; font-weight:600; margin:0; color:#1d1d1f; letter-spacing:-0.5px;">{{name}}</h1>
-                            <p style="font-size:16px; color:#86868b; margin:4px 0 8px 0;">Commande n°{{order_number}}</p>
+                            <div style="font-size: 22px; font-weight: 600; text-transform: uppercase; letter-spacing: -0.01em;">CLIENT : {{name}}</div>
+                            <div style="font-size: 13px; color: #86868b; margin-top: 6px;">#{{order_number}} | {{email}}</div>
+
                             {{#comment}}
-                            <p style="font-size:13px; color:#1d1d1f; line-height:1.6; margin:8px 0 0 0; padding:12px; background-color:#f9f9f9; border-radius:6px;">{{comment}}</p>
+                            <div style="margin-top: 20px; padding: 15px; background-color: #f9f9f9; border-radius: 8px; font-size: 12px; color: #1d1d1f; text-align: left; max-width: 600px; margin-left: auto; margin-right: auto;">
+                                <div style="font-size: 9px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: #86868b; margin-bottom: 8px;">Commentaire client</div>
+                                {{comment}}
+                            </div>
                             {{/comment}}
                         </td>
                     </tr>
+                </table>
 
+                <table width="100%" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td style="padding-top:50px;">
-                            <div style="font-size:10px; font-weight:700; color:#d2d2d7; text-transform:uppercase; letter-spacing:1px; margin-bottom:15px;">Détails des produits</div>
+                        <td width="20%" align="center" style="vertical-align: middle; padding-right: 10px;">
+                            <div style="border: 2px solid #1d1d1f; width: 24px; height: 24px; border-radius: 50%; background-color: #ffffff; line-height: 24px; font-size: 11px; font-weight: bold; margin-bottom: 10px;">✓</div>
+                            <div class="label" style="color: #1d1d1f; margin-top: 0;">Commande<br>Reçue</div>
+                        </td>
 
-                            {{#products}}
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-bottom:8px;">
+                        <td width="80%">
+                            <table width="100%" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
                                 <tr>
-                                    <td bgcolor="{{bg_color}}" style="padding:15px; border-radius:8px;">
-                                        <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                                    <td style="height: 50px; vertical-align: bottom;">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
                                             <tr>
-                                                <td width="30" valign="top" style="font-size:18px; padding-right:10px;">{{status_icon}}</td>
-                                                <td valign="top">
-                                                    <div style="font-size:14px; font-weight:600; color:#1d1d1f; margin-bottom:4px;">{{name}}</div>
-                                                    <div style="font-size:11px; color:#86868b; text-transform:uppercase;">{{details}}</div>
+                                                <td width="50" style="border-left: 1.5px solid #d2d2d7; border-top: 1.5px solid #ffb4ab; border-top-left-radius: 15px;">&nbsp;</td>
+                                                <td align="center" style="border-top: 1.5px solid #ffb4ab; position: relative;">
+                                                    <div class="circle border-red"></div>
+                                                    <div class="label text-red">Non Dispo<br>Magasin</div>
                                                 </td>
-                                                <td width="60" align="right" valign="top" style="font-size:16px; font-weight:bold; color:#007AFF; white-space:nowrap;">x {{qty}}</td>
+                                                <td align="center" style="border-top: 1.5px solid #ffb4ab; position: relative;">
+                                                    <div class="circle border-red"></div>
+                                                    <div class="label text-red">Client<br>Prévenu</div>
+                                                </td>
+                                                <td align="center" style="border-top: 1.5px solid #ffb4ab; position: relative;">
+                                                    <div class="circle border-red"></div>
+                                                    <div class="label text-red">Loïc<br>Prévenu</div>
+                                                </td>
+                                                <td align="center" style="border-top: 1.5px solid #ffb4ab; position: relative;">
+                                                    <div class="circle border-red"></div>
+                                                    <div class="label text-red">Réception<br>Commande</div>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr><td style="height: 20px;"></td></tr>
+                                <tr>
+                                    <td style="height: 50px; vertical-align: top;">
+                                        <table width="100%" cellpadding="0" cellspacing="0" style="table-layout: fixed;">
+                                            <tr>
+                                                <td width="50" style="border-left: 1.5px solid #d2d2d7; border-bottom: 1.5px solid #c4ead2; border-bottom-left-radius: 15px;">&nbsp;</td>
+                                                <td align="center" style="border-bottom: 1.5px solid #c4ead2; position: relative;">
+                                                    <div class="circle border-green" style="top: auto; bottom: -11px;"></div>
+                                                    <div class="label text-green" style="margin-top: 0; margin-bottom: 20px;">En<br>Production</div>
+                                                </td>
+                                                <td align="center" style="border-bottom: 1.5px solid #c4ead2; position: relative;">
+                                                    <div class="circle border-green" style="top: auto; bottom: -11px;"></div>
+                                                    <div class="label text-green" style="margin-top: 0; margin-bottom: 20px;">Préparation<br>Colis</div>
+                                                </td>
+                                                <td align="center" style="border-bottom: 1.5px solid #c4ead2; position: relative;">
+                                                    <div class="circle border-green" style="top: auto; bottom: -11px;"></div>
+                                                    <div class="label text-green" style="margin-top: 0; margin-bottom: 20px;">Commande<br>Terminée</div>
+                                                </td>
+                                                <td align="center" style="border-bottom: 1.5px solid #c4ead2; position: relative;">
+                                                    <div class="circle border-green" style="top: auto; bottom: -11px;"></div>
+                                                    <div class="label text-green" style="margin-top: 0; margin-bottom: 20px;">Client<br>Prévenu</div>
+                                                </td>
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
                             </table>
-                            {{/products}}
+                        </td>
+                    </tr>
+                </table>
 
-                            <table width="100%" border="0" cellspacing="0" cellpadding="0" style="margin-top:20px;">
+                <table width="100%" cellpadding="0" cellspacing="0" style="margin-top: 80px; border-top: 1px solid #1d1d1f; padding-top: 30px;">
+                    <tr>
+                        <td>
+                            <div style="font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 35px;">Détails de la Commande</div>
+
+                            {{#products}}
+                            <table width="100%" style="margin-bottom: 40px;">
                                 <tr>
-                                    <td bgcolor="#e8f5e9" style="padding:15px; border-radius:8px;">
-                                        <div style="font-size:14px; font-weight:600; color:#248a3d;">📦 COMMANDE COMPLÈTE — {{total_items}} articles</div>
+                                    <td width="35" style="vertical-align: top;">
+                                        <div style="width: 20px; height: 20px; border: 1px solid #d2d2d7; border-radius: 4px; background-color: {{bg_color}}; text-align: center; line-height: 18px; font-size: 12px;">{{status_icon}}</div>
+                                    </td>
+                                    <td>
+                                        <div style="font-size: 16px; font-weight: 500;">{{name}} <span style="font-size: 12px; color: #86868b;">(x{{qty}})</span></div>
+                                        <div style="font-size: 11px; color: #86868b; margin-top: 4px;">{{details}}</div>
+                                        <div style="margin-top: 12px; font-size: 11px; color: #86868b; border-bottom: 1px solid #f2f2f2; padding-bottom: 10px;">
+                                            Note préparateur : __________________________________________________________________________
+                                        </div>
                                     </td>
                                 </tr>
                             </table>
+                            {{/products}}
                         </td>
                     </tr>
+                </table>
 
+                <table width="100%" style="margin-top: 50px; padding: 20px 0; border-top: 1px solid #f2f2f2;">
                     <tr>
-                        <td align="center" style="padding-top:80px; font-size:10px; color:#d2d2d7; letter-spacing:0.8px; text-transform:uppercase;">
-                            Atelier OLDA — Document Interne
+                        <td align="right">
+                            <div style="font-size: 28px; font-weight: 600;">{{total_items}} <span style="font-size: 14px; color: #86868b; font-weight: 400; text-transform: uppercase; letter-spacing: 0.1em;">Articles</span></div>
+                        </td>
+                    </tr>
+                </table>
+
+                <table width="100%" style="margin-top: 60px;">
+                    <tr>
+                        <td align="center">
+                            <div style="font-size: 9px; color: #d2d2d7; letter-spacing: 0.12em; text-transform: uppercase;">Atelier OLDA — Document Interne</div>
                         </td>
                     </tr>
                 </table>
             </td>
         </tr>
     </table>
+
 </body>
 </html>
