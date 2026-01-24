@@ -540,11 +540,12 @@
                 orderDetails += `• ${ligne}\n`;
             });
 
-            // Paramètres pour le template EmailJS
+            // Paramètres pour le template EmailJS (variables du template)
             const templateParams = {
+                name: customerName.value,
+                email: customerEmail.value,
+                title: orderNumber,
                 order_number: orderNumber,
-                customer_name: customerName.value,
-                customer_email: customerEmail.value,
                 total_items: totalItems,
                 order_details: orderDetails,
                 comment: customerComment.value || 'Aucun commentaire'
