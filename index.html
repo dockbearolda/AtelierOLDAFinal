@@ -49,8 +49,8 @@
         .cart-trigger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: none; border: none; cursor: pointer; transition: transform var(--transition-fast); grid-column: 3; justify-self: end; }
         .cart-trigger:hover { transform: scale(1.05); }
         .cart-trigger svg { width: 22px; height: 22px; stroke: var(--black); stroke-width: 1.5; fill: none; }
-        .cart-count { position: absolute; top: 4px; right: 4px; min-width: 18px; height: 18px; padding: 0 5px; background: var(--black); color: var(--white); font-size: 10px; font-weight: 400; border-radius: 9px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5); transition: all var(--transition-fast); }
-        .cart-count.visible { opacity: 1; transform: scale(1); }
+        .cart-count { position: absolute; top: 8px; right: 0; min-width: 14px; height: 14px; padding: 0 3px; background: var(--gray-light); color: var(--white); font-size: 9px; font-weight: 500; border-radius: 7px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5); transition: all var(--transition-fast); }
+        .cart-count.visible { opacity: 0.85; transform: scale(1); }
         .nav-main { position: relative; display: flex; gap: 8px; padding: 14px clamp(20px, 5vw, 40px); overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); background: var(--white); }
         .nav-main::-webkit-scrollbar { display: none; }
         .tab-btn { flex-shrink: 0; padding: 10px 18px; background: none; border: none; font-size: 11px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; color: var(--charcoal); cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; border-bottom: 1px solid transparent; }
@@ -61,7 +61,7 @@
         .sub-btn { flex-shrink: 0; padding: 6px 0; background: none; border: none; border-bottom: 1px solid transparent; font-size: 10px; font-weight: 400; letter-spacing: 0.8px; text-transform: uppercase; color: var(--charcoal); cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; }
         .sub-btn:hover { color: var(--black); }
         .sub-btn.active { color: var(--black); border-bottom-color: var(--black); }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); position: relative; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); position: relative; align-items: start; }
         .product-grid::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--border); pointer-events: none; }
         @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(3, 1fr); } .product-grid::after { display: none; } }
         @media (min-width: 1200px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
