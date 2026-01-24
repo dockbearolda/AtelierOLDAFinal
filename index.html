@@ -527,17 +527,23 @@
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
 
             // ─────────────────────────────────────────────────────────────
-            // Construction du BON DE PRÉPARATION INTERNE (Style Apple)
+            // Construction du HTML des produits pour l'email
             // ─────────────────────────────────────────────────────────────
-            let orderDetails = '';
+            let productsHtml = '';
             cart.forEach((item, index) => {
-                let ligne = `${item.name}`;
-                if (item.ref) ligne += ` — Réf: ${item.ref}`;
-                if (item.color) ligne += ` — ${item.color}`;
-                if (item.size) ligne += ` — ${item.size}`;
-                if (item.detail) ligne += ` — ${item.detail}`;
-                ligne += ` — Qté: ${item.qty}`;
-                orderDetails += `• ${ligne}\n`;
+                let productName = item.name;
+                let productDetails = '';
+
+                if (item.ref) productDetails += item.ref;
+                if (item.color) productDetails += (productDetails ? ' — ' : '') + item.color;
+                if (item.size) productDetails += (productDetails ? ' — ' : '') + item.size;
+                if (item.detail) productDetails += (productDetails ? ' — ' : '') + item.detail;
+
+                productsHtml += `<tr style="border-bottom: 1px solid #f2f2f2;">
+                    <td style="padding: 12px 0; font-size: 13px; color: #1d1d1f; font-weight: 500;">${productName}</td>
+                    <td style="padding: 12px 0; font-size: 11px; color: #86868b; text-align: right;">${productDetails}</td>
+                    <td style="padding: 12px 0; font-size: 13px; color: #1d1d1f; text-align: right; font-weight: 600;">×${item.qty}</td>
+                </tr>`;
             });
 
             // Paramètres pour le template EmailJS (variables du template)
@@ -547,7 +553,7 @@
                 title: orderNumber,
                 order_number: orderNumber,
                 total_items: totalItems,
-                order_details: orderDetails,
+                products_html: productsHtml,
                 comment: customerComment.value || 'Aucun commentaire'
             };
 
