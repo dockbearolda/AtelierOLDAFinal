@@ -49,8 +49,8 @@
         .cart-trigger { display: flex; align-items: center; justify-content: center; width: 44px; height: 44px; background: none; border: none; cursor: pointer; transition: transform var(--transition-fast); grid-column: 3; justify-self: end; }
         .cart-trigger:hover { transform: scale(1.05); }
         .cart-trigger svg { width: 22px; height: 22px; stroke: var(--black); stroke-width: 1.5; fill: none; }
-        .cart-count { position: absolute; top: 4px; right: 4px; min-width: 18px; height: 18px; padding: 0 5px; background: var(--black); color: var(--white); font-size: 10px; font-weight: 400; border-radius: 9px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5); transition: all var(--transition-fast); }
-        .cart-count.visible { opacity: 1; transform: scale(1); }
+        .cart-count { position: absolute; top: 8px; right: 0; min-width: 14px; height: 14px; padding: 0 3px; background: var(--gray-light); color: var(--white); font-size: 9px; font-weight: 500; border-radius: 7px; display: flex; align-items: center; justify-content: center; opacity: 0; transform: scale(0.5); transition: all var(--transition-fast); }
+        .cart-count.visible { opacity: 0.85; transform: scale(1); }
         .nav-main { position: relative; display: flex; gap: 8px; padding: 14px clamp(20px, 5vw, 40px); overflow-x: auto; scrollbar-width: none; border-bottom: 1px solid var(--border); background: var(--white); }
         .nav-main::-webkit-scrollbar { display: none; }
         .tab-btn { flex-shrink: 0; padding: 10px 18px; background: none; border: none; font-size: 11px; font-weight: 400; letter-spacing: 1px; text-transform: uppercase; color: var(--charcoal); cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; border-bottom: 1px solid transparent; }
@@ -61,7 +61,7 @@
         .sub-btn { flex-shrink: 0; padding: 6px 0; background: none; border: none; border-bottom: 1px solid transparent; font-size: 10px; font-weight: 400; letter-spacing: 0.8px; text-transform: uppercase; color: var(--charcoal); cursor: pointer; transition: all var(--transition-fast); white-space: nowrap; }
         .sub-btn:hover { color: var(--black); }
         .sub-btn.active { color: var(--black); border-bottom-color: var(--black); }
-        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); position: relative; }
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); position: relative; align-items: start; }
         .product-grid::after { content: ""; position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: var(--border); pointer-events: none; }
         @media (min-width: 768px) { .product-grid { grid-template-columns: repeat(3, 1fr); } .product-grid::after { display: none; } }
         @media (min-width: 1200px) { .product-grid { grid-template-columns: repeat(4, 1fr); } }
@@ -209,6 +209,7 @@
         </div>
     </div>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/js-yaml/4.1.0/js-yaml.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
     <script>
     (function() {
         'use strict';
@@ -502,6 +503,17 @@
         cartOverlay.addEventListener('click', closeCart);
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart(); });
         
+        // ═══════════════════════════════════════════════════════════════
+        // EMAILJS CONFIGURATION - Atelier OLDA
+        // Email de réception : atelieroldacommande@gmail.com
+        // ═══════════════════════════════════════════════════════════════
+        const EMAILJS_PUBLIC_KEY = 'skJW2Ge2SH15HZXNp';
+        const EMAILJS_SERVICE_ID = 'service_o3r7snn';
+        const EMAILJS_TEMPLATE_ID = 'template_sqg7vz2';
+
+        // Initialisation EmailJS
+        emailjs.init(EMAILJS_PUBLIC_KEY);
+
         cartSubmit.addEventListener('click', async () => {
             if (!customerName.value || !customerEmail.value) {
                 alert('Veuillez remplir votre nom et votre email.');
@@ -511,40 +523,41 @@
             cartSubmit.disabled = true;
             cartSubmit.textContent = 'Envoi en cours...';
 
-            const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
+            const orderNumber = 'OLDA-' + String(Date.now()).slice(-6);
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
 
-            const formData = new FormData();
-            formData.append('access_key', '3f8169ef-4dbd-49ea-9d88-27b6ecfe1d34');
-            formData.append('subject', `Commande ${orderNumber} - ${customerName.value}`);
-            formData.append('from_name', 'Atelier OLDA');
-            formData.append('Numero_commande', orderNumber);
-            formData.append('Nom_client', customerName.value);
-            formData.append('Email_client', customerEmail.value);
-            formData.append('Total_articles', totalItems);
-            
+            // ─────────────────────────────────────────────────────────────
+            // Construction du BON DE PRÉPARATION INTERNE (Style Apple)
+            // ─────────────────────────────────────────────────────────────
+            let orderDetails = '';
             cart.forEach((item, index) => {
-                let produitDetails = item.name;
-                if (item.color) produitDetails += ' - ' + item.color;
-                if (item.size) produitDetails += ' - ' + item.size;
-                if (item.detail) produitDetails += ' - ' + item.detail;
-                
-                formData.append(`Produit_${index + 1}`, produitDetails);
-                formData.append(`Reference_${index + 1}`, item.ref);
-                formData.append(`Quantite_${index + 1}`, item.qty);
+                let ligne = `${item.name}`;
+                if (item.ref) ligne += ` — Réf: ${item.ref}`;
+                if (item.color) ligne += ` — ${item.color}`;
+                if (item.size) ligne += ` — ${item.size}`;
+                if (item.detail) ligne += ` — ${item.detail}`;
+                ligne += ` — Qté: ${item.qty}`;
+                orderDetails += `• ${ligne}\n`;
             });
-            
-            if (customerComment.value) {
-                formData.append('Commentaire', customerComment.value);
-            }
+
+            // Paramètres pour le template EmailJS (variables du template)
+            const templateParams = {
+                name: customerName.value,
+                email: customerEmail.value,
+                title: orderNumber,
+                order_number: orderNumber,
+                total_items: totalItems,
+                order_details: orderDetails,
+                comment: customerComment.value || 'Aucun commentaire'
+            };
 
             try {
-                const response = await fetch('https://api.web3forms.com/submit', {
-                    method: 'POST',
-                    body: formData
-                });
-                const data = await response.json();
-                if (data.success) {
+                const response = await emailjs.send(
+                    EMAILJS_SERVICE_ID,
+                    EMAILJS_TEMPLATE_ID,
+                    templateParams
+                );
+                if (response.status === 200) {
                     confirmationOverlay.classList.add('visible');
                     cart = [];
                     updateCartUI();
@@ -553,10 +566,11 @@
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 } else {
-                    throw new Error(data.message);
+                    throw new Error('Erreur EmailJS');
                 }
             } catch (error) {
-                alert('Erreur lors de l\'envoi : ' + error.message);
+                alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+                console.error('EmailJS Error:', error);
                 cartSubmit.disabled = false;
                 cartSubmit.textContent = 'Confirmer la commande';
             }
