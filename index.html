@@ -540,6 +540,39 @@
                 orderDetails += `• ${ligne}\n`;
             });
 
+            // ─────────────────────────────────────────────────────────────
+            // Génération du HTML des produits pour le template email
+            // ─────────────────────────────────────────────────────────────
+            let productsHtml = '';
+            cart.forEach((item, index) => {
+                // Déterminer la couleur de fond alternée
+                const bgColor = index % 2 === 0 ? '#f5f5f7' : '#f0f7ff';
+
+                // Construire le nom complet du produit
+                let productName = item.name;
+
+                // Construire les détails de la collection (ref, color, size, detail)
+                let collectionInfo = '';
+                if (item.ref) collectionInfo = item.ref;
+                if (item.color) collectionInfo += (collectionInfo ? ' | ' : '') + item.color;
+                if (item.size) collectionInfo += (collectionInfo ? ' | ' : '') + item.size;
+                if (item.detail) collectionInfo += (collectionInfo ? ' | ' : '') + item.detail;
+
+                // Générer le HTML pour chaque produit
+                productsHtml += `
+                    <table width="100%" border="0" cellspacing="0" cellpadding="15" bgcolor="${bgColor}" style="border-radius:6px; margin-bottom:6px;">
+                        <tr>
+                            <td width="13"><div style="width:13px; height:13px; border:1.5px solid #d2d2d7; border-radius:50%; background-color:#ffffff;"></div></td>
+                            <td style="font-size:14px; color:#1d1d1f;">
+                                <strong>${productName}</strong><br>
+                                <span style="font-size:11px; color:#86868b; text-transform:uppercase;">${collectionInfo}</span>
+                            </td>
+                            <td align="right" style="font-size:15px; font-weight:bold; color:#007AFF;">x ${item.qty}</td>
+                        </tr>
+                    </table>
+                `;
+            });
+
             // Paramètres pour le template EmailJS (variables du template)
             const templateParams = {
                 name: customerName.value,
@@ -548,7 +581,8 @@
                 order_number: orderNumber,
                 total_items: totalItems,
                 order_details: orderDetails,
-                comment: customerComment.value || 'Aucun commentaire'
+                products_html: productsHtml,
+                comment: customerComment.value || ''
             };
 
             try {
