@@ -502,41 +502,131 @@
         cartOverlay.addEventListener('click', closeCart);
         document.addEventListener('keydown', e => { if (e.key === 'Escape' && cartPanel.classList.contains('open')) closeCart(); });
         
+        // ═══════════════════════════════════════════════════════════════
+        // WEB3FORMS CONFIGURATION - Atelier OLDA
+        // Email de réception : atelieroldacommande@gmail.com
+        // ═══════════════════════════════════════════════════════════════
+        const WEB3FORMS_ACCESS_KEY = ''; // ← INSÉREZ VOTRE CLÉ ICI
+
         cartSubmit.addEventListener('click', async () => {
             if (!customerName.value || !customerEmail.value) {
                 alert('Veuillez remplir votre nom et votre email.');
                 return;
             }
 
+            if (!WEB3FORMS_ACCESS_KEY) {
+                alert('Configuration requise : veuillez ajouter votre clé Web3Forms.');
+                return;
+            }
+
             cartSubmit.disabled = true;
             cartSubmit.textContent = 'Envoi en cours...';
 
-            const orderNumber = '2026-' + String(Date.now()).slice(-4) + Math.floor(Math.random() * 10);
+            const orderNumber = 'OLDA-' + String(Date.now()).slice(-6);
             const totalItems = cart.reduce((sum, i) => sum + i.qty, 0);
 
-            const formData = new FormData();
-            formData.append('access_key', '3f8169ef-4dbd-49ea-9d88-27b6ecfe1d34');
-            formData.append('subject', `Commande ${orderNumber} - ${customerName.value}`);
-            formData.append('from_name', 'Atelier OLDA');
-            formData.append('Numero_commande', orderNumber);
-            formData.append('Nom_client', customerName.value);
-            formData.append('Email_client', customerEmail.value);
-            formData.append('Total_articles', totalItems);
-            
+            // ─────────────────────────────────────────────────────────────
+            // Construction du BON DE PRÉPARATION INTERNE (Style Apple)
+            // ─────────────────────────────────────────────────────────────
+            let orderDetails = '';
             cart.forEach((item, index) => {
-                let produitDetails = item.name;
-                if (item.color) produitDetails += ' - ' + item.color;
-                if (item.size) produitDetails += ' - ' + item.size;
-                if (item.detail) produitDetails += ' - ' + item.detail;
-                
-                formData.append(`Produit_${index + 1}`, produitDetails);
-                formData.append(`Reference_${index + 1}`, item.ref);
-                formData.append(`Quantite_${index + 1}`, item.qty);
+                let ligne = `${item.name}`;
+                if (item.ref) ligne += ` — Réf: ${item.ref}`;
+                if (item.color) ligne += ` — ${item.color}`;
+                if (item.size) ligne += ` — ${item.size}`;
+                if (item.detail) ligne += ` — ${item.detail}`;
+                ligne += ` — Qté: ${item.qty}`;
+                orderDetails += `• ${ligne}\n`;
             });
-            
+
+            const formData = new FormData();
+
+            // Clé d'accès Web3Forms
+            formData.append('access_key', WEB3FORMS_ACCESS_KEY);
+
+            // Configuration email interne
+            formData.append('subject', `BON DE PRÉPARATION ${orderNumber}`);
+            formData.append('from_name', 'Atelier OLDA - Commandes');
+
+            // ─────────────────────────────────────────────────────────────
+            // DONNÉES DU BON DE PRÉPARATION (format épuré)
+            // ─────────────────────────────────────────────────────────────
+            formData.append('Commande', orderNumber);
+            formData.append('Client', customerName.value);
+            formData.append('Email', customerEmail.value);
+            formData.append('Articles_Total', totalItems);
+            formData.append('Details_Commande', orderDetails);
             if (customerComment.value) {
-                formData.append('Commentaire', customerComment.value);
+                formData.append('Note', customerComment.value);
             }
+
+            // ─────────────────────────────────────────────────────────────
+            // AUTO-RÉPONDEUR CLIENT (Template High-End)
+            // ─────────────────────────────────────────────────────────────
+            formData.append('autoresponse', 'true');
+            formData.append('autoresponse_email', customerEmail.value);
+            formData.append('autoresponse_from', 'Atelier OLDA');
+            formData.append('autoresponse_subject', 'Votre commande Atelier OLDA a bien été reçue');
+            formData.append('autoresponse_message', `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body style="margin: 0; padding: 0; background-color: #faf9f7; font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+    <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #faf9f7; padding: 60px 20px;">
+        <tr>
+            <td align="center">
+                <table width="100%" style="max-width: 520px; background-color: #ffffff; border-radius: 4px;">
+                    <tr>
+                        <td style="padding: 60px 50px 50px 50px; text-align: center;">
+
+                            <!-- Logo texte -->
+                            <h1 style="margin: 0 0 50px 0; font-size: 18px; font-weight: 400; letter-spacing: 0.2em; color: #1d1d1f; text-transform: uppercase;">
+                                Atelier OLDA
+                            </h1>
+
+                            <!-- Message principal -->
+                            <p style="margin: 0 0 30px 0; font-size: 15px; line-height: 1.8; color: #1d1d1f; font-weight: 300;">
+                                Merci pour votre confiance.
+                            </p>
+
+                            <p style="margin: 0 0 40px 0; font-size: 15px; line-height: 1.8; color: #424245; font-weight: 300;">
+                                Votre commande est en cours de préparation dans notre atelier de Grand-Case. Nous vous recontacterons très prochainement pour la finalisation.
+                            </p>
+
+                            <!-- Numéro de commande -->
+                            <div style="margin: 40px 0; padding: 25px 0; border-top: 1px solid #e5e5e5; border-bottom: 1px solid #e5e5e5;">
+                                <p style="margin: 0; font-size: 11px; letter-spacing: 0.15em; color: #86868b; text-transform: uppercase;">
+                                    Référence commande
+                                </p>
+                                <p style="margin: 10px 0 0 0; font-size: 16px; color: #1d1d1f; font-weight: 400; letter-spacing: 0.05em;">
+                                    ${orderNumber}
+                                </p>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                    <!-- Footer -->
+                    <tr>
+                        <td style="padding: 30px 50px 50px 50px; text-align: center; background-color: #faf9f7; border-radius: 0 0 4px 4px;">
+                            <p style="margin: 0; font-size: 12px; color: #86868b; font-weight: 300; letter-spacing: 0.08em;">
+                                1 rue Opale, Grand-Case, Saint-Martin
+                            </p>
+                            <p style="margin: 15px 0 0 0; font-size: 11px; color: #aeaeb2; font-weight: 300;">
+                                © 2026 Atelier OLDA
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+</body>
+</html>
+            `);
 
             try {
                 const response = await fetch('https://api.web3forms.com/submit', {
@@ -553,10 +643,11 @@
                     cartSubmit.disabled = false;
                     cartSubmit.textContent = 'Confirmer la commande';
                 } else {
-                    throw new Error(data.message);
+                    throw new Error(data.message || 'Erreur Web3Forms');
                 }
             } catch (error) {
-                alert('Erreur lors de l\'envoi : ' + error.message);
+                alert('Erreur lors de l\'envoi. Veuillez réessayer.');
+                console.error('Web3Forms Error:', error);
                 cartSubmit.disabled = false;
                 cartSubmit.textContent = 'Confirmer la commande';
             }
